@@ -19,5 +19,7 @@
         <file>resources/images/sidebar2_back_normal.png</file>
         <file>resources/images/sidemenu_back_hover.png</file>
         <file>resources/images/logo_back.png</file>
+        <file>resources/images/downarrow.png</file>
+        <file>resources/images/downarrow_hover.png</file>
     </qresource>
 </RCC>

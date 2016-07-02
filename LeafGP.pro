@@ -11,14 +11,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = LeafGP
 TEMPLATE = app
 
+INCLUDEPATH += ./source
 
-SOURCES += main.cpp\
-        mainwidget.cpp \
-    source/main.cpp \
+SOURCES += source/main.cpp \
     source/mainwidget.cpp
 
-HEADERS  += mainwidget.h \
-    source/mainwidget.h
+HEADERS  += source/mainwidget.h
 
-FORMS    += mainwidget.ui \
-    source/mainwidget.ui
+FORMS    += source/mainwidget.ui
+
+RESOURCES += \
+    media.qrc

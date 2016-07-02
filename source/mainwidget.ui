@@ -1,24 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWidget</class>
- <widget class="QMainWindow" name="MainWidget" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="MainWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>914</width>
+    <height>653</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>MainWidget</string>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="horizontalSpacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QListWidget" name="listWidget">
+      <property name="minimumSize">
+       <size>
+        <width>80</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>80</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListWidget 
+{ 
+	background: rgb(45,65,102);
+	border: none;
+}
+QListWidget::item:selected
+{
+	background-image: url(:/icons/resources/images/sidemenu_back_selected.png);
+	background-position: center;
+	padding-top: 17px;
+}
+
+QListWidget::item 
+{ 
+	border-bottom: 0; 
+	padding-bottom: 0;
+	padding-top: 17px;
+	width: 80px;
+	height: 58px;
+	image-position: bottom;
+}</string>
+      </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>48</width>
+        <height>48</height>
+       </size>
+      </property>
+      <property name="textElideMode">
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <property name="movement">
+       <enum>QListView::Static</enum>
+      </property>
+      <property name="viewMode">
+       <enum>QListView::IconMode</enum>
+      </property>
+      <property name="modelColumn">
+       <number>0</number>
+      </property>
+      <property name="selectionRectVisible">
+       <bool>false</bool>
+      </property>
+      <item>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignTop</set>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/icons/resources/images/data_normal.png</normalon>
+         <selectedon>:/icons/resources/images/data_selected.png</selectedon>
+        </iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/icons/resources/images/setup_normal.png</normalon>
+         <selectedon>:/icons/resources/images/setup_selected.png</selectedon>
+        </iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/icons/resources/images/GP_normal.png</normalon>
+         <selectedon>:/icons/resources/images/GP_selected.png</selectedon>
+        </iconset>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/icons/resources/images/results_normal.png</normalon>
+         <selectedon>:/icons/resources/images/results_selected.png</selectedon>
+        </iconset>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="styleSheet">
+       <string notr="true">QWidget#pageData
+{
+	background: rgb(232,236,242);
+}
+
+QWidget#pageDataSimple
+{
+background: rgb(255,255,255);
+}</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="pageData">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="horizontalSpacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QFrame" name="frame">
+          <property name="minimumSize">
+           <size>
+            <width>150</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>150</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="styleSheet">
+                <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: light;
+	font-size:15px;
+	padding-left: 10px;
+}</string>
+               </property>
+               <property name="text">
+                <string>Data exploration</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="styleSheet">
+                <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: light;
+	font-size:12px;
+	padding-left: 10px;
+}</string>
+               </property>
+               <property name="text">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Input data can be analyzed and preprocessed before the algorithm is executed.&lt;/p&gt;&lt;p&gt;Express. Data is used as it is and no further changes are applied.&lt;/p&gt;&lt;p&gt;Advanced. Data can be tweaked.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QListWidget" name="listWidget_2">
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QListWidget 
+{ 
+	background: rgb(232,236,242);
+	border: none;
+	font-family: Lato;
+	font-weight: light;
+	font-size:15px;
+}
+
+QListWidget::item
+{
+	background-image: url(:/icons/resources/images/sidebar2_back_normal.png);
+	background-position: center;
+	width: 138px;
+	height: 45px;
+padding-left: 10px;
+	color: rgb(173,189,209);
+}
+
+QListWidget::item:selected
+{
+	background-image: url(:/icons/resources/images/sidebar2_back_selected.png);
+	background-position: center;
+	font-weight: regular;	
+	color: rgb(0, 0, 0);
+}</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Express</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Advanced</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QStackedWidget" name="stackedWidgetData">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <widget class="QWidget" name="pageDataSimple"/>
+          <widget class="QWidget" name="pageDataAdvanced"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="pageSetup"/>
+      <widget class="QWidget" name="pageGP"/>
+      <widget class="QWidget" name="pageResults"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>914</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

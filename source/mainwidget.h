@@ -2,6 +2,7 @@
 #define MAINWIDGET_H
 
 #include <QMainWindow>
+#include <QFontDatabase>
 
 namespace Ui {
 class MainWidget;

@@ -17,5 +17,7 @@
         <file>resources/images/setup_selected.png</file>
         <file>resources/images/sidebar2_back_selected.png</file>
         <file>resources/images/sidebar2_back_normal.png</file>
+        <file>resources/images/sidemenu_back_hover.png</file>
+        <file>resources/images/logo_back.png</file>
     </qresource>
 </RCC>

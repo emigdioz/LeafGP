@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/fonts">
+        <file>resources/fonts/Lato-Light.ttf</file>
+        <file>resources/fonts/Lato-Medium.ttf</file>
+        <file>resources/fonts/Roboto-Light.ttf</file>
+        <file>resources/fonts/Roboto-Medium.ttf</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>resources/images/sidemenu_back_selected.png</file>
+        <file>resources/images/data_normal.png</file>
+        <file>resources/images/data_selected.png</file>
+        <file>resources/images/GP_normal.png</file>
+        <file>resources/images/GP_selected.png</file>
+        <file>resources/images/results_normal.png</file>
+        <file>resources/images/results_selected.png</file>
+        <file>resources/images/setup_normal.png</file>
+        <file>resources/images/setup_selected.png</file>
+        <file>resources/images/sidebar2_back_selected.png</file>
+        <file>resources/images/sidebar2_back_normal.png</file>
+    </qresource>
+</RCC>

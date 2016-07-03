@@ -6,7 +6,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = LeafGP
 TEMPLATE = app
@@ -14,9 +14,20 @@ TEMPLATE = app
 INCLUDEPATH += ./source
 
 SOURCES += source/main.cpp \
-    source/mainwidget.cpp
+    source/mainwidget.cpp \
+    source/dataset.cpp \
+    source/qcustomplot.cpp \
+    source/benchmark.cpp \
+    source/jkqtptools.cpp \
+    source/jkqtmathtext.cpp
 
-HEADERS  += source/mainwidget.h
+HEADERS  += source/mainwidget.h \
+    source/dataset.h \
+    source/qcustomplot.h \
+    source/benchmark.h \
+    source/jkqtptools.h \
+    source/jkqtp_imexport.h \
+    source/jkqtmathtext.h
 
 FORMS    += source/mainwidget.ui
 

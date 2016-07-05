@@ -197,7 +197,7 @@ QListWidget::item
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap>:/icons/resources/images/logo_back.png</pixmap>
+            <pixmap resource="../media.qrc">:/icons/resources/images/logo_back.png</pixmap>
            </property>
           </widget>
          </item>
@@ -269,8 +269,11 @@ QPushButton {
 	font-weight: normal;
 	font-size: 9pt;
 	color: rgb(45,65,102);
+	padding: 6px;
 }
-
+QPushButton:disabled {
+	color: rgb(232,236,242);
+}
 QPushButton:hover {
 	border-style: solid;
 	border-width: 1px;
@@ -382,7 +385,130 @@ QGroupBox {
 
  QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
      background: none;
- }</string>
+ }
+
+QScrollBar:horizontal {
+     border: 0;
+     background: rgb(246,248,250);
+     height: 20px;
+     margin: 0 22px 0 22px;
+ }
+ QScrollBar::handle:horizontal {
+     background: rgb(232,236,242);
+     min-width: 20px;
+ }
+ QScrollBar::handle:hover:horizontal {
+     background: rgb(182,194,214);
+ }
+
+ QScrollBar::add-line:horizontal {
+     border: 0;
+     width: 20px;
+     subcontrol-position: right;
+     subcontrol-origin: margin;
+ }
+
+ QScrollBar::sub-line:horizontal {
+     border: 0;
+     width: 20px;
+     subcontrol-position: left;
+     subcontrol-origin: margin;
+ }
+ QScrollBar::left-arrow:horizontal {
+	background-image: url(:/icons/resources/images/scrollbar_leftarrow.png);
+ }
+ QScrollBar::left-arrow:hover:horizontal {
+	background-image: url(:/icons/resources/images/scrollbar_leftarrow_hover.png);
+ }
+
+ QScrollBar::right-arrow:horizontal {
+	background-image: url(:/icons/resources/images/scrollbar_rightarrow.png);
+}
+ QScrollBar::right-arrow:hover:horizontal {
+	background-image: url(:/icons/resources/images/scrollbar_rightarrow_hover.png);
+}
+
+ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+     background: none;
+ }
+
+QToolBox::tab {
+    background: rgb(49,96,125);    
+    color: white;
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 12pt;
+	height: 32px;
+	border-bottom: 1px solid;
+	border-color: rgb(63,122,160);
+}
+
+QToolBox::tab:selected {
+	font-weight: normal;
+}
+QToolBox::tab:hover {
+    background: rgb(75,143,185);    
+}
+
+QToolBox QScrollArea&gt;QWidget&gt;QWidget {
+	background: rgb(63,122,160);
+}
+
+QTableView {
+	background-color: rgb(255,255,255);
+	color: rgb(45,65,102);
+	font-family: Roboto;
+	font-weight: 200;
+	font-size: 9pt;
+	border-style: none;
+	gridline-color: rgb(255,255,255);
+}
+QHeaderView {
+	background-color: rgb(255,255,255);
+}
+
+QHeaderView::section
+{
+	background-color: rgb(255,255,255);
+	color: rgb(45,65,102);
+	font-family: Roboto;
+	font-weight: normal;
+	font-size: 9pt;
+	border-style: none;
+}
+QHeaderView::section:horizontal
+{
+    border-bottom: 2px solid rgb(232,236,242);
+}
+
+QHeaderView::section:vertical
+{
+    border-bottom: 2px solid rgb(232,236,242);
+}
+
+QTableView::item:selected
+{
+	background-color: rgb(182,194,214);
+	color: rgb(45,65,102);
+}
+QTableView::item:hover
+{
+	background-color: rgb(232,236,242);
+}
+
+QTableView::row:hover
+{
+	background-color: rgb(232,236,242);
+}
+
+QTableView QTableCornerButton::section {
+    background-color: rgb(255,255,255);
+	border: none;
+}
+
+QTableView::item {
+    border-bottom : 2px solid rgb(232,236,242);
+}</string>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -568,6 +694,86 @@ QListWidget::item:selected
                  <item row="0" column="0">
                   <layout class="QVBoxLayout" name="verticalLayout_15">
                    <item>
+                    <widget class="QFrame" name="frame_21">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>64</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::NoFrame</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_28">
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
+                      <item row="0" column="0">
+                       <layout class="QHBoxLayout" name="horizontalLayout_3">
+                        <item>
+                         <widget class="QPushButton" name="pushButton_2">
+                          <property name="text">
+                           <string>New project</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="pushButton_3">
+                          <property name="text">
+                           <string>Open project...</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="pushButton_4">
+                          <property name="enabled">
+                           <bool>false</bool>
+                          </property>
+                          <property name="text">
+                           <string>Save project...</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <spacer name="horizontalSpacer_3">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
                     <widget class="QFrame" name="frame_19">
                      <property name="maximumSize">
                       <size>
@@ -582,6 +788,21 @@ QListWidget::item:selected
                       <enum>QFrame::Raised</enum>
                      </property>
                      <layout class="QGridLayout" name="gridLayout_21">
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="spacing">
+                       <number>0</number>
+                      </property>
                       <item row="0" column="0">
                        <layout class="QHBoxLayout" name="horizontalLayout">
                         <item>
@@ -879,43 +1100,206 @@ padding-left: 1px;
            </layout>
           </widget>
           <widget class="QWidget" name="pageDataAdvanced">
+           <property name="styleSheet">
+            <string notr="true">QSplitter::handle {
+	background: rgb(75,143,185);
+}</string>
+           </property>
            <layout class="QGridLayout" name="gridLayout_5">
             <item row="0" column="0">
              <widget class="QSplitter" name="splitter">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
+              <property name="opaqueResize">
+               <bool>true</bool>
+              </property>
+              <property name="handleWidth">
+               <number>5</number>
+              </property>
               <widget class="QWidget" name="verticalLayoutWidget_3">
                <layout class="QVBoxLayout" name="verticalLayout_3">
                 <item>
-                 <widget class="QLabel" name="label_4">
+                 <widget class="QFrame" name="frame_20">
                   <property name="maximumSize">
                    <size>
                     <width>16777215</width>
                     <height>30</height>
                    </size>
                   </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLabel
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QGridLayout" name="gridLayout_24">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <item row="0" column="0">
+                    <layout class="QHBoxLayout" name="horizontalLayout_2">
+                     <item>
+                      <widget class="QLabel" name="label_4">
+                       <property name="minimumSize">
+                        <size>
+                         <width>0</width>
+                         <height>0</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16777215</width>
+                         <height>30</height>
+                        </size>
+                       </property>
+                       <property name="styleSheet">
+                        <string notr="true">QLabel
 {
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
 }</string>
-                  </property>
-                  <property name="text">
-                   <string>Advanced</string>
-                  </property>
+                       </property>
+                       <property name="text">
+                        <string>Advanced</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_31">
+                       <property name="styleSheet">
+                        <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: normal;
+	font-size: 9pt;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: rgb(45,65,102);
+}</string>
+                       </property>
+                       <property name="text">
+                        <string>No data has been loaded yet, please use Express section to load data.</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                 <item>
                  <widget class="QFrame" name="frame_4">
                   <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
+                   <enum>QFrame::NoFrame</enum>
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
                   </property>
+                  <layout class="QGridLayout" name="gridLayout_27">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <item row="0" column="0">
+                    <widget class="QStackedWidget" name="stackedWidgetDataAdvanced">
+                     <property name="styleSheet">
+                      <string notr="true">QWidget#pageSummary {
+	background: rgb(255,255,255);
+}
+
+QWidget#pageStatistics {
+	background: rgb(255,255,255);
+}
+
+QWidget#pageProcessing {
+	background: rgb(255,255,255);
+}</string>
+                     </property>
+                     <property name="currentIndex">
+                      <number>0</number>
+                     </property>
+                     <widget class="QWidget" name="pageSummary">
+                      <layout class="QGridLayout" name="gridLayout_29">
+                       <item row="0" column="0">
+                        <layout class="QVBoxLayout" name="verticalLayout_16">
+                         <item>
+                          <widget class="QFrame" name="frame_22">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>40</height>
+                            </size>
+                           </property>
+                           <property name="frameShape">
+                            <enum>QFrame::StyledPanel</enum>
+                           </property>
+                           <property name="frameShadow">
+                            <enum>QFrame::Raised</enum>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QTableView" name="tableViewDataSummary">
+                           <property name="focusPolicy">
+                            <enum>Qt::NoFocus</enum>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true"/>
+                           </property>
+                           <property name="frameShape">
+                            <enum>QFrame::NoFrame</enum>
+                           </property>
+                           <property name="horizontalScrollBarPolicy">
+                            <enum>Qt::ScrollBarAsNeeded</enum>
+                           </property>
+                           <property name="selectionMode">
+                            <enum>QAbstractItemView::SingleSelection</enum>
+                           </property>
+                           <property name="selectionBehavior">
+                            <enum>QAbstractItemView::SelectColumns</enum>
+                           </property>
+                           <property name="showGrid">
+                            <bool>false</bool>
+                           </property>
+                           <property name="cornerButtonEnabled">
+                            <bool>false</bool>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
+                     <widget class="QWidget" name="pageStatistics"/>
+                     <widget class="QWidget" name="pageProcessing"/>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                </layout>
@@ -928,11 +1312,81 @@ padding-left: 1px;
                 </size>
                </property>
                <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
+                <enum>QFrame::NoFrame</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
+               <layout class="QGridLayout" name="gridLayout_25">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QToolBox" name="toolBoxData">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="currentIndex">
+                   <number>0</number>
+                  </property>
+                  <property name="tabSpacing">
+                   <number>0</number>
+                  </property>
+                  <widget class="QWidget" name="page">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>86</width>
+                     <height>511</height>
+                    </rect>
+                   </property>
+                   <attribute name="label">
+                    <string>Summary</string>
+                   </attribute>
+                   <layout class="QGridLayout" name="gridLayout_26"/>
+                  </widget>
+                  <widget class="QWidget" name="page_3">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>86</width>
+                     <height>511</height>
+                    </rect>
+                   </property>
+                   <attribute name="label">
+                    <string>Metrics</string>
+                   </attribute>
+                  </widget>
+                  <widget class="QWidget" name="page_2">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>86</width>
+                     <height>511</height>
+                    </rect>
+                   </property>
+                   <attribute name="label">
+                    <string>Processing</string>
+                   </attribute>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </widget>
             </item>
@@ -1752,6 +2206,8 @@ QListWidget::item:selected
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../media.qrc"/>
+ </resources>
  <connections/>
 </ui>

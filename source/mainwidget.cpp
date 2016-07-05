@@ -15,6 +15,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(ui->listWidgetSetup, SIGNAL(currentRowChanged(int)), ui->stackedWidgetSetup, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetGP, SIGNAL(currentRowChanged(int)), ui->stackedWidgetGP, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetResults, SIGNAL(currentRowChanged(int)), ui->stackedWidgetResults, SLOT(setCurrentIndex(int)));
+	connect(ui->toolBoxData, SIGNAL(currentChanged(int)), ui->stackedWidgetDataAdvanced, SLOT(setCurrentIndex(int)));
 	QSizePolicy sp_retain = ui->InfoBox->sizePolicy();
 	sp_retain.setRetainSizeWhenHidden(true);
 	ui->InfoBox->setSizePolicy(sp_retain);
@@ -51,6 +52,9 @@ void MainWidget::on_loadButton_pressed()
 		ui->label_27->setText(QString::number(nSamples));
 		ui->InfoBox->show();
 		populatePreviewPlot(nSamples);
+		ui->label_31->hide();
+		setTableDataItemsAligment(Qt::AlignCenter);
+		ui->tableViewDataSummary->setModel(inputData.model);
 	}
 }
 
@@ -62,8 +66,8 @@ void MainWidget::populatePreviewPlot(int nSamples)
 	ui->previewPlot->xAxis->setRange(1,nSamples);
 	ui->previewPlot->yAxis->setRange(inputData.Ymin,inputData.Ymax);
 	ui->previewPlot->graph(0)->setName("Data");
-	ui->previewPlot->graph(0)->setPen(QColor(255,153,85,255));
-	ui->previewPlot->graph(0)->setBrush(QBrush(QColor(255,153,85,20)));
+	ui->previewPlot->graph(0)->setPen(QColor(255,174,0,255));
+	ui->previewPlot->graph(0)->setBrush(QBrush(QColor(255,174,0,20)));
 	ui->previewPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignBottom|Qt::AlignRight);
 	ui->previewPlot->axisRect()->setBackground(QColor(255, 255, 255, 255));
 	ui->previewPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
@@ -117,5 +121,21 @@ void MainWidget::on_comboBox_activated(int index)
 
 		ui->InfoBox->show();
 		populatePreviewPlot(nSamples);
+		ui->label_31->hide();
+		setTableDataItemsAligment(Qt::AlignCenter);
+		ui->tableViewDataSummary->setModel(inputData.model);
+	}
+}
+
+void MainWidget::setTableDataItemsAligment(Qt::AlignmentFlag aligment)
+{
+	int nRows = inputData.getSamples();
+	int nCols = inputData.getFeatures() + 1;
+	for(int j = 0;j < nRows; j++)
+	{
+		for(int i = 0;i < nCols; i++)
+		{
+			inputData.model->item(j,i)->setTextAlignment(aligment);
+		}
 	}
 }

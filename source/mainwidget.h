@@ -29,6 +29,7 @@ private slots:
 
 private:
 	Ui::MainWidget *ui;
+	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);
 };
 
 #endif // MAINWIDGET_H

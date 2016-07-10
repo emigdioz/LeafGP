@@ -37,6 +37,8 @@ bool Dataset::readFile(QString fileName)
 		nCols = model->columnCount();
 		X.clear();
 		Y.clear();
+		minimum.clear();
+		maximum.clear();
 		for(int i = 0;i < nRows;i++)
 		{
 			X.push_back(i+1);
@@ -45,6 +47,21 @@ bool Dataset::readFile(QString fileName)
 			else {
 			  if(Y.at(i) < Ymin) Ymin = Y.at(i);
 			  if(Y.at(i) > Ymax) Ymax = Y.at(i);
+			}
+			for(int j = 0;j < nCols;j++)
+			{
+				if(i == 0)
+				{
+					minimum.push_back(model->item(i,j)->text().toDouble());
+					maximum.push_back(model->item(i,j)->text().toDouble());
+				}
+				else
+				{
+					if(model->item(i,j)->text().toDouble() < minimum.at(j))
+						minimum[j] = model->item(i,j)->text().toDouble();
+					if(model->item(i,j)->text().toDouble() > maximum.at(j))
+						maximum[j] = model->item(i,j)->text().toDouble();
+				}
 			}
 		}
 		return true;
@@ -95,6 +112,8 @@ bool Dataset::readBenchmark(int choice)
 		nCols = dBenchmark.getCols();
 		X.clear();
 		Y.clear();
+		minimum.clear();
+		maximum.clear();
 		for(int i = 0;i < nRows;i++)
 		{
 			X.push_back(i+1);
@@ -103,6 +122,21 @@ bool Dataset::readBenchmark(int choice)
 			else {
 			  if(Y.at(i) < Ymin) Ymin = Y.at(i);
 			  if(Y.at(i) > Ymax) Ymax = Y.at(i);
+			}
+			for(int j = 0;j < nCols;j++)
+			{
+				if(i == 0)
+				{
+					minimum.push_back(model->item(i,j)->text().toDouble());
+					maximum.push_back(model->item(i,j)->text().toDouble());
+				}
+				else
+				{
+					if(model->item(i,j)->text().toDouble() < minimum.at(j))
+						minimum[j] = model->item(i,j)->text().toDouble();
+					if(model->item(i,j)->text().toDouble() > maximum.at(j))
+						maximum[j] = model->item(i,j)->text().toDouble();
+				}
 			}
 		}
 		return true;

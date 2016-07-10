@@ -26,6 +26,8 @@ public:
 	double Xmax;
 	benchmark dBenchmark;
 	QStandardItemModel *model;
+	QVector<double> minimum;
+	QVector<double> maximum;
 
 private:
 	void checkString(QString &temp, QChar character = 0);

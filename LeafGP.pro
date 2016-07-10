@@ -19,7 +19,10 @@ SOURCES += source/main.cpp \
     source/qcustomplot.cpp \
     source/benchmark.cpp \
     source/jkqtptools.cpp \
-    source/jkqtmathtext.cpp
+    source/jkqtmathtext.cpp \
+    source/math_stats.cpp \
+    source/kde.cpp \
+    source/starplotwidget.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -27,7 +30,10 @@ HEADERS  += source/mainwidget.h \
     source/benchmark.h \
     source/jkqtptools.h \
     source/jkqtp_imexport.h \
-    source/jkqtmathtext.h
+    source/jkqtmathtext.h \
+    source/math_stats.h \
+    source/kde.h \
+    source/starplotwidget.h
 
 FORMS    += source/mainwidget.ui
 

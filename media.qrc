@@ -29,5 +29,6 @@
         <file>resources/images/scrollbar_rightarrow_hover.png</file>
         <file>resources/images/scrollbar_leftarrow.png</file>
         <file>resources/images/scrollbar_leftarrow_hover.png</file>
+        <file>resources/images/checkicon.png</file>
     </qresource>
 </RCC>

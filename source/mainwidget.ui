@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>914</width>
+    <width>988</width>
     <height>653</height>
    </rect>
   </property>
@@ -438,9 +438,12 @@ QToolBox::tab {
 	font-family: Lato;
 	font-weight: 200;
 	font-size: 12pt;
-	height: 32px;
+	/*height: 15px;*/
 	border-bottom: 1px solid;
 	border-color: rgb(63,122,160);
+}
+QToolBoxButton {
+	min-height: 40px;
 }
 
 QToolBox::tab:selected {
@@ -814,7 +817,7 @@ QListWidget::item:selected
                            </size>
                           </property>
                           <property name="text">
-                           <string>Load data...</string>
+                           <string>Import data...</string>
                           </property>
                           <property name="flat">
                            <bool>false</bool>
@@ -1127,6 +1130,9 @@ padding-left: 1px;
                     <height>30</height>
                    </size>
                   </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
                   <property name="frameShape">
                    <enum>QFrame::NoFrame</enum>
                   </property>
@@ -1255,12 +1261,102 @@ QWidget#pageProcessing {
                              <height>40</height>
                             </size>
                            </property>
+                           <property name="styleSheet">
+                            <string notr="true">QLabel {
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 14pt;
+	padding-left: 1px;
+}</string>
+                           </property>
                            <property name="frameShape">
-                            <enum>QFrame::StyledPanel</enum>
+                            <enum>QFrame::NoFrame</enum>
                            </property>
                            <property name="frameShadow">
                             <enum>QFrame::Raised</enum>
                            </property>
+                           <layout class="QGridLayout" name="gridLayout_33">
+                            <property name="leftMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="spacing">
+                             <number>0</number>
+                            </property>
+                            <item row="0" column="0">
+                             <layout class="QGridLayout" name="gridLayout_32">
+                              <item row="0" column="2">
+                               <widget class="QLabel" name="label_49">
+                                <property name="text">
+                                 <string/>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="0">
+                               <widget class="QLabel" name="label_47">
+                                <property name="text">
+                                 <string>PDF Estimation</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="1">
+                               <widget class="QCustomPlot" name="featurePlot" native="true"/>
+                              </item>
+                              <item row="0" column="1">
+                               <widget class="QLabel" name="label_48">
+                                <property name="text">
+                                 <string>Feature Output</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="0">
+                               <widget class="QCustomPlot" name="pdfPlot" native="true">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>200</width>
+                                  <height>130</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="2">
+                               <widget class="QCustomPlot" name="featureOutputPlot" native="true">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>130</width>
+                                  <height>0</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="2" column="0">
+                               <widget class="QLabel" name="label_50">
+                                <property name="text">
+                                 <string>Sample</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="3" column="0">
+                               <widget class="starPlotWidget" name="samplePlot" native="true">
+                                <property name="minimumSize">
+                                 <size>
+                                  <width>0</width>
+                                  <height>200</height>
+                                 </size>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </item>
+                           </layout>
                           </widget>
                          </item>
                          <item>
@@ -1276,6 +1372,9 @@ QWidget#pageProcessing {
                            </property>
                            <property name="horizontalScrollBarPolicy">
                             <enum>Qt::ScrollBarAsNeeded</enum>
+                           </property>
+                           <property name="editTriggers">
+                            <set>QAbstractItemView::NoEditTriggers</set>
                            </property>
                            <property name="selectionMode">
                             <enum>QAbstractItemView::SingleSelection</enum>
@@ -1305,10 +1404,22 @@ QWidget#pageProcessing {
                </layout>
               </widget>
               <widget class="QFrame" name="frame_3">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="maximumSize">
                 <size>
                  <width>150</width>
                  <height>16777215</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -1349,22 +1460,200 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>86</width>
-                     <height>511</height>
+                     <width>143</width>
+                     <height>469</height>
                     </rect>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>150</width>
+                     <height>16777215</height>
+                    </size>
                    </property>
                    <attribute name="label">
                     <string>Summary</string>
                    </attribute>
-                   <layout class="QGridLayout" name="gridLayout_26"/>
+                   <layout class="QGridLayout" name="gridLayout_26">
+                    <item row="0" column="1">
+                     <layout class="QVBoxLayout" name="verticalLayout_17">
+                      <item>
+                       <widget class="QLabel" name="label_32">
+                        <property name="styleSheet">
+                         <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: 200;
+	font-size: 11pt;
+	color: white;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>Basic Statistics</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QFrame" name="frame_23">
+                        <property name="styleSheet">
+                         <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: normal;
+	font-size: 9pt;
+	color: white;
+}</string>
+                        </property>
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                         <enum>QFrame::Raised</enum>
+                        </property>
+                        <layout class="QGridLayout" name="gridLayout_31">
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="spacing">
+                          <number>0</number>
+                         </property>
+                         <item row="0" column="0">
+                          <layout class="QGridLayout" name="gridLayout_30">
+                           <item row="3" column="1">
+                            <widget class="QLabel" name="label_40">
+                             <property name="text">
+                              <string/>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="4" column="1">
+                            <widget class="QLabel" name="label_42">
+                             <property name="text">
+                              <string/>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QLabel" name="label_36">
+                             <property name="text">
+                              <string/>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="4" column="0">
+                            <widget class="QLabel" name="label_41">
+                             <property name="text">
+                              <string>Variance</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_33">
+                             <property name="text">
+                              <string>Mean</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="6" column="1">
+                            <widget class="QLabel" name="label_46">
+                             <property name="text">
+                              <string/>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="1">
+                            <widget class="QLabel" name="label_38">
+                             <property name="text">
+                              <string/>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QLabel" name="label_34">
+                             <property name="text">
+                              <string/>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_35">
+                             <property name="text">
+                              <string>Median</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="0">
+                            <widget class="QLabel" name="label_37">
+                             <property name="text">
+                              <string>1st Mode</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="5" column="0">
+                            <widget class="QLabel" name="label_43">
+                             <property name="text">
+                              <string>Skewness</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="0">
+                            <widget class="QLabel" name="label_39">
+                             <property name="text">
+                              <string>Std Dev</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="6" column="0">
+                            <widget class="QLabel" name="label_45">
+                             <property name="text">
+                              <string>Kurtosis</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="5" column="1">
+                            <widget class="QLabel" name="label_44">
+                             <property name="text">
+                              <string/>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="7" column="0">
+                            <spacer name="verticalSpacer_2">
+                             <property name="orientation">
+                              <enum>Qt::Vertical</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                              <size>
+                               <width>20</width>
+                               <height>40</height>
+                              </size>
+                             </property>
+                            </spacer>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
                   </widget>
                   <widget class="QWidget" name="page_3">
                    <property name="geometry">
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>86</width>
-                     <height>511</height>
+                     <width>143</width>
+                     <height>469</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -1376,8 +1665,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>86</width>
-                     <height>511</height>
+                     <width>143</width>
+                     <height>469</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -2190,12 +2479,22 @@ QListWidget::item:selected
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>914</width>
+     <width>988</width>
      <height>23</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionSelect_by_sample">
+   <property name="text">
+    <string>select by sample</string>
+   </property>
+  </action>
+  <action name="actionSelect_by_feature">
+   <property name="text">
+    <string>select by feature</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -2203,6 +2502,12 @@ QListWidget::item:selected
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
    <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>starPlotWidget</class>
+   <extends>QWidget</extends>
+   <header>starplotwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

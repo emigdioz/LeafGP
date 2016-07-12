@@ -1,5 +1,6 @@
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
+#include <QDebug>
 
 MainWidget::MainWidget(QWidget *parent) :
 	QMainWindow(parent),
@@ -18,6 +19,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(ui->listWidgetResults, SIGNAL(currentRowChanged(int)), ui->stackedWidgetResults, SLOT(setCurrentIndex(int)));
 	connect(ui->toolBoxData, SIGNAL(currentChanged(int)), ui->stackedWidgetDataAdvanced, SLOT(setCurrentIndex(int)));
 	connect(ui->tableViewDataSummary, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSelectionMenu(const QPoint&)));
+	connect(ui->selectorWidget, SIGNAL(sendSelectedCoordinates(int,int)), this, SLOT(updateOtherPlots(int,int)));
 	QSizePolicy sp_retain = ui->InfoBox->sizePolicy();
 	sp_retain.setRetainSizeWhenHidden(true);
 	ui->InfoBox->setSizePolicy(sp_retain);
@@ -44,6 +46,21 @@ MainWidget::MainWidget(QWidget *parent) :
 	tableSummarySelectionType = 1; // 1: Column wise, 2: row wise
 	ui->label_50->hide();
 	ui->samplePlot->hide();
+	QSizePolicy policy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+	policy.setHeightForWidth(true);
+	ui->selectorWidget->setSizePolicy(policy);
+	ui->selectorWidget->setNormalStateColor(QColor(232,236,242,255));
+	ui->selectorWidget->setHoverStateColor(QColor(182,194,214,255));
+	ui->selectorWidget->setDiagonalColor(QColor(246,248,250,255));
+	ui->selectorWidget->setSelectedStateColor(QColor(148,204,20,255));
+	ui->label_51->hide();
+	ui->label_52->hide();
+	ui->label_53->hide();
+	ui->label_54->hide();
+	ui->selectorWidget->hide();
+	ui->correlationPlot->hide();
+	ui->regressionPlot->hide();
+	ui->qqPlot->hide();
 }
 
 MainWidget::~MainWidget()
@@ -79,6 +96,18 @@ void MainWidget::on_loadButton_pressed()
 		setTableHeaderLabels();
 		ui->tableViewDataSummary->setModel(inputData.model);
 		ui->tableViewDataSummary->show();
+		ui->selectorWidget->setNumberVariables(nFeatures);
+		ui->selectorWidget->setInitialSelection(0,0);
+		ui->label_51->show();
+		ui->label_52->show();
+		ui->label_53->show();
+		ui->label_54->show();
+		ui->selectorWidget->show();
+		ui->correlationPlot->show();
+		ui->regressionPlot->show();
+		ui->qqPlot->show();
+		updateOtherPlots(0,0);
+		drawRegressionPlot();
 	}
 }
 
@@ -117,6 +146,17 @@ void MainWidget::on_comboBox_activated(int index)
 		setTableHeaderLabels();
 		ui->tableViewDataSummary->setModel(inputData.model);
 		ui->tableViewDataSummary->show();
+		ui->selectorWidget->setNumberVariables(nFeatures);
+		ui->selectorWidget->setInitialSelection(0,0);
+		ui->label_51->show();
+		ui->label_52->show();
+		ui->label_53->show();
+		ui->label_54->show();
+		ui->selectorWidget->show();
+		ui->correlationPlot->show();
+		ui->regressionPlot->show();
+		ui->qqPlot->show();
+		updateOtherPlots(0,0);
 	}
 }
 
@@ -536,3 +576,140 @@ void MainWidget::on_actionSelect_by_sample_triggered()
 	tableSummarySelectionType = 2;
 }
 
+void MainWidget::updateOtherPlots(const int x, const int y)
+{
+	QVector<double> X,Y;
+	QVector<double> variable;
+	QVector<double> xReg,yReg;
+	double a,b,coeffReg,temp,pearson;
+	int nRows = inputData.getSamples();
+	double marginX = (inputData.maximum.at(x) - inputData.minimum.at(x)) * 0.1;
+	double marginY = (inputData.maximum.at(y) - inputData.minimum.at(y)) * 0.1;
+	if(x != y)
+	{
+		X.clear();
+		Y.clear();
+		xReg.clear();
+		yReg.clear();
+		for(int i = 0;i < nRows;i++)
+		{
+			X.push_back(inputData.model->item(i,x)->text().toDouble());
+			Y.push_back(inputData.model->item(i,y)->text().toDouble());
+		}
+		// calculate linear regression
+		if(basicStats.computeUnivariateLinearRegression(X,Y,b,a,coeffReg))
+		{
+			xReg.push_back(inputData.minimum.at(x));
+			xReg.push_back(inputData.maximum.at(x));
+			temp = a + b * inputData.minimum.at(x);
+			yReg.push_back(temp);
+			temp = a + b * inputData.maximum.at(x);
+			yReg.push_back(temp);
+		}
+		// compute Pearson coefficient
+		pearson = basicStats.computePearson(X,Y);
+		ui->label_52->setText("Pearson Correlation ρ = "+QString::number(pearson,'f',4));
+		QPen pen(QColor(Qt::white),2);
+		QPen pen2(QColor(188,95,211,255),3);
+		QCPScatterStyle correlationScatter;
+		correlationScatter.setShape(QCPScatterStyle::ssCircle);
+		correlationScatter.setPen(Qt::NoPen);
+		correlationScatter.setBrush(QColor(255,174,0,128));
+		correlationScatter.setSize(6);
+		ui->correlationPlot->clearPlottables();
+		ui->correlationPlot->addGraph();
+		ui->correlationPlot->addGraph();
+		ui->correlationPlot->xAxis->setRange(inputData.minimum.at(x) - marginX,inputData.maximum.at(x) + marginX);
+		ui->correlationPlot->yAxis->setRange(inputData.minimum.at(y) - marginY,inputData.maximum.at(y) + marginY);
+		ui->correlationPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+		ui->correlationPlot->graph(0)->setScatterStyle(correlationScatter);
+		ui->correlationPlot->graph(1)->setPen(pen2);
+
+		ui->correlationPlot->xAxis->setTicks(false);
+		ui->correlationPlot->xAxis->setTickLabels(false);
+		ui->correlationPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+		ui->correlationPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+		ui->correlationPlot->xAxis->setBasePen(pen);
+		ui->correlationPlot->xAxis->setLabel("X" + QString::number(x+1));
+		ui->correlationPlot->xAxis->setLabelFont(QFont("Roboto",9,QFont::Light));
+		ui->correlationPlot->xAxis->setLabelColor(QColor(45,65,102,255));
+
+		ui->correlationPlot->yAxis->setTicks(false);
+		ui->correlationPlot->yAxis->setTickLabels(false);
+		ui->correlationPlot->yAxis->grid()->setPen(QColor(255, 255, 255, 255));
+		ui->correlationPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
+		ui->correlationPlot->yAxis->setBasePen(pen);
+		ui->correlationPlot->yAxis->setLabel("X" + QString::number(y+1));
+		ui->correlationPlot->yAxis->setLabelFont(QFont("Roboto",9,QFont::Light));
+		ui->correlationPlot->yAxis->setLabelColor(QColor(45,65,102,255));
+
+		ui->correlationPlot->graph(0)->clearData();
+		ui->correlationPlot->graph(0)->setData(X,Y);
+		ui->correlationPlot->graph(1)->clearData();
+		ui->correlationPlot->graph(1)->setData(xReg,yReg);
+		ui->correlationPlot->replot();
+	}
+	else
+	{
+		X.clear();
+		Y.clear();
+		variable.clear();
+		int numberBins = 15;
+		int maxY;
+		for(int i = 0;i < nRows;i++)
+		{
+			variable.push_back(inputData.model->item(i,x)->text().toDouble());
+		}
+		ui->label_52->setText("Histogram for X" + QString::number(x + 1));
+		basicStats.designHistogram(variable,numberBins,X,Y,maxY);
+
+		ui->correlationPlot->clearPlottables();
+		QCPBars *histogramPlot = new QCPBars(ui->correlationPlot->xAxis, ui->correlationPlot->yAxis);
+		ui->correlationPlot->addPlottable(histogramPlot);
+		//histogramPlot->setWidth(3/(double)X.size());
+		histogramPlot->setPen(Qt::NoPen);
+		histogramPlot->setData(X,Y);
+		histogramPlot->setAntialiased(false);
+		histogramPlot->setAntialiasedFill(false);
+		histogramPlot->setBrush(QColor(255,174,0,128));
+		histogramPlot->keyAxis()->setAutoTicks(false);
+		histogramPlot->keyAxis()->setTickVector(X);
+		histogramPlot->keyAxis()->setSubTickCount(0);
+		//histogramPlot->keyAxis()->setRange(1,4);
+		ui->correlationPlot->xAxis->setRange(-0.5,numberBins-0.5);
+		ui->correlationPlot->yAxis->setRange(0,maxY);
+		ui->correlationPlot->xAxis->setTicks(false);
+		ui->correlationPlot->xAxis->setTickLabels(false);
+		ui->correlationPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+		ui->correlationPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+		ui->correlationPlot->xAxis->setBasePen(Qt::NoPen);
+		ui->correlationPlot->xAxis->setLabel("");
+		ui->correlationPlot->yAxis->setTicks(false);
+		ui->correlationPlot->yAxis->setTickLabels(false);
+		ui->correlationPlot->yAxis->grid()->setPen(QColor(255, 255, 255, 255));
+		ui->correlationPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
+		ui->correlationPlot->yAxis->setBasePen(Qt::NoPen);
+		ui->correlationPlot->yAxis->setLabel("");
+		ui->correlationPlot->replot();
+	}
+}
+
+void MainWidget::drawRegressionPlot()
+{
+	int i,j;
+	QVector<QVector<double> > data;
+	QVector<double> output;
+	QVector<double> coefficients;
+	int nRows = inputData.getSamples();
+	int nCols = inputData.getFeatures();
+
+	for(i = 0;i < nRows;i++)
+	{
+		QVector<double> line;
+		for(j = 0;j < nCols;j++)
+			line.append(inputData.model->item(i,j)->text().toDouble());
+		data.append(line);
+		output.append(inputData.model->item(i,nCols)->text().toDouble());
+	}
+	basicStats.computeMultipleLinearRegression(data,output,coefficients);
+}

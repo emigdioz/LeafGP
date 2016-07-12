@@ -1247,7 +1247,7 @@ QWidget#pageProcessing {
 }</string>
                      </property>
                      <property name="currentIndex">
-                      <number>0</number>
+                      <number>1</number>
                      </property>
                      <widget class="QWidget" name="pageSummary">
                       <layout class="QGridLayout" name="gridLayout_29">
@@ -1394,7 +1394,87 @@ QWidget#pageProcessing {
                        </item>
                       </layout>
                      </widget>
-                     <widget class="QWidget" name="pageStatistics"/>
+                     <widget class="QWidget" name="pageStatistics">
+                      <property name="styleSheet">
+                       <string notr="true">QLabel {
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 14pt;
+	padding-left: 1px;
+}</string>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_35">
+                       <item row="0" column="0">
+                        <layout class="QGridLayout" name="gridLayout_34">
+                         <item row="1" column="0">
+                          <widget class="gridSelectorWidget" name="selectorWidget" native="true">
+                           <property name="minimumSize">
+                            <size>
+                             <width>30</width>
+                             <height>30</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>400</width>
+                             <height>400</height>
+                            </size>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="0">
+                          <widget class="QLabel" name="label_51">
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>Select Feature</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="label_53">
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>Multiple Linear Regression</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="0" column="1">
+                          <widget class="QLabel" name="label_52">
+                           <property name="text">
+                            <string>Pearson Correlation ρ</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="0">
+                          <widget class="QCustomPlot" name="regressionPlot" native="true"/>
+                         </item>
+                         <item row="1" column="1">
+                          <widget class="QCustomPlot" name="correlationPlot" native="true"/>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QLabel" name="label_54">
+                           <property name="text">
+                            <string>Q-Q</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="3" column="1">
+                          <widget class="QCustomPlot" name="qqPlot" native="true"/>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
                      <widget class="QWidget" name="pageProcessing"/>
                     </widget>
                    </item>
@@ -1450,7 +1530,7 @@ QWidget#pageProcessing {
                    <string notr="true"/>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <property name="tabSpacing">
                    <number>0</number>
@@ -1460,8 +1540,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>143</width>
-                     <height>469</height>
+                     <width>122</width>
+                     <height>449</height>
                     </rect>
                    </property>
                    <property name="maximumSize">
@@ -1652,7 +1732,7 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>143</width>
+                     <width>101</width>
                      <height>469</height>
                     </rect>
                    </property>
@@ -1665,7 +1745,7 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>143</width>
+                     <width>101</width>
                      <height>469</height>
                     </rect>
                    </property>
@@ -2498,6 +2578,12 @@ QListWidget::item:selected
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>gridSelectorWidget</class>
+   <extends>QWidget</extends>
+   <header>gridselectorwidget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>

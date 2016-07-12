@@ -11,7 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 TARGET = LeafGP
 TEMPLATE = app
 
-INCLUDEPATH += ./source
+INCLUDEPATH += ./source \
+             ./source/alglib
 
 SOURCES += source/main.cpp \
     source/mainwidget.cpp \
@@ -22,7 +23,21 @@ SOURCES += source/main.cpp \
     source/jkqtmathtext.cpp \
     source/math_stats.cpp \
     source/kde.cpp \
-    source/starplotwidget.cpp
+    source/starplotwidget.cpp \
+    source/gridselectorwidget.cpp \
+    source/alglib/alglibinternal.cpp \
+    source/alglib/alglibmisc.cpp \
+    source/alglib/ap.cpp \
+    source/alglib/dataanalysis.cpp \
+    source/alglib/diffequations.cpp \
+    source/alglib/fasttransforms.cpp \
+    source/alglib/integration.cpp \
+    source/alglib/interpolation.cpp \
+    source/alglib/linalg.cpp \
+    source/alglib/optimization.cpp \
+    source/alglib/solvers.cpp \
+    source/alglib/specialfunctions.cpp \
+    source/alglib/statistics.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -33,7 +48,22 @@ HEADERS  += source/mainwidget.h \
     source/jkqtmathtext.h \
     source/math_stats.h \
     source/kde.h \
-    source/starplotwidget.h
+    source/starplotwidget.h \
+    source/gridselectorwidget.h \
+    source/alglib/alglibinternal.h \
+    source/alglib/alglibmisc.h \
+    source/alglib/ap.h \
+    source/alglib/dataanalysis.h \
+    source/alglib/diffequations.h \
+    source/alglib/fasttransforms.h \
+    source/alglib/integration.h \
+    source/alglib/interpolation.h \
+    source/alglib/linalg.h \
+    source/alglib/optimization.h \
+    source/alglib/solvers.h \
+    source/alglib/specialfunctions.h \
+    source/alglib/statistics.h \
+    source/alglib/stdafx.h
 
 FORMS    += source/mainwidget.ui
 

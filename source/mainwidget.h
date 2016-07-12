@@ -9,6 +9,7 @@
 #include "math_stats.h"
 #include "kde.h"
 #include "starplotwidget.h"
+#include "gridselectorwidget.h"
 
 namespace Ui {
 class MainWidget;
@@ -34,6 +35,7 @@ private slots:
 	void on_actionSelect_by_feature_triggered();
 	void on_actionSelect_by_sample_triggered();
 	void showSelectionMenu(const QPoint &pos);
+	void updateOtherPlots(const int x, const int y);
 
 private:
 	Ui::MainWidget *ui;
@@ -42,6 +44,7 @@ private:
 	void drawPdfPlot(float nPoints);
 	void drawFeaturePlot(void);
 	void drawFeatureOutputPlot(void);
+	void drawRegressionPlot(void);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
 	int tableSummarySelectionType;

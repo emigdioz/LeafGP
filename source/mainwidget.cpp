@@ -18,6 +18,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(ui->listWidgetGP, SIGNAL(currentRowChanged(int)), ui->stackedWidgetGP, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetResults, SIGNAL(currentRowChanged(int)), ui->stackedWidgetResults, SLOT(setCurrentIndex(int)));
 	connect(ui->toolBoxData, SIGNAL(currentChanged(int)), ui->stackedWidgetDataAdvanced, SLOT(setCurrentIndex(int)));
+	connect(ui->toolBoxSetup, SIGNAL(currentChanged(int)), ui->stackedWidgetSetupAdvanced, SLOT(setCurrentIndex(int)));
 	connect(ui->tableViewDataSummary, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSelectionMenu(const QPoint&)));
 	connect(ui->selectorWidget, SIGNAL(sendSelectedCoordinates(int,int)), this, SLOT(updateOtherPlots(int,int)));
 	QSizePolicy sp_retain = ui->InfoBox->sizePolicy();

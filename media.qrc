@@ -30,5 +30,7 @@
         <file>resources/images/scrollbar_leftarrow.png</file>
         <file>resources/images/scrollbar_leftarrow_hover.png</file>
         <file>resources/images/checkicon.png</file>
+        <file>resources/images/spinbox_uparrow.png</file>
+        <file>resources/images/spinbox_downarrow.png</file>
     </qresource>
 </RCC>

@@ -198,195 +198,6 @@ void math_stats::designHistogram(QVector<double> data, int nBins, QVector<double
 	}
 }
 
-bool math_stats::Regress(QVector<double> Y, QVector<QVector<double> > X)
-{
-	// Y[j]   = j-th observed data point
-	// X[i,j] = j-th value of the i-th independent varialble
-	// W[j]   = j-th weight value
-
-	QVector<QVector<double> > V;            // Least squares and var/covar matrix
-	QVector <double> C;      // Coefficients
-	QVector <double> SEC;    // Std Error of coefficients
-	double RYSQ;            // Multiple correlation coefficient
-	double SDV;             // Standard deviation of errors
-	double FReg;            // Fisher F statistic for regression
-	QVector<double> Ycalc;         // Calculated values of Y
-	QVector<double> DY;            // Residual values of Y
-	QVector<double> W;
-
-	int M = Y.size();             // M = Number of data points
-	int N = X.at(0).size();         // N = Number of linear terms
-	int NDF = M - N;              // Degrees of freedom
-	//Ycalc = new double[M];
-	//DY = new double[M];
-	Ycalc.resize(M);
-	DY.resize(M);
-
-	for(int i = 0;i < M;i++)
-		W.push_back(1);
-
-	// If not enough data, don't attempt regression
-	if (NDF < 1)
-	{
-		return false;
-	}
-	//V = new double[N, N];
-	//C = new double[N];
-	//SEC = new double[N];
-
-	C.resize(N);
-	SEC.resize(N);
-
-	//double[] B = new double[N];   // Vector for LSQ
-	QVector<double> B;
-	B.resize(N);
-
-	// Clear the matrices to start out
-	for (int i = 0; i < N; i++)
-	{
-		QVector<double> temp;
-		for (int j = 0; j < N; j++)
-			temp.append(0);
-		V.append(temp);
-	}
-
-	// Form Least Squares Matrix
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			V[i][j] = 0;
-			for (int k = 0; k < M; k++)
-				V[i][j] += W.at(k) * X.at(k).at(i) * X.at(k).at(j);
-		}
-		B[i] = 0;
-		for (int k = 0; k < M; k++)
-			B[i] += W.at(k) * X.at(k).at(i) * Y.at(k);
-	}
-	// V now contains the raw least squares matrix
-	if (!symmetricMatrixInvert(V))
-	{
-		return false;
-	}
-	// V now contains the inverted least square matrix
-	// Matrix multpily to get coefficients C = VB
-	for (int i = 0; i < N; i++)
-	{
-		C[i] = 0;
-		for (int j = 0; j < N; j++)
-			C[i] += V.at(i).at(j) * B.at(j);
-	}
-
-	// Calculate statistics
-	double TSS = 0;
-	double RSS = 0;
-	double YBAR = 0;
-	double WSUM = 0;
-	for (int k = 0; k < M; k++)
-	{
-		YBAR = YBAR + W.at(k) * Y.at(k);
-		WSUM = WSUM + W.at(k);
-	}
-	YBAR = YBAR / WSUM;
-	for (int k = 0; k < M; k++)
-	{
-		Ycalc[k] = 0;
-		for (int i = 0; i < N; i++)
-			Ycalc[k] += C.at(i) * X.at(k).at(i);
-		DY[k] = Ycalc.at(k) - Y.at(k);
-		TSS = TSS + W.at(k) * (Y.at(k) - YBAR) * (Y.at(k) - YBAR);
-		RSS = RSS + W.at(k) * DY.at(k) * DY.at(k);
-	}
-	double SSQ = RSS / NDF;
-	RYSQ = 1 - RSS / TSS;
-	FReg = 9999999;
-	if(RYSQ < 0.9999999)
-		FReg = RYSQ / (1 - RYSQ) * NDF / (N - 1);
-	SDV = std::sqrt(SSQ);
-
-	// Calculate var-covar matrix and std error of coefficients
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-			V[i][j] *= SSQ;
-		SEC[i] = std::sqrt(V.at(i).at(i));
-	}
-	return true;
-}
-
-bool math_stats::symmetricMatrixInvert(QVector<QVector<double> > &V)
-{
-	 int N = (int)std::sqrt(V[0].size());
-	 double *t = new double[N];
-	 double *Q = new double[N];
-	 double *R = new double[N];
-	 double AB;
-	 int K, L, M;
-
-	 // Invert a symetric matrix in V
-	 for (M = 0; M < N; M++)
-		  R[M] = 1;
-	 K = 0;
-	 for (M = 0; M < N; M++)
-	 {
-		  double Big = 0;
-		  for (L = 0; L < N; L++)
-		  {
-				AB = std::abs(V.at(L).at(L));
-				if ((AB > Big) && (R[L] != 0))
-				{
-					 Big = AB;
-					 K = L;
-				}
-		  }
-		  if (Big == 0)
-		  {
-				return false;
-		  }
-		  R[K] = 0;
-		  Q[K] = 1 / V.at(K).at(K);
-		  t[K] = 1;
-		  V[K][K] = 0;
-		  if (K != 0)
-		  {
-				for (L = 0; L < K; L++)
-				{
-					 t[L] = V.at(L).at(K);
-					 if (R[L] == 0)
-						  Q[L] = V.at(L).at(K) * Q[K];
-					 else
-						  Q[L] = -V.at(L).at(K) * Q[K];
-					 V[L][K] = 0;
-				}
-		  }
-		  if ((K + 1) < N)
-		  {
-				for (L = K + 1; L < N; L++)
-				{
-					 if (R[L] != 0)
-						  t[L] = V.at(K).at(L);
-					 else
-						  t[L] = -V.at(K).at(L);
-					 Q[L] = -V.at(K).at(L) * Q[K];
-					 V[K][L] = 0;
-				}
-		  }
-		  for (L = 0; L < N; L++)
-				for (K = L; K < N; K++)
-					 V[L][K] += t[L] * Q[K];
-	 }
-	 M = N;
-	 L = N - 1;
-	 for (K = 1; K < N; K++)
-	 {
-		  M = M - 1;
-		  L = L - 1;
-		  for (int J = 0; J <= L; J++)
-				V[M][J] = V.at(J).at(M);
-	 }
-	 return true;
-}
-
 bool math_stats::computeMultipleLinearRegression(QVector<QVector<double> > X,
 																 QVector<double> Y,QVector<double> &Coeff)
 {
@@ -417,4 +228,34 @@ void math_stats::processMultipleLinearRegression(QVector<double> variables, doub
 	for(int i = 0;i < variables.size();i++)
 		x[i] = variables.at(i);
 	Y = alglib::lrprocess(model,x);
+}
+
+void math_stats::computeQuantiles(QVector<double> input, QVector<double> &output, int divisions)
+{
+	double temp,result;
+	int size = input.size();
+	std::vector<double> data(input.size());
+	data = input.toStdVector();
+	for(int i = 0;i <= divisions;i++)
+	{
+		temp = i / (divisions * 1.0);
+		output.append(quantile(data,size,temp));
+	}
+}
+
+double math_stats::quantile(std::vector<double> d, int size, double q)
+{
+  if (size == 0) return 0;
+  if (size == 1) return d[0];
+  if (q <= 0) return *std::min_element(std::begin(d),std::end(d));
+  if (q >= 1) return *std::max_element(std::begin(d),std::end(d));
+
+  double pos = (size - 1) * q;
+  uint ind = uint(pos);
+  double delta = pos - ind;
+  std::vector<double> w(size); std::copy(d.begin(), d.end(), w.begin());
+  std::nth_element(w.begin(), w.begin() + ind, w.end());
+  double i1 = *(w.begin() + ind);
+  double i2 = *std::min_element(w.begin() + ind + 1, w.end());
+  return i1 * (1.0 - delta) + i2 * delta;
 }

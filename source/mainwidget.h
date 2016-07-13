@@ -44,7 +44,8 @@ private:
 	void drawPdfPlot(float nPoints);
 	void drawFeaturePlot(void);
 	void drawFeatureOutputPlot(void);
-	void drawRegressionPlot(void);
+	void drawRegressionPlot(int x);
+	void drawQQPlot(int x, int y);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
 	int tableSummarySelectionType;

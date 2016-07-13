@@ -107,7 +107,6 @@ void MainWidget::on_loadButton_pressed()
 		ui->regressionPlot->show();
 		ui->qqPlot->show();
 		updateOtherPlots(0,0);
-		drawRegressionPlot();
 	}
 }
 
@@ -585,6 +584,11 @@ void MainWidget::updateOtherPlots(const int x, const int y)
 	int nRows = inputData.getSamples();
 	double marginX = (inputData.maximum.at(x) - inputData.minimum.at(x)) * 0.1;
 	double marginY = (inputData.maximum.at(y) - inputData.minimum.at(y)) * 0.1;
+	QVector<double> YTickVector;
+	QVector<QString> YTickLabels;
+	QVector<double> XTickVector;
+	QVector<QString> XTickLabels;
+
 	if(x != y)
 	{
 		X.clear();
@@ -608,7 +612,17 @@ void MainWidget::updateOtherPlots(const int x, const int y)
 		}
 		// compute Pearson coefficient
 		pearson = basicStats.computePearson(X,Y);
-		ui->label_52->setText("Pearson Correlation ρ = "+QString::number(pearson,'f',4));
+
+		XTickVector.push_back(inputData.minimum.at(x));
+		XTickVector.push_back(inputData.maximum.at(x));
+		XTickLabels.push_back(QString::number(inputData.minimum.at(x),'f',2));
+		XTickLabels.push_back(QString::number(inputData.maximum.at(x),'f',2));
+		YTickVector.push_back(inputData.minimum.at(y));
+		YTickVector.push_back(inputData.maximum.at(y));
+		YTickLabels.push_back(QString::number(inputData.minimum.at(y),'f',2));
+		YTickLabels.push_back(QString::number(inputData.maximum.at(y),'f',2));
+
+		ui->label_52->setText("Pearson Correlation ρ = " + QString::number(pearson,'f',4));
 		QPen pen(QColor(Qt::white),2);
 		QPen pen2(QColor(188,95,211,255),3);
 		QCPScatterStyle correlationScatter;
@@ -625,23 +639,37 @@ void MainWidget::updateOtherPlots(const int x, const int y)
 		ui->correlationPlot->graph(0)->setScatterStyle(correlationScatter);
 		ui->correlationPlot->graph(1)->setPen(pen2);
 
-		ui->correlationPlot->xAxis->setTicks(false);
-		ui->correlationPlot->xAxis->setTickLabels(false);
 		ui->correlationPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
 		ui->correlationPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
 		ui->correlationPlot->xAxis->setBasePen(pen);
 		ui->correlationPlot->xAxis->setLabel("X" + QString::number(x+1));
-		ui->correlationPlot->xAxis->setLabelFont(QFont("Roboto",9,QFont::Light));
+		ui->correlationPlot->xAxis->setLabelFont(QFont("Roboto",11,QFont::Light));
 		ui->correlationPlot->xAxis->setLabelColor(QColor(45,65,102,255));
+		ui->correlationPlot->xAxis->setAutoTicks(false);
+		ui->correlationPlot->xAxis->setAutoTickLabels(false);
+		ui->correlationPlot->xAxis->setTicks(true);
+		ui->correlationPlot->xAxis->setTickLabels(true);
+		ui->correlationPlot->xAxis->setTickLabelFont(QFont("Roboto",9,QFont::Light));
+		ui->correlationPlot->xAxis->setTickLabelColor(QColor(45,65,102,255));
+		ui->correlationPlot->xAxis->setTickVector(XTickVector);
+		ui->correlationPlot->xAxis->setTickVectorLabels(XTickLabels);
+		ui->correlationPlot->xAxis->setTickPen(QColor(255, 255, 255, 255));
 
-		ui->correlationPlot->yAxis->setTicks(false);
-		ui->correlationPlot->yAxis->setTickLabels(false);
 		ui->correlationPlot->yAxis->grid()->setPen(QColor(255, 255, 255, 255));
 		ui->correlationPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
 		ui->correlationPlot->yAxis->setBasePen(pen);
 		ui->correlationPlot->yAxis->setLabel("X" + QString::number(y+1));
-		ui->correlationPlot->yAxis->setLabelFont(QFont("Roboto",9,QFont::Light));
+		ui->correlationPlot->yAxis->setLabelFont(QFont("Roboto",11,QFont::Light));
 		ui->correlationPlot->yAxis->setLabelColor(QColor(45,65,102,255));
+		ui->correlationPlot->yAxis->setAutoTicks(false);
+		ui->correlationPlot->yAxis->setAutoTickLabels(false);
+		ui->correlationPlot->yAxis->setTicks(true);
+		ui->correlationPlot->yAxis->setTickLabels(true);
+		ui->correlationPlot->yAxis->setTickLabelFont(QFont("Roboto",9,QFont::Light));
+		ui->correlationPlot->yAxis->setTickLabelColor(QColor(45,65,102,255));
+		ui->correlationPlot->yAxis->setTickVector(YTickVector);
+		ui->correlationPlot->yAxis->setTickVectorLabels(YTickLabels);
+		ui->correlationPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
 
 		ui->correlationPlot->graph(0)->clearData();
 		ui->correlationPlot->graph(0)->setData(X,Y);
@@ -692,17 +720,35 @@ void MainWidget::updateOtherPlots(const int x, const int y)
 		ui->correlationPlot->yAxis->setLabel("");
 		ui->correlationPlot->replot();
 	}
+	drawRegressionPlot(x);
+	drawQQPlot(x,y);
 }
 
-void MainWidget::drawRegressionPlot()
+void MainWidget::drawRegressionPlot(int x)
 {
 	int i,j;
+	QVector<double> X,Y;
 	QVector<QVector<double> > data;
 	QVector<double> output;
 	QVector<double> coefficients;
+	QVector<double> min,max;
+	QVector<double> xReg,yReg;
+	QVector<double> YTickVector;
+	QVector<QString> YTickLabels;
+	QVector<double> XTickVector;
+	QVector<QString> XTickLabels;
+	double out;
 	int nRows = inputData.getSamples();
 	int nCols = inputData.getFeatures();
+	double marginX = (inputData.maximum.at(x) - inputData.minimum.at(x)) * 0.1;
+	double marginY = (inputData.maximum.at(nCols) - inputData.minimum.at(nCols)) * 0.1;
 
+	X.clear();
+	Y.clear();
+	min.clear();
+	max.clear();
+	xReg.clear();
+	yReg.clear();
 	for(i = 0;i < nRows;i++)
 	{
 		QVector<double> line;
@@ -710,6 +756,202 @@ void MainWidget::drawRegressionPlot()
 			line.append(inputData.model->item(i,j)->text().toDouble());
 		data.append(line);
 		output.append(inputData.model->item(i,nCols)->text().toDouble());
+		X.push_back(inputData.model->item(i,x)->text().toDouble());
+		Y.push_back(inputData.model->item(i,nCols)->text().toDouble());
 	}
 	basicStats.computeMultipleLinearRegression(data,output,coefficients);
+	for(int i = 0;i < nCols;i++)
+	{
+		min.push_back(inputData.minimum.at(i));
+		max.push_back(inputData.maximum.at(i));
+	}
+	xReg.push_back(inputData.minimum.at(x));
+	xReg.push_back(inputData.maximum.at(x));
+	basicStats.processMultipleLinearRegression(min,out);
+	yReg.push_back(out);
+	basicStats.processMultipleLinearRegression(max,out);
+	yReg.push_back(out);
+	XTickVector.push_back(inputData.minimum.at(x));
+	XTickVector.push_back(inputData.maximum.at(x));
+	XTickLabels.push_back(QString::number(inputData.minimum.at(x),'f',2));
+	XTickLabels.push_back(QString::number(inputData.maximum.at(x),'f',2));
+	YTickVector.push_back(inputData.minimum.at(nCols));
+	YTickVector.push_back(inputData.maximum.at(nCols));
+	YTickLabels.push_back(QString::number(inputData.minimum.at(nCols),'f',2));
+	YTickLabels.push_back(QString::number(inputData.maximum.at(nCols),'f',2));
+
+	ui->label_55->setText("Coefficient " + QString::number(x + 1) + " = " + QString::number(coefficients.at(x),'f',4));
+	QCPScatterStyle regressionScatter;
+	regressionScatter.setShape(QCPScatterStyle::ssCircle);
+	regressionScatter.setPen(Qt::NoPen);
+	regressionScatter.setBrush(QColor(255,174,0,128));
+	regressionScatter.setSize(6);
+	QPen pen(QColor(Qt::white),2);
+	QPen pen2(QColor(188,95,211,255),3);
+	ui->regressionPlot->addGraph();
+	ui->regressionPlot->addGraph();
+	ui->regressionPlot->xAxis->setRange(inputData.minimum.at(x) - marginX,inputData.maximum.at(x) + marginX);
+	ui->regressionPlot->yAxis->setRange(inputData.minimum.at(nCols) - marginY,inputData.maximum.at(nCols) + marginY);
+	ui->regressionPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+	ui->regressionPlot->graph(0)->setScatterStyle(regressionScatter);
+	ui->regressionPlot->graph(1)->setPen(pen2);
+
+	ui->regressionPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+	ui->regressionPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+	ui->regressionPlot->xAxis->setBasePen(pen);
+	ui->regressionPlot->xAxis->setLabel("X" + QString::number(x+1));
+	ui->regressionPlot->xAxis->setLabelFont(QFont("Roboto",11,QFont::Light));
+	ui->regressionPlot->xAxis->setLabelColor(QColor(45,65,102,255));
+	ui->regressionPlot->xAxis->setAutoTicks(false);
+	ui->regressionPlot->xAxis->setAutoTickLabels(false);
+	ui->regressionPlot->xAxis->setTicks(true);
+	ui->regressionPlot->xAxis->setTickLabels(true);
+	ui->regressionPlot->xAxis->setTickLabelFont(QFont("Roboto",9,QFont::Light));
+	ui->regressionPlot->xAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->regressionPlot->xAxis->setTickVector(XTickVector);
+	ui->regressionPlot->xAxis->setTickVectorLabels(XTickLabels);
+	ui->regressionPlot->xAxis->setTickPen(QColor(255, 255, 255, 255));
+
+	ui->regressionPlot->yAxis->grid()->setPen(QColor(255, 255, 255, 255));
+	ui->regressionPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
+	ui->regressionPlot->yAxis->setBasePen(pen);
+	ui->regressionPlot->yAxis->setLabel("Y");
+	ui->regressionPlot->yAxis->setLabelFont(QFont("Roboto",11,QFont::Light));
+	ui->regressionPlot->yAxis->setLabelColor(QColor(45,65,102,255));
+	ui->regressionPlot->yAxis->setAutoTicks(false);
+	ui->regressionPlot->yAxis->setAutoTickLabels(false);
+	ui->regressionPlot->yAxis->setTicks(true);
+	ui->regressionPlot->yAxis->setTickLabels(true);
+	ui->regressionPlot->yAxis->setTickLabelFont(QFont("Roboto",9,QFont::Light));
+	ui->regressionPlot->yAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->regressionPlot->yAxis->setTickVector(YTickVector);
+	ui->regressionPlot->yAxis->setTickVectorLabels(YTickLabels);
+	ui->regressionPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+
+	ui->regressionPlot->graph(0)->clearData();
+	ui->regressionPlot->graph(0)->setData(X,Y);
+	ui->regressionPlot->graph(1)->clearData();
+	ui->regressionPlot->graph(1)->setData(xReg,yReg);
+	ui->regressionPlot->replot();
+
+}
+
+void MainWidget::drawQQPlot(int x, int y)
+{
+	QVector<double> X,Y,x45,y45;
+	QVector<double> varX;
+	QVector<double> varY;
+	double minX,minY,maxX,maxY;
+	int nRows = inputData.getSamples();
+	int nCols = inputData.getFeatures();
+	QVector<double> YTickVector;
+	QVector<QString> YTickLabels;
+	QVector<double> XTickVector;
+	QVector<QString> XTickLabels;
+
+	if(x != y)
+	{
+		X.clear();
+		Y.clear();
+		for(int i = 0;i < nRows;i++)
+		{
+			X.push_back(inputData.model->item(i,x)->text().toDouble());
+			Y.push_back(inputData.model->item(i,y)->text().toDouble());
+		}
+		basicStats.computeQuantiles(X,varX,100);
+		basicStats.computeQuantiles(Y,varY,100);
+		minX = *std::min_element(varX.constBegin(), varX.constEnd());
+		minY = *std::min_element(varY.constBegin(), varY.constEnd());
+		maxX = *std::max_element(varX.constBegin(), varX.constEnd());
+		maxY = *std::max_element(varY.constBegin(), varY.constEnd());
+		double marginX = (maxX - minX) * 0.1;
+		double marginY = (maxY - minY) * 0.1;
+		x45.push_back(minX);
+		x45.push_back(maxX);
+		y45.push_back(minY);
+		y45.push_back(maxY);
+		XTickVector.push_back(minX);
+		XTickVector.push_back(maxX);
+		XTickLabels.push_back(QString::number(minX,'f',2));
+		XTickLabels.push_back(QString::number(maxX,'f',2));
+		YTickVector.push_back(minY);
+		YTickVector.push_back(maxY);
+		YTickLabels.push_back(QString::number(minY,'f',2));
+		YTickLabels.push_back(QString::number(maxY,'f',2));
+
+		QCPScatterStyle qqScatter;
+		qqScatter.setShape(QCPScatterStyle::ssCircle);
+		qqScatter.setPen(Qt::NoPen);
+		qqScatter.setBrush(QColor(255,174,0,128));
+		qqScatter.setSize(6);
+		QPen pen(QColor(Qt::white),2);
+		QPen pen2(QColor(255,174,0,128),2);
+		ui->qqPlot->addGraph();
+		ui->qqPlot->addGraph();
+		ui->qqPlot->xAxis->setRange(minX - marginX,maxX + marginX);
+		ui->qqPlot->yAxis->setRange(minY - marginY,maxY + marginY);
+		ui->qqPlot->graph(1)->setLineStyle(QCPGraph::lsNone);
+		ui->qqPlot->graph(1)->setScatterStyle(qqScatter);
+		ui->qqPlot->graph(0)->setPen(pen2);
+
+		ui->qqPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+		ui->qqPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+		ui->qqPlot->xAxis->setBasePen(pen);
+		ui->qqPlot->xAxis->setLabel("X" + QString::number(x+1));
+		ui->qqPlot->xAxis->setLabelFont(QFont("Roboto",11,QFont::Light));
+		ui->qqPlot->xAxis->setLabelColor(QColor(45,65,102,255));
+		ui->qqPlot->xAxis->setAutoTicks(false);
+		ui->qqPlot->xAxis->setAutoTickLabels(false);
+		ui->qqPlot->xAxis->setTicks(true);
+		ui->qqPlot->xAxis->setTickLabels(true);
+		ui->qqPlot->xAxis->setTickLabelFont(QFont("Roboto",9,QFont::Light));
+		ui->qqPlot->xAxis->setTickLabelColor(QColor(45,65,102,255));
+		ui->qqPlot->xAxis->setTickVector(XTickVector);
+		ui->qqPlot->xAxis->setTickVectorLabels(XTickLabels);
+		ui->qqPlot->xAxis->setTickPen(QColor(255, 255, 255, 255));
+
+		ui->qqPlot->yAxis->setTicks(false);
+		ui->qqPlot->yAxis->setTickLabels(false);
+		ui->qqPlot->yAxis->grid()->setPen(QColor(255, 255, 255, 255));
+		ui->qqPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
+		ui->qqPlot->yAxis->setBasePen(pen);
+		ui->qqPlot->yAxis->setLabel("X" + QString::number(y+1));
+		ui->qqPlot->yAxis->setLabelFont(QFont("Roboto",11,QFont::Light));
+		ui->qqPlot->yAxis->setLabelColor(QColor(45,65,102,255));
+		ui->qqPlot->yAxis->setAutoTicks(false);
+		ui->qqPlot->yAxis->setAutoTickLabels(false);
+		ui->qqPlot->yAxis->setTicks(true);
+		ui->qqPlot->yAxis->setTickLabels(true);
+		ui->qqPlot->yAxis->setTickLabelFont(QFont("Roboto",9,QFont::Light));
+		ui->qqPlot->yAxis->setTickLabelColor(QColor(45,65,102,255));
+		ui->qqPlot->yAxis->setTickVector(YTickVector);
+		ui->qqPlot->yAxis->setTickVectorLabels(YTickLabels);
+		ui->qqPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+
+		ui->qqPlot->graph(1)->clearData();
+		ui->qqPlot->graph(1)->setData(varX,varY);
+		ui->qqPlot->graph(0)->clearData();
+		ui->qqPlot->graph(0)->setData(x45,y45);
+		ui->qqPlot->replot();
+	}
+	else
+	{
+		ui->qqPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+		ui->qqPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+		ui->qqPlot->xAxis->setBasePen(QPen(Qt::white));
+		ui->qqPlot->xAxis->setAutoTicks(false);
+		ui->qqPlot->xAxis->setAutoTickLabels(false);
+		ui->qqPlot->xAxis->setTicks(false);
+		ui->qqPlot->xAxis->setTickLabels(false);
+		ui->qqPlot->xAxis->setTickPen(QColor(255, 255, 255, 255));
+
+		ui->qqPlot->yAxis->grid()->setPen(QColor(255, 255, 255, 255));
+		ui->qqPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
+		ui->qqPlot->yAxis->setBasePen(QPen(Qt::white));
+		ui->qqPlot->yAxis->setAutoTicks(false);
+		ui->qqPlot->yAxis->setAutoTickLabels(false);
+		ui->qqPlot->yAxis->setTicks(false);
+		ui->qqPlot->yAxis->setTickLabels(false);
+		ui->qqPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+	}
 }

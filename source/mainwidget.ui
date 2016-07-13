@@ -1247,7 +1247,7 @@ QWidget#pageProcessing {
 }</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="pageSummary">
                       <layout class="QGridLayout" name="gridLayout_29">
@@ -1406,6 +1406,42 @@ QWidget#pageProcessing {
                       <layout class="QGridLayout" name="gridLayout_35">
                        <item row="0" column="0">
                         <layout class="QGridLayout" name="gridLayout_34">
+                         <item row="0" column="1">
+                          <widget class="QLabel" name="label_52">
+                           <property name="text">
+                            <string>Pearson Correlation ρ</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="4" column="0">
+                          <widget class="QCustomPlot" name="regressionPlot" native="true"/>
+                         </item>
+                         <item row="1" column="1">
+                          <widget class="QCustomPlot" name="correlationPlot" native="true"/>
+                         </item>
+                         <item row="2" column="1">
+                          <widget class="QLabel" name="label_54">
+                           <property name="text">
+                            <string>Q-Q</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item row="4" column="1">
+                          <widget class="QCustomPlot" name="qqPlot" native="true"/>
+                         </item>
+                         <item row="2" column="0">
+                          <widget class="QLabel" name="label_53">
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>25</height>
+                            </size>
+                           </property>
+                           <property name="text">
+                            <string>Multiple Linear Regression</string>
+                           </property>
+                          </widget>
+                         </item>
                          <item row="1" column="0">
                           <widget class="gridSelectorWidget" name="selectorWidget" native="true">
                            <property name="minimumSize">
@@ -1435,41 +1471,26 @@ QWidget#pageProcessing {
                            </property>
                           </widget>
                          </item>
-                         <item row="2" column="0">
-                          <widget class="QLabel" name="label_53">
+                         <item row="3" column="0">
+                          <widget class="QLabel" name="label_55">
                            <property name="maximumSize">
                             <size>
                              <width>16777215</width>
                              <height>25</height>
                             </size>
                            </property>
+                           <property name="styleSheet">
+                            <string notr="true">QLabel {
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 14pt;
+	padding-left: 5px;
+}</string>
+                           </property>
                            <property name="text">
-                            <string>Multiple Linear Regression</string>
+                            <string>Coefficient</string>
                            </property>
                           </widget>
-                         </item>
-                         <item row="0" column="1">
-                          <widget class="QLabel" name="label_52">
-                           <property name="text">
-                            <string>Pearson Correlation ρ</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="3" column="0">
-                          <widget class="QCustomPlot" name="regressionPlot" native="true"/>
-                         </item>
-                         <item row="1" column="1">
-                          <widget class="QCustomPlot" name="correlationPlot" native="true"/>
-                         </item>
-                         <item row="2" column="1">
-                          <widget class="QLabel" name="label_54">
-                           <property name="text">
-                            <string>Q-Q</string>
-                           </property>
-                          </widget>
-                         </item>
-                         <item row="3" column="1">
-                          <widget class="QCustomPlot" name="qqPlot" native="true"/>
                          </item>
                         </layout>
                        </item>
@@ -1530,7 +1551,7 @@ QWidget#pageProcessing {
                    <string notr="true"/>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>0</number>
                   </property>
                   <property name="tabSpacing">
                    <number>0</number>

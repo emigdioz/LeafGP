@@ -19,12 +19,13 @@ public:
 	bool computeUnivariateLinearRegression(QVector<double> x, QVector<double> y, double &slope, double &intercept, double &coefficient);
 	double computePearson(QVector<double> x, QVector<double> y);
 	void designHistogram(QVector<double> data, int nBins, QVector<double> &keys, QVector<double> &frequencies, int &maxY);
-	bool symmetricMatrixInvert(QVector<QVector<double> > &V);
-	bool Regress(QVector<double> Y, QVector<QVector<double> > X);
 	bool computeMultipleLinearRegression(QVector<QVector<double> > X, QVector<double> Y, QVector<double> &Coeff);
 	void processMultipleLinearRegression(QVector<double> variables, double &Y);
+	void computeQuantiles(QVector<double> input, QVector<double> &output, int divisions);
+
 private:
 	alglib::linearmodel model;
+	double quantile(std::vector<double> d, int size, double q);
 };
 
 #endif // MATH_STATS_H

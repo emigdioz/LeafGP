@@ -32,5 +32,10 @@
         <file>resources/images/checkicon.png</file>
         <file>resources/images/spinbox_uparrow.png</file>
         <file>resources/images/spinbox_downarrow.png</file>
+        <file>resources/images/treewidget_branchopen.png</file>
+        <file>resources/images/treewidget_branchclosed.png</file>
+        <file>resources/images/treewidget_branchend.png</file>
+        <file>resources/images/treewidget_branchmore.png</file>
+        <file>resources/images/treewidget_vline.png</file>
     </qresource>
 </RCC>

@@ -37,7 +37,8 @@ SOURCES += source/main.cpp \
     source/alglib/optimization.cpp \
     source/alglib/solvers.cpp \
     source/alglib/specialfunctions.cpp \
-    source/alglib/statistics.cpp
+    source/alglib/statistics.cpp \
+    source/listwidget.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -63,7 +64,8 @@ HEADERS  += source/mainwidget.h \
     source/alglib/solvers.h \
     source/alglib/specialfunctions.h \
     source/alglib/statistics.h \
-    source/alglib/stdafx.h
+    source/alglib/stdafx.h \
+    source/listwidget.h
 
 FORMS    += source/mainwidget.ui
 

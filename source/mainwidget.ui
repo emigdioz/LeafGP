@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>988</width>
-    <height>653</height>
+    <width>1020</width>
+    <height>618</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1637,8 +1637,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>122</width>
-                     <height>202</height>
+                     <width>150</width>
+                     <height>434</height>
                     </rect>
                    </property>
                    <property name="maximumSize">
@@ -1829,8 +1829,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>100</width>
-                     <height>30</height>
+                     <width>150</width>
+                     <height>434</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -1842,8 +1842,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>100</width>
-                     <height>30</height>
+                     <width>150</width>
+                     <height>434</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -2047,11 +2047,16 @@ QListWidget::item:selected
           </widget>
           <widget class="QWidget" name="pageSetupAdvanced">
            <property name="styleSheet">
-            <string notr="true"/>
+            <string notr="true">QSplitter::handle {
+	background: rgb(75,143,185);
+}</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_8">
             <item row="0" column="0">
              <widget class="QSplitter" name="splitter_2">
+              <property name="lineWidth">
+               <number>0</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -2148,7 +2153,7 @@ QLabel
 }</string>
                      </property>
                      <property name="currentIndex">
-                      <number>2</number>
+                      <number>3</number>
                      </property>
                      <widget class="QWidget" name="pageExperiment"/>
                      <widget class="QWidget" name="pagePopulation">
@@ -2351,7 +2356,495 @@ QLabel
                        </item>
                       </layout>
                      </widget>
-                     <widget class="QWidget" name="pageFunctions"/>
+                     <widget class="QWidget" name="pageFunctions">
+                      <layout class="QGridLayout" name="gridLayout_45">
+                       <item row="0" column="0">
+                        <layout class="QVBoxLayout" name="verticalLayout_18">
+                         <item>
+                          <widget class="QFrame" name="frame_24">
+                           <property name="frameShape">
+                            <enum>QFrame::NoFrame</enum>
+                           </property>
+                           <property name="frameShadow">
+                            <enum>QFrame::Raised</enum>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_44">
+                            <item row="0" column="0">
+                             <layout class="QGridLayout" name="gridLayout_43">
+                              <item row="1" column="0">
+                               <widget class="QTreeWidget" name="treeFunctionsSource">
+                                <property name="focusPolicy">
+                                 <enum>Qt::NoFocus</enum>
+                                </property>
+                                <property name="styleSheet">
+                                 <string notr="true">QTreeWidget {
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(232,236,242);
+	font-family: Roboto;
+	font-weight: normal;
+	font-size: 9pt;
+	color: rgb(45,65,102);
+}
+
+QTreeWidget::item {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+QTreeWidget::item:hover {
+	background-color: rgb(232,236,242);
+}
+
+QTreeWidget::item:selected {
+	background-color: rgb(182,194,214);
+}
+
+QTreeWidget::branch {
+        background: palette(base);
+}
+
+QTreeWidget::branch:has-siblings:!adjoins-item {
+        border-image: url(:/icons/resources/images/treewidget_vline.png) 0;
+}
+
+QTreeWidget::branch:has-siblings:adjoins-item {
+        border-image: url(:/icons/resources/images/treewidget_branchmore.png) 0;
+}
+
+QTreeWidget::branch:!has-children:!has-siblings:adjoins-item {
+        border-image: url(:/icons/resources/images/treewidget_branchend.png) 0;
+}
+
+QTreeWidget::branch:has-children:!has-siblings:closed,
+QTreeWidget::branch:closed:has-children:has-siblings {
+        border-image: none;
+        image: url(:/icons/resources/images/treewidget_branchclosed.png);
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings  {
+        border-image: none;
+        image: url(:/icons/resources/images/treewidget_branchopen.png);
+}</string>
+                                </property>
+                                <property name="frameShape">
+                                 <enum>QFrame::NoFrame</enum>
+                                </property>
+                                <property name="editTriggers">
+                                 <set>QAbstractItemView::NoEditTriggers</set>
+                                </property>
+                                <property name="dragEnabled">
+                                 <bool>true</bool>
+                                </property>
+                                <property name="dragDropOverwriteMode">
+                                 <bool>false</bool>
+                                </property>
+                                <property name="dragDropMode">
+                                 <enum>QAbstractItemView::DragOnly</enum>
+                                </property>
+                                <property name="defaultDropAction">
+                                 <enum>Qt::CopyAction</enum>
+                                </property>
+                                <property name="rootIsDecorated">
+                                 <bool>true</bool>
+                                </property>
+                                <property name="uniformRowHeights">
+                                 <bool>false</bool>
+                                </property>
+                                <property name="sortingEnabled">
+                                 <bool>true</bool>
+                                </property>
+                                <property name="animated">
+                                 <bool>true</bool>
+                                </property>
+                                <column>
+                                 <property name="text">
+                                  <string>Name</string>
+                                 </property>
+                                </column>
+                                <item>
+                                 <property name="text">
+                                  <string>Trigonometric</string>
+                                 </property>
+                                 <property name="flags">
+                                  <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+                                 </property>
+                                 <item>
+                                  <property name="text">
+                                   <string>Tangent</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Sine</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Cosine</string>
+                                  </property>
+                                 </item>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>Relational</string>
+                                 </property>
+                                 <property name="flags">
+                                  <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+                                 </property>
+                                 <item>
+                                  <property name="text">
+                                   <string>Not equal</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Less or equal</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Less</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Greater or equal</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Greater</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Equal</string>
+                                  </property>
+                                 </item>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>Others</string>
+                                 </property>
+                                 <property name="flags">
+                                  <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+                                 </property>
+                                 <item>
+                                  <property name="text">
+                                   <string>Square</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Sign</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Round</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Root square</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Power exponent 4</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Power</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Natural logarithm</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Mean</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Logarithm base-2</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Logarithm base-10</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Floor</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Exponential base-2</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Exponential base-10</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Exponential</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Cube</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Ceil</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Absolute</string>
+                                  </property>
+                                 </item>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>Logical</string>
+                                 </property>
+                                 <property name="flags">
+                                  <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+                                 </property>
+                                 <item>
+                                  <property name="text">
+                                   <string>Xor</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Or</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Negation</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Minimum</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Maximum</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>And</string>
+                                  </property>
+                                 </item>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>Conditional</string>
+                                 </property>
+                                 <property name="flags">
+                                  <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+                                 </property>
+                                 <item>
+                                  <property name="text">
+                                   <string>If Then Else</string>
+                                  </property>
+                                 </item>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>Arithmetic</string>
+                                 </property>
+                                 <property name="flags">
+                                  <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+                                 </property>
+                                 <item>
+                                  <property name="text">
+                                   <string>Subtraction</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Multiplication</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Modulo</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Division</string>
+                                  </property>
+                                 </item>
+                                 <item>
+                                  <property name="text">
+                                   <string>Addition</string>
+                                  </property>
+                                 </item>
+                                </item>
+                               </widget>
+                              </item>
+                              <item row="0" column="0">
+                               <widget class="QLabel" name="label_64">
+                                <property name="styleSheet">
+                                 <string notr="true">QLabel {
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 14pt;
+	padding-left: 1px;
+}</string>
+                                </property>
+                                <property name="text">
+                                 <string>Available functions</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="1">
+                               <widget class="QLabel" name="label_65">
+                                <property name="styleSheet">
+                                 <string notr="true">QLabel {
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 14pt;
+	padding-left: 1px;
+}</string>
+                                </property>
+                                <property name="text">
+                                 <string>Selected functions</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="1">
+                               <widget class="ListWidget" name="listFunctionsTarget">
+                                <property name="styleSheet">
+                                 <string notr="true">QListWidget {
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(232,236,242);
+	font-family: Roboto;
+	font-weight: normal;
+	font-size: 9pt;
+	color: rgb(45,65,102);
+}</string>
+                                </property>
+                                <property name="frameShape">
+                                 <enum>QFrame::NoFrame</enum>
+                                </property>
+                                <property name="dragEnabled">
+                                 <bool>true</bool>
+                                </property>
+                                <property name="dragDropMode">
+                                 <enum>QAbstractItemView::DragDrop</enum>
+                                </property>
+                                <property name="defaultDropAction">
+                                 <enum>Qt::CopyAction</enum>
+                                </property>
+                                <property name="selectionBehavior">
+                                 <enum>QAbstractItemView::SelectRows</enum>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QGroupBox" name="groupBox">
+                           <property name="minimumSize">
+                            <size>
+                             <width>0</width>
+                             <height>150</height>
+                            </size>
+                           </property>
+                           <property name="title">
+                            <string>Information</string>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_48">
+                            <item row="0" column="0">
+                             <layout class="QGridLayout" name="gridLayout_46">
+                              <item row="0" column="0">
+                               <widget class="QLabel" name="label_66">
+                                <property name="text">
+                                 <string>Name</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="2" column="1">
+                               <widget class="QLabel" name="label_71">
+                                <property name="text">
+                                 <string/>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="1">
+                               <widget class="QLabel" name="label_69">
+                                <property name="text">
+                                 <string/>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="2" column="0">
+                               <widget class="QLabel" name="label_68">
+                                <property name="text">
+                                 <string>Arity</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="0">
+                               <widget class="QLabel" name="label_67">
+                                <property name="text">
+                                 <string>Symbolic expression</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="1">
+                               <widget class="QLabel" name="label_70">
+                                <property name="text">
+                                 <string/>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="2">
+                               <spacer name="horizontalSpacer_4">
+                                <property name="orientation">
+                                 <enum>Qt::Horizontal</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                 <size>
+                                  <width>40</width>
+                                  <height>20</height>
+                                 </size>
+                                </property>
+                               </spacer>
+                              </item>
+                             </layout>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                        </layout>
+                       </item>
+                      </layout>
+                     </widget>
                      <widget class="QWidget" name="pageTerminals"/>
                      <widget class="QWidget" name="pageOperators"/>
                      <widget class="QWidget" name="pageFitness"/>
@@ -2371,7 +2864,7 @@ QLabel
                 </size>
                </property>
                <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
+                <enum>QFrame::NoFrame</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
@@ -2398,7 +2891,7 @@ QLabel
                    <string notr="true"/>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>3</number>
                   </property>
                   <property name="tabSpacing">
                    <number>0</number>
@@ -2408,8 +2901,8 @@ QLabel
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>148</width>
-                     <height>267</height>
+                     <width>99</width>
+                     <height>234</height>
                     </rect>
                    </property>
                    <property name="maximumSize">
@@ -2428,8 +2921,8 @@ QLabel
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>148</width>
-                     <height>267</height>
+                     <width>99</width>
+                     <height>234</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -2437,6 +2930,14 @@ QLabel
                    </attribute>
                   </widget>
                   <widget class="QWidget" name="page_11">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>99</width>
+                     <height>234</height>
+                    </rect>
+                   </property>
                    <attribute name="label">
                     <string>Selection</string>
                    </attribute>
@@ -2446,21 +2947,22 @@ QLabel
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>148</width>
-                     <height>267</height>
+                     <width>99</width>
+                     <height>234</height>
                     </rect>
                    </property>
                    <attribute name="label">
                     <string>Functions</string>
                    </attribute>
+                   <layout class="QGridLayout" name="gridLayout_47"/>
                   </widget>
                   <widget class="QWidget" name="page_7">
                    <property name="geometry">
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>148</width>
-                     <height>267</height>
+                     <width>99</width>
+                     <height>234</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -2472,8 +2974,8 @@ QLabel
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>148</width>
-                     <height>267</height>
+                     <width>99</width>
+                     <height>234</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -2485,8 +2987,8 @@ QLabel
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>148</width>
-                     <height>267</height>
+                     <width>99</width>
+                     <height>234</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -2498,8 +3000,8 @@ QLabel
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>148</width>
-                     <height>267</height>
+                     <width>99</width>
+                     <height>234</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3065,7 +3567,7 @@ QListWidget::item:selected
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>988</width>
+     <width>1020</width>
      <height>23</height>
     </rect>
    </property>
@@ -3101,6 +3603,11 @@ QListWidget::item:selected
    <extends>QWidget</extends>
    <header>starplotwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ListWidget</class>
+   <extends>QListWidget</extends>
+   <header>listwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

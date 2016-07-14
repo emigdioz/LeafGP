@@ -10,6 +10,7 @@
 #include "kde.h"
 #include "starplotwidget.h"
 #include "gridselectorwidget.h"
+#include "listwidget.h"
 
 namespace Ui {
 class MainWidget;
@@ -25,6 +26,7 @@ public:
 	Dataset inputData;
 	void populatePreviewPlot(int nSamples);
 	JKQTmathText functionText;
+	JKQTmathText functionOperator;
 	math_stats basicStats;
 	KDE *featurePDF;
 
@@ -37,10 +39,15 @@ private slots:
 	void showSelectionMenu(const QPoint &pos);
 	void updateOtherPlots(const int x, const int y);
 
+	void on_treeFunctionsSource_itemClicked(QTreeWidgetItem *item, int column);
+
+	void on_listFunctionsTarget_itemClicked(QListWidgetItem *item);
+
 private:
 	Ui::MainWidget *ui;
 	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);
 	void setTableHeaderLabels(void);
+	void functionOperatorToLatex(QString name, QString &output, int &arity);
 	void drawPdfPlot(float nPoints);
 	void drawFeaturePlot(void);
 	void drawFeatureOutputPlot(void);

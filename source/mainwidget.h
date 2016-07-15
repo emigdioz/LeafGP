@@ -46,16 +46,22 @@ private slots:
 
 	void on_actionRemove_triggered();
 
+	void on_listTerminalsSource_itemClicked(QListWidgetItem *item);
+
+	void on_listTerminalsTarget_itemClicked(QListWidgetItem *item);
+
 private:
 	Ui::MainWidget *ui;
 	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);
 	void setTableHeaderLabels(void);
 	void functionOperatorToLatex(QString name, QString &output, int &arity);
+	void terminalListNames(QString name);
 	void drawPdfPlot(float nPoints);
 	void drawFeaturePlot(void);
 	void drawFeatureOutputPlot(void);
 	void drawRegressionPlot(int x);
 	void drawQQPlot(int x, int y);
+	void populateTerminalList(void);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
 	int tableSummarySelectionType;

@@ -37,5 +37,11 @@
         <file>resources/images/treewidget_branchend.png</file>
         <file>resources/images/treewidget_branchmore.png</file>
         <file>resources/images/treewidget_vline.png</file>
+        <file>resources/images/checkbox_uncheckedpressed.png</file>
+        <file>resources/images/checkbox_uncheckedhover.png</file>
+        <file>resources/images/checkbox_unchecked.png</file>
+        <file>resources/images/checkbox_checkedpressed.png</file>
+        <file>resources/images/checkbox_checkedhover.png</file>
+        <file>resources/images/checkbox_checked.png</file>
     </qresource>
 </RCC>

@@ -101,3 +101,19 @@ void MainWidget::on_actionRemove_triggered()
 {
 	qDeleteAll(ui->listFunctionsTarget->selectedItems());
 }
+
+void MainWidget::on_listTerminalsSource_itemClicked(QListWidgetItem *item)
+{
+	terminalListNames(item->text());
+}
+
+void MainWidget::on_listTerminalsTarget_itemClicked(QListWidgetItem *item)
+{
+	terminalListNames(item->text());
+}
+
+void MainWidget::terminalListNames(QString name)
+{
+	ui->label_75->setText(name);
+	ui->lineEdit_2->setText(name);
+}

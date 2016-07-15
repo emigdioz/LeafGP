@@ -41,6 +41,7 @@ void MainWidget::on_loadButton_pressed()
 		ui->regressionPlot->show();
 		ui->qqPlot->show();
 		updateOtherPlots(0,0);
+		populateTerminalList();
 	}
 }
 
@@ -90,7 +91,78 @@ void MainWidget::on_comboBox_activated(int index)
 		ui->regressionPlot->show();
 		ui->qqPlot->show();
 		updateOtherPlots(0,0);
+		populateTerminalList();
 	}
+}
+
+void MainWidget::populateTerminalList()
+{
+	ui->listTerminalsSource->clear();
+	ui->listTerminalsTarget->clear();
+	int nFeatures = inputData.getFeatures();
+	for(int i = 0;i < nFeatures;i++)
+	{
+		 QListWidgetItem *newItem = new QListWidgetItem;
+		 newItem->setText("X" + QString::number(i + 1));
+		 ui->listTerminalsTarget->addItem(newItem);
+	}
+	QListWidgetItem *newItem1 = new QListWidgetItem;
+	QListWidgetItem *newItem2 = new QListWidgetItem;
+	QListWidgetItem *newItem3 = new QListWidgetItem;
+	QListWidgetItem *newItem4 = new QListWidgetItem;
+	QListWidgetItem *newItem5 = new QListWidgetItem;
+	QListWidgetItem *newItem6 = new QListWidgetItem;
+	QListWidgetItem *newItem7 = new QListWidgetItem;
+	QListWidgetItem *newItem8 = new QListWidgetItem;
+	QListWidgetItem *newItem9 = new QListWidgetItem;
+	QListWidgetItem *newItem10 = new QListWidgetItem;
+	QListWidgetItem *newItem11 = new QListWidgetItem;
+	QListWidgetItem *newItem12 = new QListWidgetItem;
+	QListWidgetItem *newItem13 = new QListWidgetItem;
+	QListWidgetItem *newItem14 = new QListWidgetItem;
+	QListWidgetItem *newItem15 = new QListWidgetItem;
+	QListWidgetItem *newItem16 = new QListWidgetItem;
+	QListWidgetItem *newItem17 = new QListWidgetItem;
+	QListWidgetItem *newItem18 = new QListWidgetItem;
+	QListWidgetItem *newItem19 = new QListWidgetItem;
+	newItem1->setText("ERC");
+	newItem2->setText("Pi");
+	newItem3->setText("Pi/2");
+	newItem4->setText("Pi/4");
+	newItem5->setText("1/Pi");
+	newItem6->setText("2/Pi");
+	newItem7->setText("2/Square root (pi)");
+	newItem8->setText("Square root (0.5)");
+	newItem9->setText("Square root (2)");
+	newItem10->setText("Natural logarithm (10)");
+	newItem11->setText("Natural logarithm (2)");
+	newItem12->setText("Euler");
+	newItem13->setText("e");
+	newItem14->setText("-1");
+	newItem15->setText("-2");
+	newItem16->setText("-3");
+	newItem17->setText("1");
+	newItem18->setText("2");
+	newItem19->setText("3");
+	ui->listTerminalsSource->addItem(newItem1);
+	ui->listTerminalsSource->addItem(newItem2);
+	ui->listTerminalsSource->addItem(newItem3);
+	ui->listTerminalsSource->addItem(newItem4);
+	ui->listTerminalsSource->addItem(newItem5);
+	ui->listTerminalsSource->addItem(newItem6);
+	ui->listTerminalsSource->addItem(newItem7);
+	ui->listTerminalsSource->addItem(newItem8);
+	ui->listTerminalsSource->addItem(newItem9);
+	ui->listTerminalsSource->addItem(newItem10);
+	ui->listTerminalsSource->addItem(newItem11);
+	ui->listTerminalsSource->addItem(newItem12);
+	ui->listTerminalsSource->addItem(newItem13);
+	ui->listTerminalsSource->addItem(newItem14);
+	ui->listTerminalsSource->addItem(newItem15);
+	ui->listTerminalsSource->addItem(newItem16);
+	ui->listTerminalsSource->addItem(newItem17);
+	ui->listTerminalsSource->addItem(newItem18);
+	ui->listTerminalsSource->addItem(newItem19);
 }
 
 void MainWidget::setTableDataItemsAligment(Qt::AlignmentFlag aligment)

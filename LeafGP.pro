@@ -38,7 +38,9 @@ SOURCES += source/main.cpp \
     source/alglib/solvers.cpp \
     source/alglib/specialfunctions.cpp \
     source/alglib/statistics.cpp \
-    source/listwidget.cpp
+    source/listwidget.cpp \
+    source/pagesetup.cpp \
+    source/pagedata.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \

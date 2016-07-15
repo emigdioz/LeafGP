@@ -2734,6 +2734,9 @@ QTreeView::branch:open:has-children:has-siblings  {
                               </item>
                               <item row="1" column="1">
                                <widget class="ListWidget" name="listFunctionsTarget">
+                                <property name="focusPolicy">
+                                 <enum>Qt::NoFocus</enum>
+                                </property>
                                 <property name="styleSheet">
                                  <string notr="true">QListWidget {
 	border-style: solid;
@@ -2743,6 +2746,21 @@ QTreeView::branch:open:has-children:has-siblings  {
 	font-weight: normal;
 	font-size: 9pt;
 	color: rgb(45,65,102);
+}
+
+QListWidget::item {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+QListWidget::item:selected {
+	background-color: rgb(182,194,214);
+}
+
+QListWidget::item:selected:active {
+	background-color: rgb(182,194,214);
+}
+QListWidget::item:hover {
+	background-color: rgb(232,236,242);
 }</string>
                                 </property>
                                 <property name="frameShape">
@@ -2752,7 +2770,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                                  <bool>true</bool>
                                 </property>
                                 <property name="dragDropMode">
-                                 <enum>QAbstractItemView::DragDrop</enum>
+                                 <enum>QAbstractItemView::DropOnly</enum>
                                 </property>
                                 <property name="defaultDropAction">
                                  <enum>Qt::CopyAction</enum>
@@ -2901,7 +2919,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>99</width>
+                     <width>96</width>
                      <height>234</height>
                     </rect>
                    </property>
@@ -2921,7 +2939,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>99</width>
+                     <width>96</width>
                      <height>234</height>
                     </rect>
                    </property>
@@ -2934,7 +2952,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>99</width>
+                     <width>96</width>
                      <height>234</height>
                     </rect>
                    </property>
@@ -2947,7 +2965,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>99</width>
+                     <width>96</width>
                      <height>234</height>
                     </rect>
                    </property>
@@ -2961,7 +2979,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>99</width>
+                     <width>96</width>
                      <height>234</height>
                     </rect>
                    </property>
@@ -2974,7 +2992,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>99</width>
+                     <width>96</width>
                      <height>234</height>
                     </rect>
                    </property>
@@ -2987,7 +3005,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>99</width>
+                     <width>96</width>
                      <height>234</height>
                     </rect>
                    </property>
@@ -3000,7 +3018,7 @@ QTreeView::branch:open:has-children:has-siblings  {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>99</width>
+                     <width>96</width>
                      <height>234</height>
                     </rect>
                    </property>
@@ -3581,6 +3599,11 @@ QListWidget::item:selected
   <action name="actionSelect_by_feature">
    <property name="text">
     <string>select by feature</string>
+   </property>
+  </action>
+  <action name="actionRemove">
+   <property name="text">
+    <string>Remove</string>
    </property>
   </action>
  </widget>

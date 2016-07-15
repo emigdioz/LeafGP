@@ -37,11 +37,14 @@ private slots:
 	void on_actionSelect_by_feature_triggered();
 	void on_actionSelect_by_sample_triggered();
 	void showSelectionMenu(const QPoint &pos);
+	void showDeleteMenu(const QPoint &pos);
 	void updateOtherPlots(const int x, const int y);
 
 	void on_treeFunctionsSource_itemClicked(QTreeWidgetItem *item, int column);
 
 	void on_listFunctionsTarget_itemClicked(QListWidgetItem *item);
+
+	void on_actionRemove_triggered();
 
 private:
 	Ui::MainWidget *ui;

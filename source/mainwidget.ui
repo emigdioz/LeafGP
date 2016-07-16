@@ -654,7 +654,7 @@ QCheckBox::indicator:checked:pressed {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -1713,8 +1713,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>150</width>
-                     <height>434</height>
+                     <width>122</width>
+                     <height>202</height>
                     </rect>
                    </property>
                    <property name="maximumSize">
@@ -1905,8 +1905,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>150</width>
-                     <height>434</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -1918,8 +1918,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>150</width>
-                     <height>434</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3410,8 +3410,8 @@ QListWidget::item:hover {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>96</width>
-                     <height>234</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <property name="maximumSize">
@@ -3430,8 +3430,8 @@ QListWidget::item:hover {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>96</width>
-                     <height>234</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3443,8 +3443,8 @@ QListWidget::item:hover {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>96</width>
-                     <height>234</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3456,8 +3456,8 @@ QListWidget::item:hover {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>96</width>
-                     <height>234</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3470,8 +3470,8 @@ QListWidget::item:hover {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>96</width>
-                     <height>234</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3483,8 +3483,8 @@ QListWidget::item:hover {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>96</width>
-                     <height>234</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3509,8 +3509,8 @@ QListWidget::item:hover {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>96</width>
-                     <height>234</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3706,6 +3706,22 @@ QListWidget::item:selected
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
+                <widget class="circularProgressWidget" name="circularProgress" native="true">
+                 <property name="geometry">
+                  <rect>
+                   <x>570</x>
+                   <y>50</y>
+                   <width>150</width>
+                   <height>150</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
                </widget>
               </item>
              </layout>
@@ -4100,6 +4116,12 @@ QListWidget::item:selected
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>circularProgressWidget</class>
+   <extends>QWidget</extends>
+   <header>circularprogresswidget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>gridSelectorWidget</class>
    <extends>QWidget</extends>

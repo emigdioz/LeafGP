@@ -40,7 +40,8 @@ SOURCES += source/main.cpp \
     source/alglib/statistics.cpp \
     source/listwidget.cpp \
     source/pagesetup.cpp \
-    source/pagedata.cpp
+    source/pagedata.cpp \
+    source/circularprogresswidget.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -67,7 +68,8 @@ HEADERS  += source/mainwidget.h \
     source/alglib/specialfunctions.h \
     source/alglib/statistics.h \
     source/alglib/stdafx.h \
-    source/listwidget.h
+    source/listwidget.h \
+    source/circularprogresswidget.h
 
 FORMS    += source/mainwidget.ui
 

@@ -11,6 +11,7 @@
 #include "starplotwidget.h"
 #include "gridselectorwidget.h"
 #include "listwidget.h"
+#include "circularprogresswidget.h"
 
 namespace Ui {
 class MainWidget;

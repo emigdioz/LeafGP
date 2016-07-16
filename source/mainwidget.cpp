@@ -66,6 +66,16 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->regressionPlot->hide();
 	ui->qqPlot->hide();
 	ui->treeFunctionsSource->sortByColumn(0,Qt::AscendingOrder);
+	ui->circularProgress->setCircular1BackgroundColor(QColor(246,248,250,255));
+	ui->circularProgress->setCircular2BackgroundColor(QColor(246,248,250,255));
+	ui->circularProgress->setBackgroundColor(QColor(246,248,250,255));
+	ui->circularProgress->setCircular1Color(QColor(255,174,0,255));
+	ui->circularProgress->setCircular2Color(QColor(188,95,211,255));
+	ui->circularProgress->setFont(QFont("Roboto",9,QFont::Light));
+	ui->circularProgress->setFontColor(QColor(45,65,102));
+	ui->circularProgress->setDoubleProgress(true);
+	ui->circularProgress->setProgress1(400);
+	ui->circularProgress->setProgress2(800);
 }
 
 MainWidget::~MainWidget()

@@ -76,6 +76,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->circularProgress->setDoubleProgress(true);
 	ui->circularProgress->setProgress1(400);
 	ui->circularProgress->setProgress2(800);
+	ui->correlationGPPlot->setSizePolicy(policy);
 }
 
 MainWidget::~MainWidget()

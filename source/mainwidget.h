@@ -12,6 +12,7 @@
 #include "gridselectorwidget.h"
 #include "listwidget.h"
 #include "circularprogresswidget.h"
+#include "workergp.h"
 
 namespace Ui {
 class MainWidget;
@@ -40,16 +41,15 @@ private slots:
 	void showSelectionMenu(const QPoint &pos);
 	void showDeleteMenu(const QPoint &pos);
 	void updateOtherPlots(const int x, const int y);
-
 	void on_treeFunctionsSource_itemClicked(QTreeWidgetItem *item, int column);
-
 	void on_listFunctionsTarget_itemClicked(QListWidgetItem *item);
-
 	void on_actionRemove_triggered();
-
 	void on_listTerminalsSource_itemClicked(QListWidgetItem *item);
-
 	void on_listTerminalsTarget_itemClicked(QListWidgetItem *item);
+	void on_startButton_clicked();
+	void showElapsedTime(void);
+	void receivedProgress1(int value);
+	void algorithmFinished(void);
 
 private:
 	Ui::MainWidget *ui;
@@ -66,6 +66,14 @@ private:
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
 	int tableSummarySelectionType;
+	void showStartedTime(void);
+	QString secondsToDHMS(qint64 duration);
+
+	QThread* threadGP;
+	workerGP* workerAlgorithm;
+	void requestAlgorithmStart(void);
+	QTimer* timerGP;
+	QDateTime startedDateTime;
 };
 
 #endif // MAINWIDGET_H

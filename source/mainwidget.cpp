@@ -77,9 +77,23 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->circularProgress->setProgress1(400);
 	ui->circularProgress->setProgress2(800);
 	ui->correlationGPPlot->setSizePolicy(policy);
+
+	threadGP = new QThread();
+	workerAlgorithm = new workerGP();
+	workerAlgorithm->moveToThread(threadGP);
+	connect(workerAlgorithm, SIGNAL(workRequested()), threadGP, SLOT(start()));
+	connect(threadGP, SIGNAL(started()), workerAlgorithm, SLOT(doWork()));
+	connect(workerAlgorithm, SIGNAL(finished()), threadGP, SLOT(quit()), Qt::DirectConnection);
+	connect(workerAlgorithm, SIGNAL(sendProgress1(int)), this, SLOT(receivedProgress1(int)));
+
+	timerGP = new QTimer();
+	connect(timerGP, SIGNAL(timeout()), this, SLOT(showElapsedTime()));
+	connect(workerAlgorithm, SIGNAL(finished()), this, SLOT(algorithmFinished()));
 }
 
 MainWidget::~MainWidget()
 {
 	delete ui;
 }
+
+

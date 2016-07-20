@@ -41,7 +41,9 @@ SOURCES += source/main.cpp \
     source/listwidget.cpp \
     source/pagesetup.cpp \
     source/pagedata.cpp \
-    source/circularprogresswidget.cpp
+    source/circularprogresswidget.cpp \
+    source/workergp.cpp \
+    source/pagegp.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -69,7 +71,8 @@ HEADERS  += source/mainwidget.h \
     source/alglib/statistics.h \
     source/alglib/stdafx.h \
     source/listwidget.h \
-    source/circularprogresswidget.h
+    source/circularprogresswidget.h \
+    source/workergp.h
 
 FORMS    += source/mainwidget.ui
 

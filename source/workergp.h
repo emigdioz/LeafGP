@@ -7,6 +7,10 @@
 #include <QThread>
 #include <QTime>
 #include <QCoreApplication>
+#include "GP.h"
+#include "CPU.h"
+#include "GPU.h"
+#include "params.h"
 
 class workerGP : public QObject
 {
@@ -17,6 +21,8 @@ public:
   void suspend();
   void resume();
   void requestWork();
+  GP* gp_engine;
+  Params parameters;
 
 signals:
   void workRequested();

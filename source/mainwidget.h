@@ -13,6 +13,7 @@
 #include "listwidget.h"
 #include "circularprogresswidget.h"
 #include "workergp.h"
+#include "cl.hpp"
 
 namespace Ui {
 class MainWidget;
@@ -68,6 +69,7 @@ private:
 	int tableSummarySelectionType;
 	void showStartedTime(void);
 	QString secondsToDHMS(qint64 duration);
+	void getInfoOpenCL(void);
 
 	QThread* threadGP;
 	workerGP* workerAlgorithm;

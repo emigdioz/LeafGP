@@ -11,8 +11,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 TARGET = LeafGP
 TEMPLATE = app
 
+LIBS += -lOpenCL
+
 INCLUDEPATH += ./source \
-             ./source/alglib
+             ./source/alglib \
+             ./source/CL
 
 SOURCES += source/main.cpp \
     source/mainwidget.cpp \
@@ -43,7 +46,12 @@ SOURCES += source/main.cpp \
     source/pagedata.cpp \
     source/circularprogresswidget.cpp \
     source/workergp.cpp \
-    source/pagegp.cpp
+    source/pagegp.cpp \
+    source/CPU.cpp \
+    source/GP.cpp \
+    source/GPU.cpp \
+    source/params.cpp \
+    source/primitives.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -72,7 +80,22 @@ HEADERS  += source/mainwidget.h \
     source/alglib/stdafx.h \
     source/listwidget.h \
     source/circularprogresswidget.h \
-    source/workergp.h
+    source/workergp.h \
+    source/CPU.h \
+    source/GP.h \
+    source/GPU.h \
+    source/params.h \
+    source/primitives.h \
+    source/util.h \
+    source/random.h \
+    source/CL/cl.h \
+    source/CL/cl.hpp \
+    source/CL/cl_d3d10.h \
+    source/CL/cl_ext.h \
+    source/CL/cl_gl.h \
+    source/CL/cl_gl_ext.h \
+    source/CL/cl_platform.h \
+    source/CL/opencl.h
 
 FORMS    += source/mainwidget.ui
 

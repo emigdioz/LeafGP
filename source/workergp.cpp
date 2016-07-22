@@ -53,11 +53,12 @@ void workerGP::doWork()
       qDebug() << "Aborting worker process in Thread " << thread()->currentThreadId();
   }
 
-  for(int i = 0;i < 1000;i++)
-  {
-    delay(10);
-    emit sendProgress1(i);
-  }
+//  for(int i = 0;i < 1000;i++)
+//  {
+//    delay(10);
+//    emit sendProgress1(i);
+//  }
+  parameters.Initialize();
 
   mutex.lock();
   _working = false;

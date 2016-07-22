@@ -44,5 +44,6 @@
         <file>resources/images/checkbox_checkedhover.png</file>
         <file>resources/images/checkbox_checked.png</file>
         <file>resources/images/nvidia_logo.png</file>
+        <file>resources/images/intel_logo.png</file>
     </qresource>
 </RCC>

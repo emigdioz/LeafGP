@@ -103,6 +103,7 @@ void MainWidget::getInfoOpenCL()
   int i, j;
   char* value;
   char* info;
+  int type;
   size_t valueSize;
   size_t infoSize;
   cl_uint platformCount;
@@ -119,7 +120,7 @@ void MainWidget::getInfoOpenCL()
   clGetPlatformIDs(0, NULL, &platformCount);
   platforms = (cl_platform_id*) malloc(sizeof(cl_platform_id) * platformCount);
   clGetPlatformIDs(platformCount, platforms, NULL);
-
+  int counter = 0;
   for (i = 0; i < platformCount; i++)
   {
     // get all devices
@@ -134,13 +135,12 @@ void MainWidget::getInfoOpenCL()
     // get platform attribute value
     clGetPlatformInfo(platforms[i], attributeTypes[1], infoSize, info, NULL);
 
-    //printf("  %d.%d %-11s: %sn", i+1, j+1, attributeNames[j], info);
-    qDebug()<<i+1<<" "<<" "<<attributeNames[1]<<" "<<info;
-
     QVBoxLayout *vbox1 = new QVBoxLayout;
     QGroupBox *groupBoxFirst = new QGroupBox(info);
     ui->verticalLayout_24->addWidget(groupBoxFirst);
     groupBoxFirst->setLayout(vbox1);
+    if(info[0] == 'I') type = 1;
+    if(info[0] == 'N') type = 2;
 
     free(info);
 
@@ -165,15 +165,20 @@ void MainWidget::getInfoOpenCL()
       clGetDeviceInfo(devices[j], CL_DEVICE_NAME, 0, NULL, &valueSize);
       value = (char*) malloc(valueSize);
       clGetDeviceInfo(devices[j], CL_DEVICE_NAME, valueSize, value, NULL);
-      //printf("%d. Device: %sn", j+1, value);
-      qDebug()<<j+1<<" Device: "<<value;
 
       QGroupBox *groupBoxSecond = new QGroupBox(value);
       groupBoxSecond->setStyleSheet("QGroupBox { background-color: rgb(246,248,250); }");
       groupBoxSecond->setCheckable(true);
+      groupBoxSecond->setChecked(false);
       groupBoxSecond->setLayout(grid);
+      groupBoxSecond->setObjectName("deviceParallel"+QString::number(counter++));
+      //connect(groupBoxSecond, SIGNAL(toggled(bool)), this, SLOT(parallelDevicesChecked(bool)));
+
       QLabel *mylabel = new QLabel();
-      mylabel->setPixmap(QPixmap(":/icons/resources/images/nvidia_logo.png"));
+      if(type == 1)
+        mylabel->setPixmap(QPixmap(":/icons/resources/images/intel_logo.png"));
+      if(type == 2)
+        mylabel->setPixmap(QPixmap(":/icons/resources/images/nvidia_logo.png"));
       mylabel->setMaximumHeight(40);
       vbox1->addWidget(mylabel);
       vbox1->addWidget(groupBoxSecond);
@@ -188,8 +193,6 @@ void MainWidget::getInfoOpenCL()
       clGetDeviceInfo(devices[j], CL_DEVICE_VERSION, 0, NULL, &valueSize);
       value = (char*) malloc(valueSize);
       clGetDeviceInfo(devices[j], CL_DEVICE_VERSION, valueSize, value, NULL);
-      //printf(" %d.%d Hardware version: %sn", j+1, 1, value);
-      qDebug()<<j+1<<"1 Hardware version: "<<value;
       hardwareVersionName->setText(value);
       grid->addWidget(hardwareVersionName,0,1);
       free(value);
@@ -198,8 +201,6 @@ void MainWidget::getInfoOpenCL()
       clGetDeviceInfo(devices[j], CL_DRIVER_VERSION, 0, NULL, &valueSize);
       value = (char*) malloc(valueSize);
       clGetDeviceInfo(devices[j], CL_DRIVER_VERSION, valueSize, value, NULL);
-      //printf(" %d.%d Software version: %sn", j+1, 2, value);
-      qDebug()<<j+1<<"2 Software version: "<<value;
       softwareVersionName->setText(value);
       grid->addWidget(softwareVersionName,1,1);
       free(value);
@@ -208,22 +209,45 @@ void MainWidget::getInfoOpenCL()
       clGetDeviceInfo(devices[j], CL_DEVICE_OPENCL_C_VERSION, 0, NULL, &valueSize);
       value = (char*) malloc(valueSize);
       clGetDeviceInfo(devices[j], CL_DEVICE_OPENCL_C_VERSION, valueSize, value, NULL);
-      //printf(" %d.%d OpenCL C version: %sn", j+1, 3, value);
-      qDebug()<<j+1<<"3 OpenCL C version: "<<value;
-      openclVersionName->setText(value);
+       openclVersionName->setText(value);
       grid->addWidget(openclVersionName,2,1);
       free(value);
 
       // print parallel compute units
       clGetDeviceInfo(devices[j], CL_DEVICE_MAX_COMPUTE_UNITS,
                       sizeof(maxComputeUnits), &maxComputeUnits, NULL);
-      //printf(" %d.%d Parallel compute units: %dn", j+1, 4, maxComputeUnits);
-      qDebug()<<j+1<<"4 Parallel compute units: "<<maxComputeUnits;
       parallelUnitsName->setText(QString::number(maxComputeUnits));
       grid->addWidget(parallelUnitsName,3,1);
-
     }
     free(devices);
+  }
+  devicesNumber = counter;
+  qDebug()<<counter;
 
+  QGroupBox* firstGroup = ui->groupBox_7->findChild<QGroupBox*>("deviceParallel0");
+  firstGroup->setChecked(true);
+  deviceChecked = 0;
+  for(i = 0;i < devicesNumber;i++)
+  {
+    QGroupBox* Group = ui->groupBox_7->findChild<QGroupBox*>("deviceParallel" + QString::number(i));
+    Group->setProperty("index",i);
+    connect(Group, SIGNAL(toggled(bool)), this, SLOT(parallelDevicesChecked(bool)));
+  }
+}
+
+void MainWidget::parallelDevicesChecked(bool t)
+{
+  QObject *pSender = sender();
+  int index = pSender->property("index").toInt();
+  deviceChecked = index;
+  for(int i = 0;i < devicesNumber;i++)
+  {
+    QGroupBox* Group = ui->groupBox_7->findChild<QGroupBox*>("deviceParallel" + QString::number(i));
+    Group->blockSignals(true);
+    if(i != index)
+      Group->setChecked(false);
+    else
+      Group->setChecked(true);
+    Group->blockSignals(false);
   }
 }

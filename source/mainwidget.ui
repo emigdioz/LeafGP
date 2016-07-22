@@ -1713,8 +1713,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>150</width>
-                     <height>440</height>
+                     <width>119</width>
+                     <height>178</height>
                     </rect>
                    </property>
                    <property name="maximumSize">
@@ -1905,8 +1905,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>150</width>
-                     <height>440</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -1918,8 +1918,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>150</width>
-                     <height>440</height>
+                     <width>100</width>
+                     <height>30</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -3369,7 +3369,7 @@ QListWidget::item:hover {
 }</string>
                            </property>
                            <property name="title">
-                            <string>Multicore processing</string>
+                            <string>Accelerated processing</string>
                            </property>
                            <layout class="QGridLayout" name="gridLayout_71">
                             <item row="0" column="0">

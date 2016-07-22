@@ -51,6 +51,7 @@ private slots:
 	void showElapsedTime(void);
 	void receivedProgress1(int value);
 	void algorithmFinished(void);
+	void parallelDevicesChecked(bool t);
 
 private:
 	Ui::MainWidget *ui;
@@ -76,6 +77,8 @@ private:
 	void requestAlgorithmStart(void);
 	QTimer* timerGP;
 	QDateTime startedDateTime;
+	int devicesNumber;
+	int deviceChecked;
 };
 
 #endif // MAINWIDGET_H

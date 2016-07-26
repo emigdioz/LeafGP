@@ -212,14 +212,22 @@ Params::Initialize()
 //   m_max_local_size = Opts.Int.Get( "-cl-mls" );
 
   m_verbose = true;
+  m_print_primitives = false;
   m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
   m_number_of_generations = 100;
   m_population_size = 1000;
   m_crossover_probability = 0.9;
   m_mutation_probability = 0.1;
   m_maximum_tree_size = 100;
-
-
+  m_minimum_tree_size = 1;
+  m_tournament_size = 3;
+  m_device = DEVICE_GPU_FPI;
+  m_elitism_size = 1;
+  m_error_tolerance = -1;
+  m_max_local_size = 0;
+  m_output_file = "gpocl.out";
+  m_seed = 0;
+  m_number_of_runs = 1;
    // ---------------
    return true;
 }

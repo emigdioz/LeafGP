@@ -35,11 +35,13 @@
 #include <limits>
 #include <iomanip>
 #include <ctime>
+#include <QDebug>
+#include <QCoreApplication>
 
 Params* GP::m_params = 0;
 
 // -----------------------------------------------------------------------------
-GP::GP( Params& p, cl_device_type device_type ): m_device_type( device_type ),
+GP::GP(Params& p, cl_device_type device_type ): m_device_type( device_type ),
                                                  m_X( 0 ),
                                                  m_E( 0 ),
                                                  m_num_points( 0 ),
@@ -93,7 +95,10 @@ void GP::Evolve()
    19: end for
    20: return the best individual so far
    */
+  int progress_run;
 
+  for(int i = 0;i < m_params->m_number_of_runs;i++)
+  {
    // ------
    std::clock_t start = std::clock();
    // ------
@@ -141,6 +146,9 @@ void GP::Evolve()
 #endif
    std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
    // ---------
+
+    progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
+    emit GP_send_run_progress(progress_run);
    } // 19
 
    // 20:
@@ -153,6 +161,7 @@ void GP::Evolve()
    delete[] pop_a;
    delete[] pop_b;
    ///delete[] errors;
+  }
 }
 
 // -----------------------------------------------------------------------------
@@ -596,8 +605,9 @@ void GP::OpenCLInit()
          platforms[i].getDevices( m_device_type, &devices );
       } catch( cl::Error ) { }
 
-   if( devices.empty() )
-//      throw Error( "Not a single compatible device found." );
+   //if( devices.empty() )
+   //  qDebug()<<"Not a single compatible device found.";
+      //throw Error( "Not a single compatible device found." );
 
    // TODO: Pick the best device from *all* platforms
    m_device = devices.front();
@@ -935,103 +945,32 @@ void GP::CreateLinearTree( cl_uint* node, unsigned size ) const
    } while( --size );
 }
 
+void GP::insertDataTraining(std::vector<std::vector<float> > data)
+{
+  input_data_matrix = data;
+}
+
 // -----------------------------------------------------------------------------
 void GP::LoadPoints( std::vector<std::vector<cl_float> > & out_x )
 {
    using namespace util;
+  int nRows = input_data_matrix.size();
+  int nCols = input_data_matrix.at(0).size();
 
-//   if( m_params->m_data_points.empty() )
-////      throw Error( "Missing data points filename" );
-
-//   // We will consider just the first file name given by the user
-//   std::ifstream points( m_params->m_data_points[0].c_str() );
-
-////   if( !points.is_open() ) {
-////      // Maybe a typo when passing the file name on the command-line
-////      throw Error( "[" + m_params->m_data_points[0] + "]: file not found." );
-////	}
-
-//   // -----
-//   unsigned cur_line = 0;
-//   while( ++cur_line, points.good() )
-//   {
-//      // Ignore (treat as comment) empty lines or lines beginning with one of:
-//      //                '%', or '#'
-//      switch( points.peek() )
-//      {
-//         case '%': case '#': case '\n':
-//            points.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
-//            continue;
-//      }
-
-//      // Found a non-comment line, lets go to the next phase (guessing the field
-//      // separator character).
-//      break;
-//   }
-
-//   std::string line; std::getline( points, line );
-   
-//   // --- Guessing the field separator char
-//   // First discards the leading spaces (if any)
-//   std::size_t start = line.find_first_not_of( " \t" );
-//   start = line.find_first_not_of( "01234567890.+-Ee", start );
-
-//   if( start == std::string::npos )
-////      throw Error( "[" + m_params->m_data_points[0] + ", line " + ToString( cur_line )
-////                  + "]: could not guess the field separator character." );
-
-//   // Guessed field separator is the char at line[start]
-//   const char separator = line[start];
-
-//   do
-//   {
-//      // Skipping empty lines or lines beginning with '#' or '%'
-//      if( line.empty() || line[0] == '#' || line[0] == '%' ) { continue; }
-
-//      std::stringstream ss( line ); std::string cell; std::vector<cl_float> v;
-//      while( std::getline( ss, cell, separator ) )
-//      {
-//         if( cell.empty() ) continue; // ignore adjacent occurrence of the separator
-
-//         cl_float element;
-//         if( !StringTo( element, cell ) )
-//            // This means that 'cell' couldn't be converted to a float numeral type. It is
-//            // better to throw a fatal error here and let the user fix the dirty file.
-////            throw Error( "[" + m_params->m_data_points[0] + ", line " + ToString( cur_line )
-////                  + "]: could not convert '" + ToString( cell ) + "' to a float point number." );
-
-//         // Appending the cell to the temporary float vector 'v'
-//         v.push_back( element );
-//      }
-
-//      // Set the number of expected cols as the number of cells found on the first row
-//      static const unsigned cols = v.size(); // only assigned once
-
-//      // Setting the dimension of the input variables (X) and checking whether
-//      // there are lines with different number of variables.
-//      if( v.size() != cols )
-////         throw Error( "[" + m_params->m_data_points[0] + ", line " + ToString( cur_line ) + "]: expected "
-////                          + ToString( cols ) + " columns but found " + ToString( v.size() ) );
-
-//      // Here we append directly in m_Y because both CPU and GPU we use it (m_Y) throughout
-//      // the evolutionary process.
-//      m_Y.push_back( v.back() ); v.pop_back();
-      
-//      // Update m_min_Y/m_max_Y (only useful for data classification)
-//      if( m_Y.back() < m_primitives.m_min_Y && m_Y.back() > 0 ) m_primitives.m_min_Y = m_Y.back();
-//      if( m_Y.back() > m_primitives.m_max_Y && m_Y.back() <= MAX_INT_VALUE ) m_primitives.m_max_Y = m_Y.back();
-
-//      out_x.push_back( v );
-
-//   } while( ++cur_line, std::getline( points, line ) );
-
-//   if( out_x.empty() )
-////      throw Error( "[" + m_params->m_data_points[0] + "]: no data found." );
-//   m_num_points = out_x.size();
-
-//   if( out_x[0].empty() )
-////      throw Error( "[" + m_params->m_data_points[0] + "]: no enough columns (variables) found." );
-//   m_x_dim = out_x[0].size();
+	for(int j = 0;j < nRows; j++)
+	{
+		std::vector<float> line_data;
+		for(int i = 0;i < nCols-1; i++)
+		{
+			line_data.push_back(input_data_matrix[j][i]);
+		}
+		out_x.push_back(line_data);
+		m_Y.push_back(input_data_matrix[j][nCols-1]);
+		if( m_Y.back() < m_primitives.m_min_Y && m_Y.back() > 0 ) m_primitives.m_min_Y = m_Y.back();
+		if( m_Y.back() > m_primitives.m_max_Y && m_Y.back() <= MAX_INT_VALUE ) m_primitives.m_max_Y = m_Y.back();
+	}
+	m_num_points = nRows;
+	m_x_dim = nCols - 1;
 }
 
 // -----------------------------------------------------------------------------

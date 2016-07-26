@@ -10,6 +10,8 @@ void MainWidget::requestAlgorithmStart()
 
 void MainWidget::on_startButton_clicked()
 {
+	// Copy input data to worker local matrix
+	workerAlgorithm->data_matrix = input_data_matrix;
 	requestAlgorithmStart();
 	showStartedTime();
 	startedDateTime = QDateTime::currentDateTime();
@@ -19,6 +21,12 @@ void MainWidget::on_startButton_clicked()
 void MainWidget::receivedProgress1(int value)
 {
 	ui->circularProgress->setProgress1(value);
+}
+
+void MainWidget::receivedRunProgress(int value)
+{
+	ui->circularProgress->setProgress1(value);
+	qDebug()<<value;
 }
 
 QString MainWidget::secondsToDHMS(qint64 duration)

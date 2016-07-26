@@ -137,7 +137,7 @@ QListWidget::item
             <bool>false</bool>
            </property>
            <property name="currentRow">
-            <number>1</number>
+            <number>0</number>
            </property>
            <item>
             <property name="textAlignment">
@@ -654,7 +654,7 @@ QCheckBox::indicator:checked:pressed {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -1399,7 +1399,7 @@ QWidget#pageProcessing {
 }</string>
                      </property>
                      <property name="currentIndex">
-                      <number>1</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="pageSummary">
                       <layout class="QGridLayout" name="gridLayout_29">
@@ -1713,8 +1713,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>119</width>
-                     <height>178</height>
+                     <width>150</width>
+                     <height>440</height>
                     </rect>
                    </property>
                    <property name="maximumSize">
@@ -1905,8 +1905,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>100</width>
-                     <height>30</height>
+                     <width>150</width>
+                     <height>440</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -1918,8 +1918,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>100</width>
-                     <height>30</height>
+                     <width>150</width>
+                     <height>440</height>
                     </rect>
                    </property>
                    <attribute name="label">
@@ -2229,7 +2229,7 @@ QLabel
 }</string>
                      </property>
                      <property name="currentIndex">
-                      <number>7</number>
+                      <number>0</number>
                      </property>
                      <widget class="QWidget" name="pageExperiment"/>
                      <widget class="QWidget" name="pagePopulation">
@@ -3424,7 +3424,7 @@ QListWidget::item:hover {
                    <string notr="true"/>
                   </property>
                   <property name="currentIndex">
-                   <number>7</number>
+                   <number>0</number>
                   </property>
                   <property name="tabSpacing">
                    <number>0</number>

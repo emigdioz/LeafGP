@@ -70,6 +70,7 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include <QObject>
 
 /*
 Definitions:
@@ -88,7 +89,9 @@ Definitions:
 
 
 // -----------------------------------------------------------------------------
-class GP {
+class GP : public QObject
+{
+  Q_OBJECT
 public:
    /**
     * @class Error
@@ -101,13 +104,15 @@ public:
 
 public:
    // Get platform, context, devices and create queue
-   GP( Params& p, cl_device_type );
+   explicit GP(Params& p, cl_device_type);
    virtual ~GP() 
    { 
       delete[] m_X;
       delete[] m_E;
       delete[] m_best_program;
    }
+
+   void insertDataTraining(std::vector<std::vector<float> > data);
 
    void Run()
    {
@@ -363,9 +368,15 @@ public:
    unsigned m_x_dim; /**< Number of input variables. */
    unsigned m_y_dim; /**< Number of output variables. Currently, always = 1. */
 
-   std::vector<cl_float> m_Y;
+   std::vector<cl_float> m_Y;   
+
+   std::vector<std::vector<float> > input_data_matrix;
 
    static Params* m_params; /**< Pointer to Params class (holds the parameters). */
+
+signals:
+   void GP_send_run_progress(const int value);
+
 };
 
 // -----------------------------------------------------------------------------

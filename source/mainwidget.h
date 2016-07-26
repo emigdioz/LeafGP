@@ -32,6 +32,9 @@ public:
 	JKQTmathText functionOperator;
 	math_stats basicStats;
 	KDE *featurePDF;
+	std::vector<std::vector<float> > input_data_matrix;
+public slots:
+	void receivedRunProgress(int value);
 
 private slots:
 	void on_loadButton_pressed();
@@ -71,7 +74,7 @@ private:
 	void showStartedTime(void);
 	QString secondsToDHMS(qint64 duration);
 	void getInfoOpenCL(void);
-
+	void populateDataForGP(void);
 	QThread* threadGP;
 	workerGP* workerAlgorithm;
 	void requestAlgorithmStart(void);
@@ -79,6 +82,7 @@ private:
 	QDateTime startedDateTime;
 	int devicesNumber;
 	int deviceChecked;
+
 };
 
 #endif // MAINWIDGET_H

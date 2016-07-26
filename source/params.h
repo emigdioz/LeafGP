@@ -96,6 +96,7 @@ public:
    float m_crossover_probability; /**< Crossover probability */
    float m_mutation_probability; /**< Mutation probability */
    float m_error_tolerance; /**< Error tolerance (stop criterion) */
+   int m_number_of_runs;
 
    std::string m_output_file; /**< output filename. */
 

@@ -5,6 +5,8 @@ workerGP::workerGP(QObject *parent) : QObject(parent)
 {
   _working = false;
   _abort = false;
+
+  // ************** Temporal, forced to GPU here, it should initialize based on user options
 }
 
 void workerGP::abort()
@@ -58,7 +60,17 @@ void workerGP::doWork()
 //    delay(10);
 //    emit sendProgress1(i);
 //  }
-  parameters.Initialize();
+
+  // ************** Temporal, forced to GPU here, it should initialize based on user options
+  gp_parameters.Initialize();
+  gp_engine = new FPI(gp_parameters);
+
+  connect(gp_engine, SIGNAL(GP_send_run_progress(const int)), this, SLOT(GP_received_run_progress(const int)));
+
+  // insert data to GP object
+
+  gp_engine->insertDataTraining(data_matrix);
+  gp_engine->Run();
 
   mutex.lock();
   _working = false;
@@ -80,4 +92,10 @@ void workerGP::delay( int millisecondsToWait )
     {
         //QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
     }
+}
+
+void workerGP::GP_received_run_progress(const int value)
+{
+  emit sendRunProgress(value);
+  //QCoreApplication::processEvents();
 }

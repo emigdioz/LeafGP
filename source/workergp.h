@@ -22,7 +22,8 @@ public:
   void resume();
   void requestWork();
   GP* gp_engine;
-  Params parameters;
+  Params gp_parameters;
+  std::vector<std::vector<float> > data_matrix;
 
 signals:
   void workRequested();
@@ -30,6 +31,7 @@ signals:
   void finished();
 
   void sendProgress1(int value);
+  void sendRunProgress(int value);
 
 public slots:
   void doWork();
@@ -43,6 +45,10 @@ private:
   QWaitCondition waitCondition;
 
   void delay(int millisecondsToWait);
+
+private slots:
+  void GP_received_run_progress(const int value);
+
 };
 
 #endif // WORKERGP_H

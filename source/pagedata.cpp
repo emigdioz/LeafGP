@@ -42,6 +42,7 @@ void MainWidget::on_loadButton_pressed()
 		ui->qqPlot->show();
 		updateOtherPlots(0,0);
 		populateTerminalList();
+		populateDataForGP();
 	}
 }
 
@@ -92,6 +93,23 @@ void MainWidget::on_comboBox_activated(int index)
 		ui->qqPlot->show();
 		updateOtherPlots(0,0);
 		populateTerminalList();
+		populateDataForGP();
+	}
+}
+
+void MainWidget::populateDataForGP()
+{
+	int nRows = inputData.getSamples();
+	int nCols = inputData.getFeatures() + 1;
+	input_data_matrix.clear();
+	for(int j = 0;j < nRows; j++)
+	{
+		std::vector<float> line_data;
+		for(int i = 0;i < nCols; i++)
+		{
+			line_data.push_back(inputData.model->item(j,i)->text().toFloat());
+		}
+		input_data_matrix.push_back(line_data);
 	}
 }
 

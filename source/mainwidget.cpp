@@ -84,7 +84,8 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(workerAlgorithm, SIGNAL(workRequested()), threadGP, SLOT(start()));
 	connect(threadGP, SIGNAL(started()), workerAlgorithm, SLOT(doWork()));
 	connect(workerAlgorithm, SIGNAL(finished()), threadGP, SLOT(quit()), Qt::DirectConnection);
-	connect(workerAlgorithm, SIGNAL(sendProgress1(int)), this, SLOT(receivedProgress1(int)));
+	//connect(workerAlgorithm, SIGNAL(sendProgress1(int)), this, SLOT(receivedProgress1(int)));
+	connect(workerAlgorithm, SIGNAL(sendRunProgress(int)), this, SLOT(receivedRunProgress(int)));
 
 	timerGP = new QTimer();
 	connect(timerGP, SIGNAL(timeout()), this, SLOT(showElapsedTime()));

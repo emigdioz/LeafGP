@@ -224,14 +224,17 @@ void MainWidget::getInfoOpenCL()
   devicesNumber = counter;
   qDebug()<<counter;
 
-  QGroupBox* firstGroup = ui->groupBox_7->findChild<QGroupBox*>("deviceParallel0");
-  firstGroup->setChecked(true);
-  deviceChecked = 0;
-  for(i = 0;i < devicesNumber;i++)
+  if(counter > 0)
   {
-    QGroupBox* Group = ui->groupBox_7->findChild<QGroupBox*>("deviceParallel" + QString::number(i));
-    Group->setProperty("index",i);
-    connect(Group, SIGNAL(toggled(bool)), this, SLOT(parallelDevicesChecked(bool)));
+	  QGroupBox* firstGroup = ui->groupBox_7->findChild<QGroupBox*>("deviceParallel0");
+	  firstGroup->setChecked(true);
+	  deviceChecked = 0;
+	  for(i = 0;i < devicesNumber;i++)
+	  {
+		 QGroupBox* Group = ui->groupBox_7->findChild<QGroupBox*>("deviceParallel" + QString::number(i));
+		 Group->setProperty("index",i);
+		 connect(Group, SIGNAL(toggled(bool)), this, SLOT(parallelDevicesChecked(bool)));
+	  }
   }
 }
 

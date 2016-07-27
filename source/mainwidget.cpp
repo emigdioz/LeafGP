@@ -2,6 +2,8 @@
 #include "ui_mainwidget.h"
 #include <QDebug>
 
+Q_DECLARE_METATYPE(GP::treeStruct);
+
 MainWidget::MainWidget(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWidget)
@@ -11,6 +13,8 @@ MainWidget::MainWidget(QWidget *parent) :
 	QFontDatabase::addApplicationFont(":/fonts/resources/fonts/Lato-Medium.ttf");
 	QFontDatabase::addApplicationFont(":/fonts/resources/fonts/Roboto-Light.ttf");
 	QFontDatabase::addApplicationFont(":/fonts/resources/fonts/Roboto-Medium.ttf");
+	qRegisterMetaType<GP::treeStruct>();
+
 	ui->tableViewDataSummary->setContextMenuPolicy(Qt::CustomContextMenu);
 	ui->listFunctionsTarget->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(ui->listWidget, SIGNAL(currentRowChanged(int)), ui->stackedWidget, SLOT(setCurrentIndex(int)));
@@ -86,6 +90,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(workerAlgorithm, SIGNAL(finished()), threadGP, SLOT(quit()), Qt::DirectConnection);
 	//connect(workerAlgorithm, SIGNAL(sendProgress1(int)), this, SLOT(receivedProgress1(int)));
 	connect(workerAlgorithm, SIGNAL(sendRunProgress(int)), this, SLOT(receivedRunProgress(int)));
+	connect(workerAlgorithm, SIGNAL(sendSingleTree(GP::treeStruct)), this, SLOT(receivedSingleTree(GP::treeStruct)));
 
 	timerGP = new QTimer();
 	connect(timerGP, SIGNAL(timeout()), this, SLOT(showElapsedTime()));
@@ -253,5 +258,65 @@ void MainWidget::parallelDevicesChecked(bool t)
     else
       Group->setChecked(true);
     Group->blockSignals(false);
+  }
+}
+
+void MainWidget::receivedSingleTree(GP::treeStruct data)
+{
+  selectedTree = data;
+  int nLeaves = 0;
+  for (int i = 0; i < selectedTree.name.size(); i++) {
+      nLeaves = countLeaves(i, nLeaves);
+  }
+  positionLeaves(0,0,nLeaves);
+  positionParents(0,0);
+  qDebug()<<nLeaves;
+}
+
+int MainWidget::countLeaves(int index, int count)
+{
+  if (selectedTree.subTreeSize[index] == 1) {
+      selectedTree.index[index] = count;
+      count += 1;
+  }
+  return count;
+}
+
+void MainWidget::positionLeaves(int index, int depth, int numberLeaves)
+{
+  if (selectedTree.subTreeSize[index] == 1) {
+      selectedTree.posX[index] = (float)selectedTree.index[index] / (numberLeaves - 1);
+      selectedTree.posY[index] = depth;
+  }
+  unsigned int j = index + 1;
+  for (int i = 0; i < selectedTree.arity[index]; i++) {
+      positionLeaves(j, depth + 1, numberLeaves);
+      j += selectedTree.subTreeSize[j];
+  }
+}
+
+void MainWidget::positionParents(int index, int depth)
+{
+  unsigned int j = index + 1;
+  for (int i = 0; i < selectedTree.arity[index]; i++) {
+      positionParents(j, depth + 1);
+      j += selectedTree.subTreeSize[j];
+  }
+  if (selectedTree.subTreeSize[index] > 1) {
+      float x = 0;
+      int counter = 0;
+      for (int k = 0; k < selectedTree.arity[index]; k++) {
+          do // Search for childrens
+          {
+              if (selectedTree.posY[index + counter] == (depth + 1)) {
+                  x += selectedTree.posX[index + counter];
+                  counter += 1;
+                  break;
+              }
+              counter += 1;
+          } while ((index + counter) < selectedTree.name.size());
+      }
+      selectedTree.posX[index] = x / selectedTree.arity[index];
+      selectedTree.posY[index] = depth;
   }
 }

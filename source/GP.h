@@ -71,6 +71,8 @@
 #include <vector>
 #include <cassert>
 #include <QObject>
+#include <QVector>
+#include <QString>
 
 /*
 Definitions:
@@ -111,8 +113,20 @@ public:
       delete[] m_E;
       delete[] m_best_program;
    }
+  typedef struct
+  {
+      QVector<QString> name;
+      QVector<int> arity;
+      QVector<int> subTreeSize;
+      QVector<float> posX;
+      QVector<float> posY;
+      QVector<int> index;
+  } treeStruct;
 
-   void insertDataTraining(std::vector<std::vector<float> > data);
+  void insertDataTraining(std::vector<std::vector<float> > data);
+  void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
+
+
 
    void Run()
    {
@@ -376,6 +390,7 @@ public:
 
 signals:
    void GP_send_run_progress(const int value);
+   void GP_send_single_tree(GP::treeStruct singleTree);
 
 };
 

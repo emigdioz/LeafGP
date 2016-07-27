@@ -14,6 +14,7 @@
 #include "circularprogresswidget.h"
 #include "workergp.h"
 #include "cl.hpp"
+#include "GP.h"
 
 namespace Ui {
 class MainWidget;
@@ -55,6 +56,7 @@ private slots:
 	void receivedProgress1(int value);
 	void algorithmFinished(void);
 	void parallelDevicesChecked(bool t);
+	void receivedSingleTree(GP::treeStruct data);
 
 private:
 	Ui::MainWidget *ui;
@@ -82,7 +84,10 @@ private:
 	QDateTime startedDateTime;
 	int devicesNumber;
 	int deviceChecked;
-
+	GP::treeStruct selectedTree;
+	int countLeaves(int index, int count);
+	void positionLeaves(int index, int depth, int numberLeaves);
+	void positionParents(int index, int depth);
 };
 
 #endif // MAINWIDGET_H

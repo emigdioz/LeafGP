@@ -37,6 +37,7 @@
 #include <ctime>
 #include <QDebug>
 #include <QCoreApplication>
+#include <QThread>
 
 Params* GP::m_params = 0;
 
@@ -70,6 +71,7 @@ GP::GP(Params& p, cl_device_type device_type ): m_device_type( device_type ),
 // -----------------------------------------------------------------------------
 void GP::Evolve()
 {
+  treeStruct thisTree;
    /*
 
       Pseudo-code for Evolve:
@@ -138,6 +140,10 @@ void GP::Evolve()
 
       // 18:
       std::swap( cur_pop, tmp_pop );
+
+      //************* temporal ***************************************************************************
+      convertProgramToTreeStruct(thisTree,m_best_program);
+      emit GP_send_single_tree(thisTree);
 
    // ---------
    std::cout << "[Gen " << gen << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << sqrt(m_best_error/m_num_points) << ", size: " << ProgramSize( m_best_program ) << ")... ";
@@ -897,6 +903,42 @@ void GP::PrintNode( const cl_uint* node ) const
       default:
          std::cout << m_primitives.DB[INDEX(*node)].name << "";
    }
+}
+
+void GP::convertProgramToTreeStruct(treeStruct &tree, const cl_uint *program)
+{
+  tree.name.clear();
+  tree.arity.clear();
+  tree.subTreeSize.clear();
+  tree.posX.clear();
+  tree.posY.clear();
+  tree.index.clear();
+  int size = ProgramSize(program++);
+  for(int i = 0;i < size;i++)
+  {
+    switch( INDEX( *(program + i) ) )
+    {
+      case Primitives::GPT_VAR:
+        tree.name.append("X" + QString::number(AS_INT( *(program + i) )));
+        break;
+      case Primitives::GPT_EPHEMERAL:
+        tree.name.append(QString::number(AS_FLOAT( *(program + i) )));
+        break;
+      case Primitives::GPT_CLASS:
+        tree.name.append(QString::number(AS_INT( *(program + i) )));
+        break;
+      case Primitives::GPF_IDENTITY:
+        tree.name.append("I");
+        break;
+      default:
+        tree.name.append(QString::fromStdString(m_primitives.DB[INDEX(*(program + i))].name));
+    }
+    tree.arity.append(ARITY( *(program + i)));
+    tree.subTreeSize.append(TreeSize( program + i ));
+    tree.posX.append(0);
+    tree.posY.append(0);
+    tree.index.append(-1);
+  }
 }
 
 // -----------------------------------------------------------------------------

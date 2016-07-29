@@ -228,7 +228,7 @@ void MainWidget::getInfoOpenCL()
     free(devices);
   }
   devicesNumber = counter;
-  qDebug()<<counter;
+  //qDebug()<<counter;
 
   if(counter > 0)
   {
@@ -270,7 +270,15 @@ void MainWidget::receivedSingleTree(GP::treeStruct data)
   }
   positionLeaves(0,0,nLeaves);
   positionParents(0,0);
-  qDebug()<<nLeaves;
+  ui->expressTreeWidget->setData(selectedTree.posX,
+                      selectedTree.posY,
+                      selectedTree.name,
+                      selectedTree.arity);
+  ui->expressTreeWidget->setLinkColor(QColor(255,174,0,255));
+  ui->expressTreeWidget->setNodeColor(QColor(255,174,0,255));
+  ui->expressTreeWidget->setNodeHoverColor(QColor(148,204,20,255));
+  //ui->label_102->setText(data.syntaxPrefix);
+  //qDebug()<<nLeaves;
 }
 
 int MainWidget::countLeaves(int index, int count)

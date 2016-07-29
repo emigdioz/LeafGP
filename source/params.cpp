@@ -215,7 +215,7 @@ Params::Initialize()
   m_print_primitives = false;
   m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
   m_number_of_generations = 100;
-  m_population_size = 1000;
+  m_population_size = 100;
   m_crossover_probability = 0.9;
   m_mutation_probability = 0.1;
   m_maximum_tree_size = 100;

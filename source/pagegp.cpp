@@ -26,7 +26,6 @@ void MainWidget::receivedProgress1(int value)
 void MainWidget::receivedRunProgress(int value)
 {
 	ui->circularProgress->setProgress1(value);
-	qDebug()<<value;
 }
 
 QString MainWidget::secondsToDHMS(qint64 duration)

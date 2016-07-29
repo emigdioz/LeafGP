@@ -12,6 +12,7 @@
 #include "gridselectorwidget.h"
 #include "listwidget.h"
 #include "circularprogresswidget.h"
+#include "drawtreewidget.h"
 #include "workergp.h"
 #include "cl.hpp"
 #include "GP.h"

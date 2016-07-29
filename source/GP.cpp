@@ -72,6 +72,7 @@ GP::GP(Params& p, cl_device_type device_type ): m_device_type( device_type ),
 void GP::Evolve()
 {
   treeStruct thisTree;
+  QString bestIndividual;
    /*
 
       Pseudo-code for Evolve:
@@ -141,10 +142,6 @@ void GP::Evolve()
       // 18:
       std::swap( cur_pop, tmp_pop );
 
-      //************* temporal ***************************************************************************
-      convertProgramToTreeStruct(thisTree,m_best_program);
-      emit GP_send_single_tree(thisTree);
-
    // ---------
    std::cout << "[Gen " << gen << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << sqrt(m_best_error/m_num_points) << ", size: " << ProgramSize( m_best_program ) << ")... ";
 #ifdef PROFILING
@@ -152,6 +149,11 @@ void GP::Evolve()
 #endif
    std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
    // ---------
+   //************* temporal ***************************************************************************
+   convertProgramToTreeStruct(thisTree,m_best_program);
+   convertProgramString(m_best_program,bestIndividual);
+   thisTree.syntaxPrefix = bestIndividual;
+   emit GP_send_single_tree(thisTree);
 
     progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
     emit GP_send_run_progress(progress_run);
@@ -162,6 +164,7 @@ void GP::Evolve()
       << ProgramSize( m_best_program ) << "}\t";
    PrintProgramPretty( m_best_program );
    std::cout << std::endl;
+
 
    // Clean up
    delete[] pop_a;
@@ -905,6 +908,77 @@ void GP::PrintNode( const cl_uint* node ) const
    }
 }
 
+void GP::convertProgramString(const cl_uint *program, QString &output, int start, int end)
+{
+  if( (start == -1) || (end == -1) ) { start = 0; end = ProgramSize( program++ ) - 1; bufferString = "";}
+
+  if( ARITY( *(program + start) ) == 0 )
+  {
+     switch( INDEX( *( program + start ) ) )
+     {
+        case Primitives::GPT_VAR:
+           bufferString += "X";
+           bufferString += QString::number(AS_INT( *(program + start) ));
+           break;
+        case Primitives::GPT_EPHEMERAL:
+           bufferString += QString::number(AS_FLOAT( *(program + start) ));
+           break;
+        case Primitives::GPT_CLASS:
+           bufferString += "class(";
+           bufferString += QString::number(AS_INT( *(program + start) ));
+           bufferString += ")";
+           break;
+        case Primitives::GPF_IDENTITY:
+           bufferString += "I";
+           break;
+        default:
+           bufferString += QString::fromStdString(m_primitives.DB[INDEX(*(program + start))].name);
+     }
+     return;
+  }
+  else
+  {
+     switch( INDEX( *( program + start ) ) )
+     {
+       case Primitives::GPT_VAR:
+          bufferString += "X";
+          bufferString += QString::number(AS_INT( *(program + start) ));
+          break;
+       case Primitives::GPT_EPHEMERAL:
+          bufferString += QString::number(AS_FLOAT( *(program + start) ));
+          break;
+       case Primitives::GPT_CLASS:
+          bufferString += "class(";
+          bufferString += QString::number(AS_INT( *(program + start) ));
+          bufferString += ")";
+          break;
+       case Primitives::GPF_IDENTITY:
+          bufferString += "I";
+          break;
+       default:
+          bufferString += QString::fromStdString(m_primitives.DB[INDEX(*(program + start))].name);
+
+     }
+     bufferString += "( ";
+  }
+
+  int i;
+  start++;
+  while( start <= end )
+  {
+     i = TreeSize( program + start );
+     convertProgramString( program, output, start, ( i > 1 ) ? start + i - 1 : end );
+     start += i;
+
+     /* Put the trailing ")" */
+     if( start <= end )
+      bufferString += ", ";
+     else
+       bufferString += " )";
+  }
+  output = bufferString;
+  return;
+}
 void GP::convertProgramToTreeStruct(treeStruct &tree, const cl_uint *program)
 {
   tree.name.clear();

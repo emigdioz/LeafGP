@@ -51,7 +51,8 @@ SOURCES += source/main.cpp \
     source/GP.cpp \
     source/GPU.cpp \
     source/params.cpp \
-    source/primitives.cpp
+    source/primitives.cpp \
+    source/drawtreewidget.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -95,7 +96,8 @@ HEADERS  += source/mainwidget.h \
     source/CL/cl_gl.h \
     source/CL/cl_gl_ext.h \
     source/CL/cl_platform.h \
-    source/CL/opencl.h
+    source/CL/opencl.h \
+    source/drawtreewidget.h
 
 FORMS    += source/mainwidget.ui
 

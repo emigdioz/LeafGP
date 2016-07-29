@@ -121,12 +121,12 @@ public:
       QVector<float> posX;
       QVector<float> posY;
       QVector<int> index;
+      QString syntaxPrefix;
   } treeStruct;
 
   void insertDataTraining(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
-
-
+  void convertProgramString(const cl_uint* program, QString &output, int start = -1, int end = -1 );
 
    void Run()
    {
@@ -392,6 +392,8 @@ signals:
    void GP_send_run_progress(const int value);
    void GP_send_single_tree(GP::treeStruct singleTree);
 
+private:
+   QString bufferString;
 };
 
 // -----------------------------------------------------------------------------

@@ -124,6 +124,16 @@ public:
       QString syntaxPrefix;
   } treeStruct;
 
+	typedef struct
+	{
+		int currentGeneration;
+		long currentEvaluations;
+		long currentNodesExecutions;
+		float bestError;
+		int bestSize;
+		float avgSize;
+	} basicInfo;
+
   void insertDataTraining(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
   void convertProgramString(const cl_uint* program, QString &output, int start = -1, int end = -1 );
@@ -391,9 +401,11 @@ public:
 signals:
    void GP_send_run_progress(const int value);
    void GP_send_single_tree(GP::treeStruct singleTree);
+	void GP_send_basic_info(GP::basicInfo info);
 
 private:
    QString bufferString;
+	bool locallyEvaluate(const cl_uint* program);
 };
 
 // -----------------------------------------------------------------------------

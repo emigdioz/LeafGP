@@ -33,6 +33,7 @@ signals:
   void sendProgress1(int value);
   void sendRunProgress(int value);
   void sendSingleTree(GP::treeStruct data);
+  void sendBasicInfo(GP::basicInfo info);
 
 public slots:
   void doWork();
@@ -50,6 +51,7 @@ private:
 private slots:
   void GP_received_run_progress(const int value);
   void GP_received_single_tree(GP::treeStruct data);
+  void GP_received_basic_info(GP::basicInfo info);
 
 };
 

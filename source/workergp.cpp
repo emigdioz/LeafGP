@@ -1,10 +1,12 @@
 #include "workergp.h"
 #include <QDebug>
 Q_DECLARE_METATYPE(GP::treeStruct);
+Q_DECLARE_METATYPE(GP::basicInfo);
 
 workerGP::workerGP(QObject *parent) : QObject(parent)
 {
   qRegisterMetaType<GP::treeStruct>();
+  qRegisterMetaType<GP::basicInfo>();
   _working = false;
   _abort = false;
 
@@ -69,6 +71,7 @@ void workerGP::doWork()
 
   connect(gp_engine, SIGNAL(GP_send_run_progress(const int)), this, SLOT(GP_received_run_progress(const int)));
   connect(gp_engine, SIGNAL(GP_send_single_tree(GP::treeStruct)), this, SLOT(GP_received_single_tree(GP::treeStruct)));
+  connect(gp_engine, SIGNAL(GP_send_basic_info(GP::basicInfo)), this, SLOT(GP_received_basic_info(GP::basicInfo)));
   // insert data to GP object
 
   gp_engine->insertDataTraining(data_matrix);
@@ -105,4 +108,9 @@ void workerGP::GP_received_run_progress(const int value)
 void workerGP::GP_received_single_tree(GP::treeStruct data)
 {
   emit sendSingleTree(data);
+}
+
+void workerGP::GP_received_basic_info(GP::basicInfo info)
+{
+	emit sendBasicInfo(info);
 }

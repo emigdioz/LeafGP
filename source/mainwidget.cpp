@@ -3,6 +3,7 @@
 #include <QDebug>
 
 Q_DECLARE_METATYPE(GP::treeStruct);
+Q_DECLARE_METATYPE(GP::basicInfo);
 
 MainWidget::MainWidget(QWidget *parent) :
 	QMainWindow(parent),
@@ -14,6 +15,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	QFontDatabase::addApplicationFont(":/fonts/resources/fonts/Roboto-Light.ttf");
 	QFontDatabase::addApplicationFont(":/fonts/resources/fonts/Roboto-Medium.ttf");
 	qRegisterMetaType<GP::treeStruct>();
+	qRegisterMetaType<GP::basicInfo>();
 
 	ui->tableViewDataSummary->setContextMenuPolicy(Qt::CustomContextMenu);
 	ui->listFunctionsTarget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -91,6 +93,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	//connect(workerAlgorithm, SIGNAL(sendProgress1(int)), this, SLOT(receivedProgress1(int)));
 	connect(workerAlgorithm, SIGNAL(sendRunProgress(int)), this, SLOT(receivedRunProgress(int)));
 	connect(workerAlgorithm, SIGNAL(sendSingleTree(GP::treeStruct)), this, SLOT(receivedSingleTree(GP::treeStruct)));
+	connect(workerAlgorithm, SIGNAL(sendBasicInfo(GP::basicInfo)), this, SLOT(receivedBasicInfo(GP::basicInfo)));
 
 	timerGP = new QTimer();
 	connect(timerGP, SIGNAL(timeout()), this, SLOT(showElapsedTime()));
@@ -327,4 +330,12 @@ void MainWidget::positionParents(int index, int depth)
       selectedTree.posX[index] = x / selectedTree.arity[index];
       selectedTree.posY[index] = depth;
   }
+}
+
+void MainWidget::receivedBasicInfo(GP::basicInfo info)
+{
+	ui->label_88->setText(QString::number(info.currentGeneration));
+	ui->label_92->setText(QString::number(info.currentNodesExecutions));
+	ui->label_94->setText(QString::number(info.bestError));
+	ui->label_96->setText(QString::number(info.bestSize));
 }

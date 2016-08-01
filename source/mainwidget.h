@@ -58,6 +58,7 @@ private slots:
 	void algorithmFinished(void);
 	void parallelDevicesChecked(bool t);
 	void receivedSingleTree(GP::treeStruct data);
+	void receivedBasicInfo(GP::basicInfo info);
 
 private:
 	Ui::MainWidget *ui;

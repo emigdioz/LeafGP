@@ -73,6 +73,7 @@ void GP::Evolve()
 {
   treeStruct thisTree;
   QString bestIndividual;
+  basicInfo currentInfo;
    /*
 
       Pseudo-code for Evolve:
@@ -157,6 +158,13 @@ void GP::Evolve()
 
     progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
     emit GP_send_run_progress(progress_run);
+
+	 currentInfo.bestError = sqrt(m_best_error/m_num_points);
+	 currentInfo.bestSize = ProgramSize(m_best_program);
+	 currentInfo.currentGeneration = gen;
+	 currentInfo.currentNodesExecutions = m_node_evaluations;
+	 emit GP_send_basic_info(currentInfo);
+
    } // 19
 
    // 20:
@@ -504,6 +512,29 @@ bool GP::EvaluatePopulation( const cl_uint* pop )
 
    // We should stop the evolution if an error below the specified tolerance is found
    return (m_best_error <= m_params->m_error_tolerance);
+}
+
+bool GP::locallyEvaluate(const cl_uint *program)
+{
+
+//	for( uint samples = 0; samples < m_num_points; samples++ )
+//	{
+//		for( int op = ProgramSize(program); op-- ; )
+//		{
+//			switch( INDEX( program[op] ) )
+//			{
+//				INTERPRETER_CORE
+//				default:
+//					PUSH_0( X[samples * X_DIM + AS_INT( program[op] )] );
+//			}
+//		}
+//		error += ERROR_METRIC( POP, Y[ samples ] );
+
+//		// Avoid further calculations if the current one has overflown the float
+//		// (i.e., it is inf or NaN).
+//		if( isinf( error ) || isnan( error ) ) { error = MAX_FLOAT; break; }
+//	}
+
 }
 
 // -----------------------------------------------------------------------------

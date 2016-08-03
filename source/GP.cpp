@@ -38,6 +38,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QThread>
+#include <QVector>
 
 Params* GP::m_params = 0;
 
@@ -74,6 +75,10 @@ void GP::Evolve()
   treeStruct thisTree;
   QString bestIndividual;
   basicInfo currentInfo;
+  std::vector<double> exp;
+  std::vector<double> act;
+  QVector<double> expQ;
+  QVector<double> actQ;
    /*
 
       Pseudo-code for Evolve:
@@ -129,41 +134,50 @@ void GP::Evolve()
 #endif
    std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
    // ---------
-
+   float avgSize;
    // 3:
    for( unsigned gen = 2; gen <= m_params->m_number_of_generations; ++gen )
    {
-      // 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16:
-      ///Breed( cur_pop, tmp_pop, errors );
-      Breed( cur_pop, tmp_pop );
-      // 17:
-      ///if( EvaluatePopulation( tmp_pop, errors ) ) break;
-      if( EvaluatePopulation( tmp_pop ) ) break;
+     // 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16:
+     ///Breed( cur_pop, tmp_pop, errors );
+     Breed( cur_pop, tmp_pop );
+     // 17:
+     ///if( EvaluatePopulation( tmp_pop, errors ) ) break;
+     if( EvaluatePopulation( tmp_pop ) ) break;
 
-      // 18:
-      std::swap( cur_pop, tmp_pop );
+     // 18:
+     std::swap( cur_pop, tmp_pop );
 
-   // ---------
-   std::cout << "[Gen " << gen << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << sqrt(m_best_error/m_num_points) << ", size: " << ProgramSize( m_best_program ) << ")... ";
+     // ---------
+     std::cout << "[Gen " << gen << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << sqrt(m_best_error/m_num_points) << ", size: " << ProgramSize( m_best_program ) << ")... ";
 #ifdef PROFILING
-   std::cout << std::setprecision(2) << std::fixed << "| GPop/s: " << m_node_evaluations / (m_kernel_time/1.0E9) << std::setprecision(4) << " | Node evals: " << m_node_evaluations << " | Avg. KET(ms): " << m_kernel_time / (m_kernel_calls * 1.0E6) << " | Avg. KLT(ms): " << m_launch_time / (m_kernel_calls * 1.0E6) << " | Acc. KET(s): " << m_kernel_time/1.0E+9 << " | Acc. KLT(s): " << m_launch_time/1.0E+9 << " | Kernel calls: " << m_kernel_calls;
+     std::cout << std::setprecision(2) << std::fixed << "| GPop/s: " << m_node_evaluations / (m_kernel_time/1.0E9) << std::setprecision(4) << " | Node evals: " << m_node_evaluations << " | Avg. KET(ms): " << m_kernel_time / (m_kernel_calls * 1.0E6) << " | Avg. KLT(ms): " << m_launch_time / (m_kernel_calls * 1.0E6) << " | Acc. KET(s): " << m_kernel_time/1.0E+9 << " | Acc. KLT(s): " << m_launch_time/1.0E+9 << " | Kernel calls: " << m_kernel_calls;
 #endif
-   std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
-   // ---------
-   //************* temporal ***************************************************************************
-   convertProgramToTreeStruct(thisTree,m_best_program);
-   convertProgramString(m_best_program,bestIndividual);
-   thisTree.syntaxPrefix = bestIndividual;
-   emit GP_send_single_tree(thisTree);
+     std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
+     // ---------
+     avgSize = 0.0f;
+     for(int ind = 0;ind < m_params->m_population_size;ind++)
+       avgSize += ProgramSize(Program( cur_pop, ind ));
+     avgSize /= m_params->m_population_size;
+     //************* temporal ***************************************************************************
+     convertProgramToTreeStruct(thisTree,m_best_program);
+     convertProgramString(m_best_program,bestIndividual);
+     thisTree.syntaxPrefix = bestIndividual;
+     emit GP_send_single_tree(thisTree);
 
-    progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
-    emit GP_send_run_progress(progress_run);
-
-	 currentInfo.bestError = sqrt(m_best_error/m_num_points);
-	 currentInfo.bestSize = ProgramSize(m_best_program);
-	 currentInfo.currentGeneration = gen;
-	 currentInfo.currentNodesExecutions = m_node_evaluations;
-	 emit GP_send_basic_info(currentInfo);
+     progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
+     emit GP_send_run_progress(progress_run,0);
+     locallyEvaluate(m_best_program,act,exp);
+     currentInfo.bestError = sqrt(m_best_error/m_num_points);
+     currentInfo.bestSize = ProgramSize(m_best_program);
+     currentInfo.avgSize = avgSize;
+     currentInfo.currentGeneration = gen;
+     currentInfo.currentNodesExecutions = m_node_evaluations;
+     expQ = QVector<double>::fromStdVector(exp);
+     actQ = QVector<double>::fromStdVector(act);
+     currentInfo.actual = actQ;
+     currentInfo.expected = expQ;
+     emit GP_send_basic_info(currentInfo);
 
    } // 19
 
@@ -173,7 +187,7 @@ void GP::Evolve()
    PrintProgramPretty( m_best_program );
    std::cout << std::endl;
 
-   locallyEvaluate(m_best_program);
+
    // Clean up
    delete[] pop_a;
    delete[] pop_b;
@@ -1101,18 +1115,25 @@ void GP::LoadPoints( std::vector<std::vector<cl_float> > & out_x )
 
 // -----------------------------------------------------------------------------
 
-bool GP::locallyEvaluate(const cl_uint *program)
+bool GP::locallyEvaluate(const cl_uint *program, std::vector<double> &act_compress, std::vector<double> &exp_compress)
 {
 	float partial_error = 0.0f;
+	float partial_semantic;
 	float rmse;
+	std::vector<float> actual;
+	std::vector<float> expected;
+
 	for( uint iter = 0; iter < m_num_points; iter++ )
 	{
-		partial_error += evaluateInstance(program,iter);
-		//if( isinf( error ) || isnan( error ) ) { error = MAX_FLOAT; break; }
-
+		partial_semantic = evaluateInstance(program,iter);
+		partial_error += pow( input_data_matrix.at(iter).at(m_x_dim) - partial_semantic, 2 );
+		actual.push_back(partial_semantic);
+		expected.push_back(input_data_matrix.at(iter).at(m_x_dim));
 	}
 	rmse = sqrt(partial_error/m_num_points);
 	qDebug()<<"RMSE: "<<rmse;
+	compressOutputPairs(actual,expected,act_compress,exp_compress);
+
 }
 
 float GP::evaluateInstance(const cl_uint *program, int iter)
@@ -1124,43 +1145,75 @@ float GP::evaluateInstance(const cl_uint *program, int iter)
   #define X_DIM m_x_dim
   #define POP       ( stack[stack_top--] )
   //#define PUSH(arity, exp) stack[stack_top + 1 - arity] = (exp); stack_top += 1 - arity;
-  #define PUSH_0( value ) stack[++stack_top] = (value);
-  #define PUSH_1( exp ) stack[stack_top] = (exp);
-  #define PUSH_2( exp ) stack[stack_top - 1] = (exp); --stack_top;
-  #define PUSH_3( exp ) stack[stack_top - 2] = (exp); stack_top -= 2;
+  #define PUSH_0( value ) stack[++stack_top] = value;
+  #define PUSH_1( exp ) stack[stack_top] = exp;
+  #define PUSH_2( exp ) stack[stack_top - 1] = exp; --stack_top;
+  #define PUSH_3( exp ) stack[stack_top - 2] = exp; stack_top -= 2;
   #define ARG(n) (stack[stack_top - n])
   #define STACK_SIZE max_stack_size
   #define CREATE_STACK float stack[STACK_SIZE]; int stack_top = -1;
   #define NODE program[op]
 
-	//#define ERROR_METRIC( actual, expected ) fabs( actual - expected )
-	#define ERROR_METRIC( actual, expected ) pow( actual - expected, 2 )
-
 	CREATE_STACK
 	float error = 0.0f;
-	for(int op = ProgramSize(program); op--; )
+	for(int op = ProgramSize(program); op > 0; op--)
 	{
 		index = INDEX(program[op]);
-		//qDebug()<<INDEX(program[op]);
-		if(INDEX(program[op]) == 0) PUSH_0(AS_FLOAT(NODE));
-		if(INDEX(program[op]) == 37) PUSH_1(sin(ARG(0)));
-		if(INDEX(program[op]) == 23) PUSH_1(cos(ARG(0)));
-		if(INDEX(program[op]) == 39) PUSH_1(tan(ARG(0)));
-		if(INDEX(program[op]) == 38) PUSH_1(sqrt(ARG(0)));
-		if(INDEX(program[op]) == 24) PUSH_1(exp(ARG(0)));
-		if(INDEX(program[op]) == 3) PUSH_2(ARG(0) + ARG(1));
-		if(INDEX(program[op]) == 15) PUSH_2(ARG(0) - ARG(1));
-		if(INDEX(program[op]) == 16) PUSH_2(ARG(0) * ARG(1));
-		if(INDEX(program[op]) == 5) PUSH_2(ARG(0)/ARG(1));
-		if(INDEX(program[op]) == 127) {
-			PUSH_0(input_data_matrix.at(iter).at(AS_INT(program[op])));
-			qDebug()<<"X"<<AS_INT(program[op]);
-			qDebug()<<input_data_matrix.at(iter).at(AS_INT(program[op]));
+		switch(index) {
+			case 0: PUSH_0(AS_FLOAT(NODE)) break;
+			case 3: PUSH_2(ARG(0) + ARG(1)) break;
+			case 5: PUSH_2(ARG(0)/ARG(1)) break;
+			case 15: PUSH_2(ARG(0) - ARG(1)) break;
+			case 16: PUSH_2(ARG(0) * ARG(1)) break;
+			case 23: PUSH_1(cos(ARG(0))) break;
+			case 24: PUSH_1(exp(ARG(0))) break;
+			case 37: PUSH_1(sin(ARG(0))) break;
+			case 38: PUSH_1(sqrt(ARG(0))) break;
+			case 39: PUSH_1(tan(ARG(0))) break;
+			case 127: PUSH_0(input_data_matrix.at(iter).at(AS_INT(program[op]))) break;
 		}
 	}
-	//qDebug()<<POP<<" , "<<input_data_matrix.at(iter).at(X_DIM);
-	error = ERROR_METRIC(POP, input_data_matrix.at(iter).at(X_DIM));
-	//qDebug()<<error;
-	return error;
+	return POP;
 }
 
+void GP::compressOutputPairs(std::vector<float> actual, std::vector<float> expected, std::vector<double> &actual_compressed, std::vector<double> &expected_compressed)
+{
+	int outSamples = 20;
+	int length = actual.size();
+	int sliceLength = length/outSamples;
+	int start,end;
+	float partial_act,partial_exp,avg_act,avg_exp;
+	actual_compressed.clear();
+	expected_compressed.clear();
+	for(int i = 0;i < (outSamples-1);i++)
+	{
+		// gather slice data
+		start = i * sliceLength;
+		end = ((i + 1) * sliceLength) - 1;
+		partial_act = 0.0f;
+		partial_exp = 0.0f;
+		for(int j = start;j <= end;j++)
+		{
+			partial_act += actual.at(j);
+			partial_exp += expected.at(j);
+		}
+		avg_act = partial_act / sliceLength;
+		avg_exp = partial_exp / sliceLength;
+		actual_compressed.push_back(avg_act);
+		expected_compressed.push_back(avg_exp);
+	}
+	// last slice could be larger
+	start = (outSamples - 1) * sliceLength;
+	end = length - 1;
+	partial_act = 0.0f;
+	partial_exp = 0.0f;
+	for(int j = start;j <= end;j++)
+	{
+		partial_act += actual.at(j);
+		partial_exp += expected.at(j);
+	}
+	avg_act = partial_act / sliceLength;
+	avg_exp = partial_exp / sliceLength;
+	actual_compressed.push_back(avg_act);
+	expected_compressed.push_back(avg_exp);
+}

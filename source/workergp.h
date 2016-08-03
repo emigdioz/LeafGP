@@ -30,8 +30,7 @@ signals:
   void workFinished();
   void finished();
 
-  void sendProgress1(int value);
-  void sendRunProgress(int value);
+  void sendRunProgress(int value, int run);
   void sendSingleTree(GP::treeStruct data);
   void sendBasicInfo(GP::basicInfo info);
 
@@ -49,7 +48,7 @@ private:
   void delay(int millisecondsToWait);
 
 private slots:
-  void GP_received_run_progress(const int value);
+  void GP_received_run_progress(const int value, const int run);
   void GP_received_single_tree(GP::treeStruct data);
   void GP_received_basic_info(GP::basicInfo info);
 

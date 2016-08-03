@@ -132,13 +132,16 @@ public:
 		float bestError;
 		int bestSize;
 		float avgSize;
+		QVector<double> expected;
+		QVector<double> actual;
 	} basicInfo;
 
   void insertDataTraining(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
   void convertProgramString(const cl_uint* program, QString &output, int start = -1, int end = -1 );
-  bool locallyEvaluate(const cl_uint* program);
+  bool locallyEvaluate(const cl_uint* program, std::vector<double> &act_compress, std::vector<double> &exp_compress);
   float evaluateInstance(const cl_uint* program, int iter);
+  void compressOutputPairs(std::vector<float> actual, std::vector<float> expected, std::vector<double> &actual_compressed, std::vector<double> &expected_compressed);
 
    void Run()
    {
@@ -401,7 +404,7 @@ public:
    static Params* m_params; /**< Pointer to Params class (holds the parameters). */
 
 signals:
-   void GP_send_run_progress(const int value);
+   void GP_send_run_progress(const int value, const int run);
    void GP_send_single_tree(GP::treeStruct singleTree);
 	void GP_send_basic_info(GP::basicInfo info);
 

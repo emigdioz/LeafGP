@@ -36,7 +36,7 @@ public:
 	KDE *featurePDF;
 	std::vector<std::vector<float> > input_data_matrix;
 public slots:
-	void receivedRunProgress(int value);
+	void receivedRunProgress(int value, int run);
 
 private slots:
 	void on_loadButton_pressed();
@@ -54,7 +54,6 @@ private slots:
 	void on_listTerminalsTarget_itemClicked(QListWidgetItem *item);
 	void on_startButton_clicked();
 	void showElapsedTime(void);
-	void receivedProgress1(int value);
 	void algorithmFinished(void);
 	void parallelDevicesChecked(bool t);
 	void receivedSingleTree(GP::treeStruct data);
@@ -71,6 +70,7 @@ private:
 	void drawFeatureOutputPlot(void);
 	void drawRegressionPlot(int x);
 	void drawQQPlot(int x, int y);
+	void drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY);
 	void populateTerminalList(void);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
@@ -86,6 +86,7 @@ private:
 	QDateTime startedDateTime;
 	int devicesNumber;
 	int deviceChecked;
+	QVector<int> devicesType;
 	GP::treeStruct selectedTree;
 	int countLeaves(int index, int count);
 	void positionLeaves(int index, int depth, int numberLeaves);

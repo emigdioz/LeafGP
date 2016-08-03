@@ -79,9 +79,9 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->circularProgress->setCircular2Color(QColor(188,95,211,255));
 	ui->circularProgress->setFont(QFont("Roboto",9,QFont::Light));
 	ui->circularProgress->setFontColor(QColor(45,65,102));
-	ui->circularProgress->setDoubleProgress(true);
-	ui->circularProgress->setProgress1(400);
-	ui->circularProgress->setProgress2(800);
+	ui->circularProgress->setDoubleProgress(false);
+	ui->circularProgress->setProgress1(0);
+	ui->circularProgress->setProgress2(0);
 	ui->correlationGPPlot->setSizePolicy(policy);
 
 	threadGP = new QThread();
@@ -91,7 +91,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(threadGP, SIGNAL(started()), workerAlgorithm, SLOT(doWork()));
 	connect(workerAlgorithm, SIGNAL(finished()), threadGP, SLOT(quit()), Qt::DirectConnection);
 	//connect(workerAlgorithm, SIGNAL(sendProgress1(int)), this, SLOT(receivedProgress1(int)));
-	connect(workerAlgorithm, SIGNAL(sendRunProgress(int)), this, SLOT(receivedRunProgress(int)));
+	connect(workerAlgorithm, SIGNAL(sendRunProgress(int,int)), this, SLOT(receivedRunProgress(int,int)));
 	connect(workerAlgorithm, SIGNAL(sendSingleTree(GP::treeStruct)), this, SLOT(receivedSingleTree(GP::treeStruct)));
 	connect(workerAlgorithm, SIGNAL(sendBasicInfo(GP::basicInfo)), this, SLOT(receivedBasicInfo(GP::basicInfo)));
 
@@ -99,6 +99,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(timerGP, SIGNAL(timeout()), this, SLOT(showElapsedTime()));
 	connect(workerAlgorithm, SIGNAL(finished()), this, SLOT(algorithmFinished()));
 
+	ui->correlationGPPlot->hide();
 	getInfoOpenCL();
 }
 
@@ -120,6 +121,9 @@ void MainWidget::getInfoOpenCL()
   cl_uint deviceCount;
   cl_device_id* devices;
   cl_uint maxComputeUnits;
+  cl_device_type deviceType;
+  devicesType.clear();
+
   const char* attributeNames[5] = { "Name", "Vendor",
         "Version", "Profile", "Extensions" };
   const cl_platform_info attributeTypes[5] = { CL_PLATFORM_NAME, CL_PLATFORM_VENDOR,
@@ -227,6 +231,12 @@ void MainWidget::getInfoOpenCL()
                       sizeof(maxComputeUnits), &maxComputeUnits, NULL);
       parallelUnitsName->setText(QString::number(maxComputeUnits));
       grid->addWidget(parallelUnitsName,3,1);
+
+      // device type
+      clGetDeviceInfo(devices[j], CL_DEVICE_TYPE,
+                      sizeof(deviceType), &deviceType, NULL);
+      if(deviceType == CL_DEVICE_TYPE_CPU) devicesType.push_back(0);
+      if(deviceType == CL_DEVICE_TYPE_GPU) devicesType.push_back(1);
     }
     free(devices);
   }
@@ -242,6 +252,7 @@ void MainWidget::getInfoOpenCL()
 	  {
 		 QGroupBox* Group = ui->groupBox_7->findChild<QGroupBox*>("deviceParallel" + QString::number(i));
 		 Group->setProperty("index",i);
+		 Group->setProperty("type",devicesType.at(i));
 		 connect(Group, SIGNAL(toggled(bool)), this, SLOT(parallelDevicesChecked(bool)));
 	  }
   }
@@ -251,6 +262,7 @@ void MainWidget::parallelDevicesChecked(bool t)
 {
   QObject *pSender = sender();
   int index = pSender->property("index").toInt();
+  int type = pSender->property("type").toInt(); // Device type, 0: CPU, 1: GPU
   deviceChecked = index;
   for(int i = 0;i < devicesNumber;i++)
   {
@@ -262,6 +274,7 @@ void MainWidget::parallelDevicesChecked(bool t)
       Group->setChecked(true);
     Group->blockSignals(false);
   }
+
 }
 
 void MainWidget::receivedSingleTree(GP::treeStruct data)
@@ -280,7 +293,7 @@ void MainWidget::receivedSingleTree(GP::treeStruct data)
   ui->expressTreeWidget->setLinkColor(QColor(255,174,0,255));
   ui->expressTreeWidget->setNodeColor(QColor(255,174,0,255));
   ui->expressTreeWidget->setNodeHoverColor(QColor(148,204,20,255));
-  //ui->label_102->setText(data.syntaxPrefix);
+  ui->label_103->setText(data.syntaxPrefix);
   //qDebug()<<nLeaves;
 }
 
@@ -338,4 +351,6 @@ void MainWidget::receivedBasicInfo(GP::basicInfo info)
 	ui->label_92->setText(QString::number(info.currentNodesExecutions));
 	ui->label_94->setText(QString::number(info.bestError));
 	ui->label_96->setText(QString::number(info.bestSize));
+	ui->label_98->setText(QString::number(info.avgSize));
+	drawCorrelationPlotGP(info.actual,info.expected);
 }

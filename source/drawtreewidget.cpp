@@ -280,6 +280,7 @@ void drawTreeWidget::setData(QVector<float> x, QVector<float> y, QVector<QString
 		posX[0] = 0;
 		posY[0] = 0;
 	}
+	currentNode = 0;
 	update();
 }
 

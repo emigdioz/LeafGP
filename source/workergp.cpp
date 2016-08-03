@@ -67,10 +67,10 @@ void workerGP::doWork()
 
   // ************** Temporal, forced to GPU here, it should initialize based on user options
   gp_parameters.Initialize();
-  //gp_engine = new FPI(gp_parameters);
-  gp_engine = new GPonCPU(gp_parameters);
+  gp_engine = new FPI(gp_parameters);
+  //gp_engine = new GPonCPU(gp_parameters);
 
-  connect(gp_engine, SIGNAL(GP_send_run_progress(const int)), this, SLOT(GP_received_run_progress(const int)));
+  connect(gp_engine, SIGNAL(GP_send_run_progress(const int,const int)), this, SLOT(GP_received_run_progress(const int,const int)));
   connect(gp_engine, SIGNAL(GP_send_single_tree(GP::treeStruct)), this, SLOT(GP_received_single_tree(GP::treeStruct)));
   connect(gp_engine, SIGNAL(GP_send_basic_info(GP::basicInfo)), this, SLOT(GP_received_basic_info(GP::basicInfo)));
   // insert data to GP object
@@ -100,9 +100,9 @@ void workerGP::delay( int millisecondsToWait )
     }
 }
 
-void workerGP::GP_received_run_progress(const int value)
+void workerGP::GP_received_run_progress(const int value, const int run)
 {
-  emit sendRunProgress(value);
+  emit sendRunProgress(value,run);
   //QCoreApplication::processEvents();
 }
 

@@ -137,6 +137,8 @@ public:
   void insertDataTraining(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
   void convertProgramString(const cl_uint* program, QString &output, int start = -1, int end = -1 );
+  bool locallyEvaluate(const cl_uint* program);
+  float evaluateInstance(const cl_uint* program, int iter);
 
    void Run()
    {
@@ -405,7 +407,7 @@ signals:
 
 private:
    QString bufferString;
-	bool locallyEvaluate(const cl_uint* program);
+
 };
 
 // -----------------------------------------------------------------------------

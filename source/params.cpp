@@ -221,7 +221,8 @@ Params::Initialize()
   m_maximum_tree_size = 100;
   m_minimum_tree_size = 1;
   m_tournament_size = 3;
-  m_device = DEVICE_GPU_FPI;
+  //m_device = DEVICE_GPU_FPI;
+  //m_device = DEVICE_CPU;
   m_elitism_size = 1;
   m_error_tolerance = -1;
   m_max_local_size = 0;

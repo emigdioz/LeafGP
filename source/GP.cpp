@@ -168,12 +168,12 @@ void GP::Evolve()
    } // 19
 
    // 20:
-   std::cout << "\n> Best: [" << std::setprecision(16) << m_best_error << "]\t{" 
+   std::cout << "\n> Best: [" << std::setprecision(16) << sqrt(m_best_error/m_num_points) << "]\t{"
       << ProgramSize( m_best_program ) << "}\t";
    PrintProgramPretty( m_best_program );
    std::cout << std::endl;
 
-
+   locallyEvaluate(m_best_program);
    // Clean up
    delete[] pop_a;
    delete[] pop_b;
@@ -514,28 +514,7 @@ bool GP::EvaluatePopulation( const cl_uint* pop )
    return (m_best_error <= m_params->m_error_tolerance);
 }
 
-bool GP::locallyEvaluate(const cl_uint *program)
-{
 
-//	for( uint samples = 0; samples < m_num_points; samples++ )
-//	{
-//		for( int op = ProgramSize(program); op-- ; )
-//		{
-//			switch( INDEX( program[op] ) )
-//			{
-//				INTERPRETER_CORE
-//				default:
-//					PUSH_0( X[samples * X_DIM + AS_INT( program[op] )] );
-//			}
-//		}
-//		error += ERROR_METRIC( POP, Y[ samples ] );
-
-//		// Avoid further calculations if the current one has overflown the float
-//		// (i.e., it is inf or NaN).
-//		if( isinf( error ) || isnan( error ) ) { error = MAX_FLOAT; break; }
-//	}
-
-}
 
 // -----------------------------------------------------------------------------
 void GP::CalculateErrors( const cl_uint* pop )
@@ -1121,3 +1100,67 @@ void GP::LoadPoints( std::vector<std::vector<cl_float> > & out_x )
 }
 
 // -----------------------------------------------------------------------------
+
+bool GP::locallyEvaluate(const cl_uint *program)
+{
+	float partial_error = 0.0f;
+	float rmse;
+	for( uint iter = 0; iter < m_num_points; iter++ )
+	{
+		partial_error += evaluateInstance(program,iter);
+		//if( isinf( error ) || isnan( error ) ) { error = MAX_FLOAT; break; }
+
+	}
+	rmse = sqrt(partial_error/m_num_points);
+	qDebug()<<"RMSE: "<<rmse;
+}
+
+float GP::evaluateInstance(const cl_uint *program, int iter)
+{
+  unsigned max_stack_size = std::max( 1U, static_cast<unsigned>( MaximumTreeSize() -
+                                          std::floor(MaximumTreeSize() /
+                                          (float) std::min( m_primitives.m_max_arity, MaximumTreeSize() ) ) ) );
+  int index;
+  #define X_DIM m_x_dim
+  #define POP       ( stack[stack_top--] )
+  //#define PUSH(arity, exp) stack[stack_top + 1 - arity] = (exp); stack_top += 1 - arity;
+  #define PUSH_0( value ) stack[++stack_top] = (value);
+  #define PUSH_1( exp ) stack[stack_top] = (exp);
+  #define PUSH_2( exp ) stack[stack_top - 1] = (exp); --stack_top;
+  #define PUSH_3( exp ) stack[stack_top - 2] = (exp); stack_top -= 2;
+  #define ARG(n) (stack[stack_top - n])
+  #define STACK_SIZE max_stack_size
+  #define CREATE_STACK float stack[STACK_SIZE]; int stack_top = -1;
+  #define NODE program[op]
+
+	//#define ERROR_METRIC( actual, expected ) fabs( actual - expected )
+	#define ERROR_METRIC( actual, expected ) pow( actual - expected, 2 )
+
+	CREATE_STACK
+	float error = 0.0f;
+	for(int op = ProgramSize(program); op--; )
+	{
+		index = INDEX(program[op]);
+		//qDebug()<<INDEX(program[op]);
+		if(INDEX(program[op]) == 0) PUSH_0(AS_FLOAT(NODE));
+		if(INDEX(program[op]) == 37) PUSH_1(sin(ARG(0)));
+		if(INDEX(program[op]) == 23) PUSH_1(cos(ARG(0)));
+		if(INDEX(program[op]) == 39) PUSH_1(tan(ARG(0)));
+		if(INDEX(program[op]) == 38) PUSH_1(sqrt(ARG(0)));
+		if(INDEX(program[op]) == 24) PUSH_1(exp(ARG(0)));
+		if(INDEX(program[op]) == 3) PUSH_2(ARG(0) + ARG(1));
+		if(INDEX(program[op]) == 15) PUSH_2(ARG(0) - ARG(1));
+		if(INDEX(program[op]) == 16) PUSH_2(ARG(0) * ARG(1));
+		if(INDEX(program[op]) == 5) PUSH_2(ARG(0)/ARG(1));
+		if(INDEX(program[op]) == 127) {
+			PUSH_0(input_data_matrix.at(iter).at(AS_INT(program[op])));
+			qDebug()<<"X"<<AS_INT(program[op]);
+			qDebug()<<input_data_matrix.at(iter).at(AS_INT(program[op]));
+		}
+	}
+	//qDebug()<<POP<<" , "<<input_data_matrix.at(iter).at(X_DIM);
+	error = ERROR_METRIC(POP, input_data_matrix.at(iter).at(X_DIM));
+	//qDebug()<<error;
+	return error;
+}
+

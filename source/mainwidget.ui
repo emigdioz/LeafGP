@@ -654,7 +654,7 @@ QCheckBox::indicator:checked:pressed {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -1713,8 +1713,8 @@ QWidget#pageProcessing {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>129</width>
-                     <height>217</height>
+                     <width>119</width>
+                     <height>178</height>
                     </rect>
                    </property>
                    <property name="maximumSize">
@@ -4626,7 +4626,7 @@ QListWidget::item:selected
      <x>0</x>
      <y>0</y>
      <width>1020</width>
-     <height>24</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

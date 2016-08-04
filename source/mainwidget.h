@@ -59,6 +59,8 @@ private slots:
 	void receivedSingleTree(GP::treeStruct data);
 	void receivedBasicInfo(GP::basicInfo info);
 
+	void on_checkBox_toggled(bool checked);
+
 private:
 	Ui::MainWidget *ui;
 	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);

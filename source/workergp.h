@@ -24,6 +24,7 @@ public:
   GP* gp_engine;
   Params gp_parameters;
   std::vector<std::vector<float> > data_matrix;
+  int engineType;
 
 signals:
   void workRequested();

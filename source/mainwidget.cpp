@@ -274,7 +274,7 @@ void MainWidget::parallelDevicesChecked(bool t)
       Group->setChecked(true);
     Group->blockSignals(false);
   }
-
+  workerAlgorithm->engineType = type;
 }
 
 void MainWidget::receivedSingleTree(GP::treeStruct data)
@@ -353,4 +353,9 @@ void MainWidget::receivedBasicInfo(GP::basicInfo info)
 	ui->label_96->setText(QString::number(info.bestSize));
 	ui->label_98->setText(QString::number(info.avgSize));
 	drawCorrelationPlotGP(info.actual,info.expected);
+}
+
+void MainWidget::on_checkBox_toggled(bool checked)
+{
+		ui->groupBox_7->setEnabled(checked);
 }

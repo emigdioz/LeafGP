@@ -228,7 +228,7 @@ Params::Initialize()
   m_max_local_size = 0;
   m_output_file = "gpocl.out";
   m_seed = 0;
-  m_number_of_runs = 1;
+  m_number_of_runs = 5;
    // ---------------
    return true;
 }

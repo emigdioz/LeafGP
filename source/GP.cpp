@@ -79,7 +79,7 @@ void GP::Evolve()
   std::vector<double> act;
   QVector<double> expQ;
   QVector<double> actQ;
-   /*
+  /*
 
       Pseudo-code for Evolve:
 
@@ -106,92 +106,98 @@ void GP::Evolve()
    */
   int progress_run;
 
-  for(int i = 0;i < m_params->m_number_of_runs;i++)
+  for(int curr_run = 0;curr_run < m_params->m_number_of_runs;curr_run++)
   {
-   // ------
-   std::clock_t start = std::clock();
-   // ------
+    // ------
+    std::clock_t start = std::clock();
+    // ------
 
-   m_E = new cl_float[ m_params->m_population_size ];
+    m_E = new cl_float[ m_params->m_population_size ];
+    cl_uint* pop_a = new cl_uint[ m_params->m_population_size * MaximumProgramSize() ];
+    cl_uint* pop_b = new cl_uint[ m_params->m_population_size * MaximumProgramSize() ];
 
-   cl_uint* pop_a = new cl_uint[ m_params->m_population_size * MaximumProgramSize() ];
-   cl_uint* pop_b = new cl_uint[ m_params->m_population_size * MaximumProgramSize() ];
+    cl_uint* cur_pop = pop_a;
+    cl_uint* tmp_pop = pop_b;
+    //cl_uint* cur_pop = new cl_uint[ m_params->m_population_size * MaximumProgramSize() ];
+    //cl_uint* tmp_pop = new cl_uint[ m_params->m_population_size * MaximumProgramSize() ];
 
-   cl_uint* cur_pop = pop_a;
-   cl_uint* tmp_pop = pop_b;
+    // 1:
+    //   std::cout << "\n[Gen 1 of " << m_params->m_number_of_generations << "]...\n";
+    InitializePopulation( cur_pop );
+    // 2:
+    ///EvaluatePopulation( cur_pop, errors );
+    EvaluatePopulation( cur_pop );
 
-   // 1:
-//   std::cout << "\n[Gen 1 of " << m_params->m_number_of_generations << "]...\n";
-   InitializePopulation( cur_pop );
-   // 2:
-   ///EvaluatePopulation( cur_pop, errors );
-   EvaluatePopulation( cur_pop );
-
-   // ---------
-   std::cout << "[Gen " << 1 << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << m_best_error << ", size: " << ProgramSize( m_best_program ) << ")... ";
+    // ---------
+    std::cout << "[Gen " << 1 << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << m_best_error << ", size: " << ProgramSize( m_best_program ) << ")... ";
 #ifdef PROFILING
-   std::cout << std::setprecision(2) << std::fixed << "| GPop/s: " << m_node_evaluations / (m_kernel_time/1.0E9) << std::setprecision(4) << " | Node evals: " << m_node_evaluations << " | Avg. KET(ms): " << m_kernel_time / (m_kernel_calls * 1.0E6) << " | Avg. KLT(ms): " << m_launch_time / (m_kernel_calls * 1.0E6) << " | Acc. KET(s): " << m_kernel_time/1.0E+9 << " | Acc. KLT(s): " << m_launch_time/1.0E+9 << " | Kernel calls: " << m_kernel_calls;
+    std::cout << std::setprecision(2) << std::fixed << "| GPop/s: " << m_node_evaluations / (m_kernel_time/1.0E9) << std::setprecision(4) << " | Node evals: " << m_node_evaluations << " | Avg. KET(ms): " << m_kernel_time / (m_kernel_calls * 1.0E6) << " | Avg. KLT(ms): " << m_launch_time / (m_kernel_calls * 1.0E6) << " | Acc. KET(s): " << m_kernel_time/1.0E+9 << " | Acc. KLT(s): " << m_launch_time/1.0E+9 << " | Kernel calls: " << m_kernel_calls;
 #endif
-   std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
-   // ---------
-   float avgSize;
-   // 3:
-   for( unsigned gen = 2; gen <= m_params->m_number_of_generations; ++gen )
-   {
-     // 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16:
-     ///Breed( cur_pop, tmp_pop, errors );
-     Breed( cur_pop, tmp_pop );
-     // 17:
-     ///if( EvaluatePopulation( tmp_pop, errors ) ) break;
-     if( EvaluatePopulation( tmp_pop ) ) break;
+    std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
+    // ---------
+    float avgSize;
+    // 3:
+    for( unsigned gen = 2; gen <= m_params->m_number_of_generations; ++gen )
+    {
+      // 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16:
+      ///Breed( cur_pop, tmp_pop, errors );
+      Breed( cur_pop, tmp_pop );
+      // 17:
+      ///if( EvaluatePopulation( tmp_pop, errors ) ) break;
+      if( EvaluatePopulation( tmp_pop ) ) break;
 
-     // 18:
-     std::swap( cur_pop, tmp_pop );
+      // 18:
+      std::swap( cur_pop, tmp_pop );
 
-     // ---------
-     std::cout << "[Gen " << gen << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << sqrt(m_best_error/m_num_points) << ", size: " << ProgramSize( m_best_program ) << ")... ";
+      // ---------
+      std::cout << "[Gen " << gen << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << sqrt(m_best_error/m_num_points) << ", size: " << ProgramSize( m_best_program ) << ")... ";
 #ifdef PROFILING
-     std::cout << std::setprecision(2) << std::fixed << "| GPop/s: " << m_node_evaluations / (m_kernel_time/1.0E9) << std::setprecision(4) << " | Node evals: " << m_node_evaluations << " | Avg. KET(ms): " << m_kernel_time / (m_kernel_calls * 1.0E6) << " | Avg. KLT(ms): " << m_launch_time / (m_kernel_calls * 1.0E6) << " | Acc. KET(s): " << m_kernel_time/1.0E+9 << " | Acc. KLT(s): " << m_launch_time/1.0E+9 << " | Kernel calls: " << m_kernel_calls;
+      std::cout << std::setprecision(2) << std::fixed << "| GPop/s: " << m_node_evaluations / (m_kernel_time/1.0E9) << std::setprecision(4) << " | Node evals: " << m_node_evaluations << " | Avg. KET(ms): " << m_kernel_time / (m_kernel_calls * 1.0E6) << " | Avg. KLT(ms): " << m_launch_time / (m_kernel_calls * 1.0E6) << " | Acc. KET(s): " << m_kernel_time/1.0E+9 << " | Acc. KLT(s): " << m_launch_time/1.0E+9 << " | Kernel calls: " << m_kernel_calls;
 #endif
-     std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
-     // ---------
-     avgSize = 0.0f;
-     for(int ind = 0;ind < m_params->m_population_size;ind++)
-       avgSize += ProgramSize(Program( cur_pop, ind ));
-     avgSize /= m_params->m_population_size;
-     //************* temporal ***************************************************************************
-     convertProgramToTreeStruct(thisTree,m_best_program);
-     convertProgramString(m_best_program,bestIndividual);
-     thisTree.syntaxPrefix = bestIndividual;
-     emit GP_send_single_tree(thisTree);
+      std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
+      // ---------
+      avgSize = 0.0f;
+      for(int ind = 0;ind < m_params->m_population_size;ind++)
+        avgSize += ProgramSize(Program( cur_pop, ind ));
+      avgSize /= m_params->m_population_size;
+      //************* temporal ***************************************************************************
+      convertProgramToTreeStruct(thisTree,m_best_program);
+      convertProgramString(m_best_program,bestIndividual);
+      thisTree.syntaxPrefix = bestIndividual;
+      emit GP_send_single_tree(thisTree);
 
-     progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
-     emit GP_send_run_progress(progress_run,0);
-     locallyEvaluate(m_best_program,act,exp);
-     currentInfo.bestError = sqrt(m_best_error/m_num_points);
-     currentInfo.bestSize = ProgramSize(m_best_program);
-     currentInfo.avgSize = avgSize;
-     currentInfo.currentGeneration = gen;
-     currentInfo.currentNodesExecutions = m_node_evaluations;
-     expQ = QVector<double>::fromStdVector(exp);
-     actQ = QVector<double>::fromStdVector(act);
-     currentInfo.actual = actQ;
-     currentInfo.expected = expQ;
-     emit GP_send_basic_info(currentInfo);
+      progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
+      emit GP_send_run_progress(progress_run,curr_run);
+      locallyEvaluate(m_best_program,act,exp);
+      currentInfo.bestError = sqrt(m_best_error/m_num_points);
+      currentInfo.bestSize = ProgramSize(m_best_program);
+      currentInfo.avgSize = avgSize;
+      currentInfo.currentGeneration = gen;
+      currentInfo.currentNodesExecutions = m_node_evaluations;
+      expQ = QVector<double>::fromStdVector(exp);
+      actQ = QVector<double>::fromStdVector(act);
+      currentInfo.actual = actQ;
+      currentInfo.expected = expQ;
+      emit GP_send_basic_info(currentInfo);
 
-   } // 19
+    } // 19
 
-   // 20:
-   std::cout << "\n> Best: [" << std::setprecision(16) << sqrt(m_best_error/m_num_points) << "]\t{"
-      << ProgramSize( m_best_program ) << "}\t";
-   PrintProgramPretty( m_best_program );
-   std::cout << std::endl;
+    // 20:
+    std::cout << "\n> Best: [" << std::setprecision(16) << sqrt(m_best_error/m_num_points) << "]\t{"
+              << ProgramSize( m_best_program ) << "}\t";
+    PrintProgramPretty( m_best_program );
+    std::cout << std::endl;
 
-
-   // Clean up
-   delete[] pop_a;
-   delete[] pop_b;
-   ///delete[] errors;
+    // Clean up
+    for(int i = 0; i < (m_params->m_population_size * MaximumProgramSize());++i)
+    {
+      pop_a[i] = NULL;
+      pop_b[i] = NULL;
+    }
+    delete[] pop_a;
+    delete[] pop_b;
+    SetProgramSize( m_best_program, 0 );
+    m_best_error = std::numeric_limits<cl_float>::max();
   }
 }
 

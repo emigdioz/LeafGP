@@ -622,6 +622,12 @@ background: rgb(182,194,214);
 
 QCheckBox {
 	spacing: 5px;
+	font-family: Roboto;
+	font-weight: 200;
+	font-size: 9pt;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: rgb(45,65,102);
 }
 
 QCheckBox::indicator {
@@ -3362,6 +3368,32 @@ QListWidget::item:hover {
                        <item row="0" column="0">
                         <layout class="QVBoxLayout" name="verticalLayout_23">
                          <item>
+                          <widget class="QFrame" name="frame_33">
+                           <property name="frameShape">
+                            <enum>QFrame::NoFrame</enum>
+                           </property>
+                           <property name="frameShadow">
+                            <enum>QFrame::Raised</enum>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_75">
+                            <item row="0" column="0">
+                             <layout class="QGridLayout" name="gridLayout_74">
+                              <item row="0" column="0">
+                               <widget class="QCheckBox" name="checkBox">
+                                <property name="text">
+                                 <string>Use accelerated processing</string>
+                                </property>
+                                <property name="checked">
+                                 <bool>true</bool>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item>
                           <widget class="QGroupBox" name="groupBox_7">
                            <property name="styleSheet">
                             <string notr="true">QGroupBox {
@@ -3372,7 +3404,7 @@ QListWidget::item:hover {
                             <string>Accelerated processing</string>
                            </property>
                            <layout class="QGridLayout" name="gridLayout_71">
-                            <item row="0" column="0">
+                            <item row="2" column="0">
                              <layout class="QVBoxLayout" name="verticalLayout_24"/>
                             </item>
                            </layout>

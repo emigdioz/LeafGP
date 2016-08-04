@@ -9,8 +9,7 @@ workerGP::workerGP(QObject *parent) : QObject(parent)
   qRegisterMetaType<GP::basicInfo>();
   _working = false;
   _abort = false;
-
-  // ************** Temporal, forced to GPU here, it should initialize based on user options
+  engineType = 0;
 }
 
 void workerGP::abort()
@@ -67,7 +66,8 @@ void workerGP::doWork()
 
   // ************** Temporal, forced to GPU here, it should initialize based on user options
   gp_parameters.Initialize();
-  gp_engine = new FPI(gp_parameters);
+  if(engineType == 0) gp_engine = new GPonCPU(gp_parameters);
+  if(engineType == 1) gp_engine = new FPI(gp_parameters);
   //gp_engine = new GPonCPU(gp_parameters);
 
   connect(gp_engine, SIGNAL(GP_send_run_progress(const int,const int)), this, SLOT(GP_received_run_progress(const int,const int)));

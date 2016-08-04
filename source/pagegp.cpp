@@ -19,8 +19,8 @@ void MainWidget::on_startButton_clicked()
 }
 
 void MainWidget::receivedRunProgress(int value, int run)
-{
-	ui->circularProgress->setProgress1(value);
+{	
+	ui->circularProgress->setProgress1(value);	
 }
 
 QString MainWidget::secondsToDHMS(qint64 duration)

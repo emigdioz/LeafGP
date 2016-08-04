@@ -24,8 +24,8 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(ui->listWidgetSetup, SIGNAL(currentRowChanged(int)), ui->stackedWidgetSetup, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetGP, SIGNAL(currentRowChanged(int)), ui->stackedWidgetGP, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetResults, SIGNAL(currentRowChanged(int)), ui->stackedWidgetResults, SLOT(setCurrentIndex(int)));
-	connect(ui->toolBoxData, SIGNAL(currentChanged(int)), ui->stackedWidgetDataAdvanced, SLOT(setCurrentIndex(int)));
-	connect(ui->toolBoxSetup, SIGNAL(currentChanged(int)), ui->stackedWidgetSetupAdvanced, SLOT(setCurrentIndex(int)));
+	connect(ui->listWidgetDataAdvanced, SIGNAL(currentRowChanged(int)), ui->stackedWidgetDataAdvanced, SLOT(setCurrentIndex(int)));
+	connect(ui->listWidgetSetupAdvanced, SIGNAL(currentRowChanged(int)), ui->stackedWidgetSetupAdvanced, SLOT(setCurrentIndex(int)));
 	connect(ui->tableViewDataSummary, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSelectionMenu(const QPoint&)));
 	connect(ui->listFunctionsTarget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showDeleteMenu(const QPoint&)));
 	connect(ui->selectorWidget, SIGNAL(sendSelectedCoordinates(int,int)), this, SLOT(updateOtherPlots(int,int)));
@@ -41,9 +41,6 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->featurePlot->hide();
 	ui->label_49->hide();
 	ui->featureOutputPlot->hide();
-	ui->page->setMinimumHeight(90);
-	ui->frame_3->resize(150,ui->frame_3->height());
-	ui->frame_8->resize(150,ui->frame_8->height());
 	QPen pen(QColor(232,236,242,255), 2);
 	ui->samplePlot->setGridPen(pen);
 	pen.setColor(QColor(255,85,85,255));
@@ -101,6 +98,8 @@ MainWidget::MainWidget(QWidget *parent) :
 
 	ui->correlationGPPlot->hide();
 	getInfoOpenCL();
+
+	setDefaultGPParameters(); // has to be called after worker object initialization
 }
 
 MainWidget::~MainWidget()
@@ -358,4 +357,149 @@ void MainWidget::receivedBasicInfo(GP::basicInfo info)
 void MainWidget::on_checkBox_toggled(bool checked)
 {
 		ui->groupBox_7->setEnabled(checked);
+}
+
+void MainWidget::on_listWidgetDataAdvanced_currentRowChanged(int currentRow)
+{
+    if(currentRow == 0)
+    {
+      ui->label_32->show();
+      ui->frame_23->show();
+    }
+    else
+    {
+      ui->label_32->hide();
+      ui->frame_23->hide();
+    }
+}
+
+void MainWidget::on_listWidgetData_currentRowChanged(int currentRow)
+{
+    if(currentRow == 0)
+    {
+    ui->listWidgetData->setStyleSheet("QListWidget { background: rgb(182,194,214);"
+      "border: none;"
+      "font-family: Lato;"
+      "font-weight: 200;"
+      "font-size:12pt; }"
+
+      "QListWidget::item { background-image: url(:/icons/resources/images/sidebar2_back_normal2.png);"
+      "background-position: center;"
+      "width: 138px;"
+      "height: 45px;"
+      "padding-left: 10px;"
+      "color: rgb(45,65,102);}"
+
+    "QListWidget::item:selected { background-image: url(:/icons/resources/images/sidebar2_back_selected2.png);"
+      "background-position: center;"
+      "color: rgb(0, 0, 0);}"
+
+    "QListWidget::item:hover { background-image: url(:/icons/resources/images/sidebar2_back_hover2.png);"
+      "background-position: center;"
+      "color: rgb(0, 0, 0);}");
+    }
+    else
+    {
+      ui->listWidgetData->setStyleSheet("QListWidget { background: rgb(182,194,214);"
+        "border: none;"
+        "font-family: Lato;"
+        "font-weight: 200;"
+        "font-size:12pt; }"
+
+        "QListWidget::item { background-image: url(:/icons/resources/images/sidebar2_back_normal.png);"
+        "background-position: center;"
+        "width: 138px;"
+        "height: 45px;"
+        "padding-left: 10px;"
+        "color: rgb(45,65,102);}"
+
+      "QListWidget::item:selected { background-image: url(:/icons/resources/images/sidebar2_back_selected.png);"
+        "background-position: center;"
+        "color: rgb(0, 0, 0);}"
+
+      "QListWidget::item:hover { background-image: url(:/icons/resources/images/sidebar2_back_hover.png);"
+        "background-position: center;"
+        "color: rgb(0, 0, 0);}");
+    }
+}
+
+void MainWidget::on_listWidgetSetup_currentRowChanged(int currentRow)
+{
+    if(currentRow == 0)
+    {
+      ui->listWidgetSetup->setStyleSheet("QListWidget { background: rgb(182,194,214);"
+        "border: none;"
+        "font-family: Lato;"
+        "font-weight: 200;"
+        "font-size:12pt; }"
+
+        "QListWidget::item { background-image: url(:/icons/resources/images/sidebar2_back_normal2.png);"
+        "background-position: center;"
+        "width: 138px;"
+        "height: 45px;"
+        "padding-left: 10px;"
+        "color: rgb(45,65,102);}"
+
+      "QListWidget::item:selected { background-image: url(:/icons/resources/images/sidebar2_back_selected2.png);"
+        "background-position: center;"
+        "color: rgb(0, 0, 0);}"
+
+      "QListWidget::item:hover { background-image: url(:/icons/resources/images/sidebar2_back_hover2.png);"
+        "background-position: center;"
+        "color: rgb(0, 0, 0);}");
+      }
+      else
+      {
+        ui->listWidgetSetup->setStyleSheet("QListWidget { background: rgb(182,194,214);"
+          "border: none;"
+          "font-family: Lato;"
+          "font-weight: 200;"
+          "font-size:12pt; }"
+
+          "QListWidget::item { background-image: url(:/icons/resources/images/sidebar2_back_normal.png);"
+          "background-position: center;"
+          "width: 138px;"
+          "height: 45px;"
+          "padding-left: 10px;"
+          "color: rgb(45,65,102);}"
+
+        "QListWidget::item:selected { background-image: url(:/icons/resources/images/sidebar2_back_selected.png);"
+          "background-position: center;"
+          "color: rgb(0, 0, 0);}"
+
+        "QListWidget::item:hover { background-image: url(:/icons/resources/images/sidebar2_back_hover.png);"
+          "background-position: center;"
+          "color: rgb(0, 0, 0);}");
+      }
+}
+
+void MainWidget::setDefaultGPParameters()
+{
+  workerAlgorithm->gp_parameters.m_verbose = true;
+  workerAlgorithm->gp_parameters.m_print_primitives = false;
+  workerAlgorithm->gp_parameters.m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
+  workerAlgorithm->gp_parameters.m_number_of_generations = 100;
+  workerAlgorithm->gp_parameters.m_population_size = 100;
+  workerAlgorithm->gp_parameters.m_crossover_probability = 0.9;
+  workerAlgorithm->gp_parameters.m_mutation_probability = 0.1;
+  workerAlgorithm->gp_parameters.m_maximum_tree_size = 100;
+  workerAlgorithm->gp_parameters.m_minimum_tree_size = 1;
+  workerAlgorithm->gp_parameters.m_tournament_size = 3;
+  //m_device = DEVICE_GPU_FPI;
+  //m_device = DEVICE_CPU;
+  workerAlgorithm->gp_parameters.m_elitism_size = 1;
+  workerAlgorithm->gp_parameters.m_error_tolerance = -1;
+  workerAlgorithm->gp_parameters.m_max_local_size = 0;
+  workerAlgorithm->gp_parameters.m_output_file = "gpocl.out";
+  workerAlgorithm->gp_parameters.m_seed = 0;
+  workerAlgorithm->gp_parameters.m_number_of_runs = 1;
+}
+
+void MainWidget::on_spinBox_5_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_number_of_runs = arg1;
+  if(arg1 == 1)
+    ui->circularProgress->setDoubleProgress(false);
+  else
+    ui->circularProgress->setDoubleProgress(true);
 }

@@ -58,17 +58,8 @@ void workerGP::doWork()
       qDebug() << "Aborting worker process in Thread " << thread()->currentThreadId();
   }
 
-//  for(int i = 0;i < 1000;i++)
-//  {
-//    delay(10);
-//    emit sendProgress1(i);
-//  }
-
-  // ************** Temporal, forced to GPU here, it should initialize based on user options
-  gp_parameters.Initialize();
   if(engineType == 0) gp_engine = new GPonCPU(gp_parameters);
   if(engineType == 1) gp_engine = new FPI(gp_parameters);
-  //gp_engine = new GPonCPU(gp_parameters);
 
   connect(gp_engine, SIGNAL(GP_send_run_progress(const int,const int)), this, SLOT(GP_received_run_progress(const int,const int)));
   connect(gp_engine, SIGNAL(GP_send_single_tree(GP::treeStruct)), this, SLOT(GP_received_single_tree(GP::treeStruct)));

@@ -45,5 +45,12 @@
         <file>resources/images/checkbox_checked.png</file>
         <file>resources/images/nvidia_logo.png</file>
         <file>resources/images/intel_logo.png</file>
+        <file>resources/images/sidebar2_back_hover.png</file>
+        <file>resources/images/sidebar3_back_hover.png</file>
+        <file>resources/images/sidebar3_back_normal.png</file>
+        <file>resources/images/sidebar3_back_selected.png</file>
+        <file>resources/images/sidebar2_back_hover2.png</file>
+        <file>resources/images/sidebar2_back_normal2.png</file>
+        <file>resources/images/sidebar2_back_selected2.png</file>
     </qresource>
 </RCC>

@@ -20,7 +20,17 @@ void MainWidget::on_startButton_clicked()
 
 void MainWidget::receivedRunProgress(int value, int run)
 {	
-	ui->circularProgress->setProgress1(value);	
+	int max_runs = workerAlgorithm->gp_parameters.m_number_of_runs;
+	if(max_runs > 1)
+	{
+		int total_progress = ((1000.0/max_runs) * run) + ((float)value/max_runs);
+		ui->circularProgress->setProgress1(total_progress);
+		ui->circularProgress->setProgress2(value);
+	}
+	else
+		ui->circularProgress->setProgress1(value);
+
+	ui->label_82->setText("Run " + QString::number(run + 1) + "/" + QString::number(max_runs));
 }
 
 QString MainWidget::secondsToDHMS(qint64 duration)

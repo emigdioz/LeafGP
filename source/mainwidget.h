@@ -16,6 +16,7 @@
 #include "workergp.h"
 #include "cl.hpp"
 #include "GP.h"
+#include "params.h"
 
 namespace Ui {
 class MainWidget;
@@ -61,6 +62,14 @@ private slots:
 
 	void on_checkBox_toggled(bool checked);
 
+	void on_listWidgetDataAdvanced_currentRowChanged(int currentRow);
+
+	void on_listWidgetData_currentRowChanged(int currentRow);
+
+	void on_listWidgetSetup_currentRowChanged(int currentRow);
+
+	void on_spinBox_5_valueChanged(int arg1);
+
 private:
 	Ui::MainWidget *ui;
 	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);
@@ -93,6 +102,7 @@ private:
 	int countLeaves(int index, int count);
 	void positionLeaves(int index, int depth, int numberLeaves);
 	void positionParents(int index, int depth);
+	void setDefaultGPParameters(void);
 };
 
 #endif // MAINWIDGET_H

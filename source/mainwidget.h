@@ -36,6 +36,8 @@ public:
 	math_stats basicStats;
 	KDE *featurePDF;
 	std::vector<std::vector<float> > input_data_matrix;
+	int trainingRandomRatio;
+
 public slots:
 	void receivedRunProgress(int value, int run);
 
@@ -59,16 +61,12 @@ private slots:
 	void parallelDevicesChecked(bool t);
 	void receivedSingleTree(GP::treeStruct data);
 	void receivedBasicInfo(GP::basicInfo info);
-
 	void on_checkBox_toggled(bool checked);
-
 	void on_listWidgetDataAdvanced_currentRowChanged(int currentRow);
-
 	void on_listWidgetData_currentRowChanged(int currentRow);
-
 	void on_listWidgetSetup_currentRowChanged(int currentRow);
-
 	void on_spinBox_5_valueChanged(int arg1);
+	void on_horizontalSlider_valueChanged(int value);
 
 private:
 	Ui::MainWidget *ui;

@@ -657,6 +657,35 @@ QCheckBox::indicator:checked:hover {
 
 QCheckBox::indicator:checked:pressed {
     image: url(:/icons/resources/images/checkbox_checkedpressed.png);
+}
+
+QCheckBox::indicator:checked:disabled {
+    image: url(:/icons/resources/images/checkbox_checkeddisabled.png);
+}
+
+QSlider::groove:horizontal {
+	height: 10px;
+ 	border: 0px solid;
+}
+
+QSlider::handle:horizontal {
+    background: rgb(232,236,242);
+    width: 18px;
+	height: 20px;
+	margin: -8px 0;
+}
+
+QSlider::handle:horizontal:hover {
+    background: rgb(182,194,214);
+}
+
+
+QSlider::add-page:horizontal {
+    background: rgb(75,143,185);
+}
+
+QSlider::sub-page:horizontal {
+    background: rgb(148,204,20);
 }</string>
       </property>
       <property name="currentIndex">
@@ -2121,7 +2150,7 @@ QListWidget::item:hover
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="pageSetupSimple">
            <layout class="QGridLayout" name="gridLayout_7">
@@ -2452,17 +2481,35 @@ QLabel
                             <item row="1" column="0">
                              <widget class="QLabel" name="label_107">
                               <property name="text">
-                               <string>Training data percentage (rest is testing)</string>
+                               <string>Training/testing ratio (70%/30%)</string>
                               </property>
                              </widget>
                             </item>
                             <item row="1" column="1">
-                             <widget class="QLineEdit" name="lineEdit_7">
+                             <widget class="QSlider" name="horizontalSlider">
                               <property name="minimumSize">
                                <size>
                                 <width>0</width>
                                 <height>24</height>
                                </size>
+                              </property>
+                              <property name="minimum">
+                               <number>10</number>
+                              </property>
+                              <property name="maximum">
+                               <number>100</number>
+                              </property>
+                              <property name="value">
+                               <number>70</number>
+                              </property>
+                              <property name="orientation">
+                               <enum>Qt::Horizontal</enum>
+                              </property>
+                              <property name="tickPosition">
+                               <enum>QSlider::NoTicks</enum>
+                              </property>
+                              <property name="tickInterval">
+                               <number>10</number>
                               </property>
                              </widget>
                             </item>
@@ -2520,6 +2567,19 @@ QLabel
                           </item>
                          </layout>
                         </widget>
+                       </item>
+                       <item>
+                        <spacer name="verticalSpacer_9">
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                        </spacer>
                        </item>
                       </layout>
                      </item>
@@ -3645,6 +3705,19 @@ QListWidget::item:hover {
                          </layout>
                         </widget>
                        </item>
+                       <item>
+                        <spacer name="verticalSpacer_10">
+                         <property name="orientation">
+                          <enum>Qt::Vertical</enum>
+                         </property>
+                         <property name="sizeHint" stdset="0">
+                          <size>
+                           <width>20</width>
+                           <height>40</height>
+                          </size>
+                         </property>
+                        </spacer>
+                       </item>
                       </layout>
                      </item>
                     </layout>
@@ -3667,6 +3740,9 @@ QListWidget::item:hover {
                            <layout class="QGridLayout" name="gridLayout_74">
                             <item row="0" column="0">
                              <widget class="QCheckBox" name="checkBox">
+                              <property name="enabled">
+                               <bool>true</bool>
+                              </property>
                               <property name="text">
                                <string>Use accelerated processing</string>
                               </property>
@@ -4273,8 +4349,8 @@ QListWidget::item:hover
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>331</width>
-                                  <height>50</height>
+                                  <width>182</width>
+                                  <height>36</height>
                                  </rect>
                                 </property>
                                 <layout class="QGridLayout" name="gridLayout_73">

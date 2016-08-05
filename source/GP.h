@@ -132,66 +132,28 @@ public:
 		float bestError;
 		int bestSize;
 		float avgSize;
+		float avgTrainError;
 		QVector<double> expected;
 		QVector<double> actual;
 	} basicInfo;
 
-  void insertDataTraining(std::vector<std::vector<float> > data);
+  void insertData(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
   void convertProgramString(const cl_uint* program, QString &output, int start = -1, int end = -1 );
   bool locallyEvaluate(const cl_uint* program, std::vector<double> &act_compress, std::vector<double> &exp_compress);
   float evaluateInstance(const cl_uint* program, int iter);
   void compressOutputPairs(std::vector<float> actual, std::vector<float> expected, std::vector<double> &actual_compressed, std::vector<double> &expected_compressed);
+  void randomlySplitData(std::vector<std::vector<float> > original, int ratio);
+
+  int dataPartitionType;
+  int trainingRatio;
+  std::vector<std::vector<float> > input_data_matrix;
+  std::vector<std::vector<float> > training_data;
+  std::vector<std::vector<float> > testing_data;
+  std::vector<std::vector<float> > original_input_data_matrix;
 
    void Run()
    {
-      // ------------------------------------------------------------
-      if( m_params->m_print_primitives ) { m_primitives.ShowAvailablePrimitives(); return; }
-      // ------------------------------------------------------------
-
-      // ------------------------------------------------------------
-      // Load training points
-      LoadPoints();
-      // ------------------------------------------------------------
-
-      // ------------------------------------------------------------
-      // Load primitives
-      m_primitives.Load( m_x_dim, m_params->m_maximum_tree_size, m_params->m_primitives );
-      // ------------------------------------------------------------
-
-      // ------------------------------------------------------------
-      // Create context/devices
-      // Create queue
-      OpenCLInit();
-      // ------------------------------------------------------------
-
-      // ------------------------------------------------------------
-      CalculateNDRanges();
-#ifndef NDEBUG
-      std::cout << "NDRanges: [local: " << m_local_size << ", global: " << m_global_size << ", work-groups: " << m_global_size/m_local_size << "]\n";
-#endif
-      // ------------------------------------------------------------
-
-      // ------------------------------------------------------------
-      // Create buffers
-      CreateBuffers();
-      // ------------------------------------------------------------
-
-      // ------------------------------------------------------------
-      // Create program ("build kernel")
-      BuildKernel();
-      // ------------------------------------------------------------
-
-      // ------------------------------------------------------------
-      SetKernelArgs();
-#ifndef NDEBUG
-      std::cout << "Total local memory/CU (bytes): " << m_device.getInfo<CL_DEVICE_LOCAL_MEM_SIZE>()
-                << ", used by the kernel: " << m_kernel.getWorkGroupInfo<CL_KERNEL_LOCAL_MEM_SIZE>( m_device )
-               // [OCL 1.1 only] << ", private memory used by each work-item: " << m_kernel.getWorkGroupInfo<CL_KERNEL_PRIVATE_MEM_SIZE>( m_device )
-                << ", actual work-group size: " << m_kernel.getWorkGroupInfo<CL_KERNEL_WORK_GROUP_SIZE>( m_device )
-                << std::endl;
-#endif
-      // ------------------------------------------------------------
 
       // ------------------------------------------------------------
       Evolve();
@@ -399,7 +361,6 @@ public:
 
    std::vector<cl_float> m_Y;   
 
-   std::vector<std::vector<float> > input_data_matrix;
 
    static Params* m_params; /**< Pointer to Params class (holds the parameters). */
 

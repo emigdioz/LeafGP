@@ -100,6 +100,9 @@ MainWidget::MainWidget(QWidget *parent) :
 	getInfoOpenCL();
 
 	setDefaultGPParameters(); // has to be called after worker object initialization
+	trainingRandomRatio = 70;
+	ui->label_105->hide();
+	ui->lineEdit_6->hide();
 }
 
 MainWidget::~MainWidget()
@@ -499,7 +502,22 @@ void MainWidget::on_spinBox_5_valueChanged(int arg1)
 {
   workerAlgorithm->gp_parameters.m_number_of_runs = arg1;
   if(arg1 == 1)
+  {
     ui->circularProgress->setDoubleProgress(false);
+    ui->label_105->hide();
+    ui->lineEdit_6->hide();
+  }
   else
+  {
     ui->circularProgress->setDoubleProgress(true);
+    ui->label_105->show();
+    ui->lineEdit_6->show();
+  }
+}
+
+void MainWidget::on_horizontalSlider_valueChanged(int value)
+{
+    trainingRandomRatio = value;
+    ui->label_107->setText("Training/testing ratio (" + QString::number(value) + "%/" + QString::number(100-value) + "%)");
+    workerAlgorithm->trainingRatio = value;
 }

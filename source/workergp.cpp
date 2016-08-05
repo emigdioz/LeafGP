@@ -10,6 +10,7 @@ workerGP::workerGP(QObject *parent) : QObject(parent)
   _working = false;
   _abort = false;
   engineType = 0;
+  trainingRatio = 70;
 }
 
 void workerGP::abort()
@@ -66,7 +67,9 @@ void workerGP::doWork()
   connect(gp_engine, SIGNAL(GP_send_basic_info(GP::basicInfo)), this, SLOT(GP_received_basic_info(GP::basicInfo)));
   // insert data to GP object
 
-  gp_engine->insertDataTraining(data_matrix);
+  gp_engine->insertData(data_matrix);
+  gp_engine->dataPartitionType = dataPartitionType;
+  gp_engine->trainingRatio = trainingRatio;
   gp_engine->Run();
 
   mutex.lock();

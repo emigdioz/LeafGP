@@ -25,6 +25,8 @@ public:
   Params gp_parameters;
   std::vector<std::vector<float> > data_matrix;
   int engineType;
+  int dataPartitionType;
+  int trainingRatio;
 
 signals:
   void workRequested();

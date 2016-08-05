@@ -52,5 +52,6 @@
         <file>resources/images/sidebar2_back_hover2.png</file>
         <file>resources/images/sidebar2_back_normal2.png</file>
         <file>resources/images/sidebar2_back_selected2.png</file>
+        <file>resources/images/checkbox_checkeddisabled.png</file>
     </qresource>
 </RCC>

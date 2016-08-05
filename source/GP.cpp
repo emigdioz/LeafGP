@@ -79,6 +79,7 @@ void GP::Evolve()
   std::vector<double> act;
   QVector<double> expQ;
   QVector<double> actQ;
+
   /*
 
       Pseudo-code for Evolve:
@@ -106,11 +107,34 @@ void GP::Evolve()
    */
   int progress_run;
 
+  std::clock_t start = std::clock();
+
   for(int curr_run = 0;curr_run < m_params->m_number_of_runs;curr_run++)
   {
-    // ------
-    std::clock_t start = std::clock();
-    // ------
+
+    // Kernel has to be loaded each run since data can change
+    if( m_params->m_print_primitives ) { m_primitives.ShowAvailablePrimitives(); return; }
+    randomlySplitData(original_input_data_matrix,trainingRatio);
+    // copy training data to input_matrix
+    input_data_matrix = training_data;
+    LoadPoints();
+    m_primitives.m_primitives.clear();
+    m_primitives.Load( m_x_dim, m_params->m_maximum_tree_size, m_params->m_primitives );
+    OpenCLInit();
+    CalculateNDRanges();
+  #ifndef NDEBUG
+    std::cout << "NDRanges: [local: " << m_local_size << ", global: " << m_global_size << ", work-groups: " << m_global_size/m_local_size << "]\n";
+  #endif
+    CreateBuffers();
+    BuildKernel();
+    SetKernelArgs();
+  #ifndef NDEBUG
+    std::cout << "Total local memory/CU (bytes): " << m_device.getInfo<CL_DEVICE_LOCAL_MEM_SIZE>()
+              << ", used by the kernel: " << m_kernel.getWorkGroupInfo<CL_KERNEL_LOCAL_MEM_SIZE>( m_device )
+             // [OCL 1.1 only] << ", private memory used by each work-item: " << m_kernel.getWorkGroupInfo<CL_KERNEL_PRIVATE_MEM_SIZE>( m_device )
+              << ", actual work-group size: " << m_kernel.getWorkGroupInfo<CL_KERNEL_WORK_GROUP_SIZE>( m_device )
+              << std::endl;
+  #endif
 
     m_E = new cl_float[ m_params->m_population_size ];
     cl_uint* pop_a = new cl_uint[ m_params->m_population_size * MaximumProgramSize() ];
@@ -136,6 +160,7 @@ void GP::Evolve()
     std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
     // ---------
     float avgSize;
+    float avgError;
     // 3:
     for( unsigned gen = 2; gen <= m_params->m_number_of_generations; ++gen )
     {
@@ -157,9 +182,14 @@ void GP::Evolve()
       std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
       // ---------
       avgSize = 0.0f;
+      avgError = 0.0f;
       for(int ind = 0;ind < m_params->m_population_size;ind++)
+      {
         avgSize += ProgramSize(Program( cur_pop, ind ));
+        avgError += sqrt(m_E[ind]/m_num_points);
+      }
       avgSize /= m_params->m_population_size;
+      avgError /= m_params->m_population_size;
       //************* temporal ***************************************************************************
       convertProgramToTreeStruct(thisTree,m_best_program);
       convertProgramString(m_best_program,bestIndividual);
@@ -172,6 +202,7 @@ void GP::Evolve()
       currentInfo.bestError = sqrt(m_best_error/m_num_points);
       currentInfo.bestSize = ProgramSize(m_best_program);
       currentInfo.avgSize = avgSize;
+      currentInfo.avgTrainError = avgError;
       currentInfo.currentGeneration = gen;
       currentInfo.currentNodesExecutions = m_node_evaluations;
       expQ = QVector<double>::fromStdVector(exp);
@@ -218,6 +249,27 @@ void GP::Breed( cl_uint* old_pop, cl_uint* new_pop )
 #endif
    }
 
+//   // Tournament:
+//   for( unsigned i = m_params->m_elitism_size; i < m_params->m_population_size; ++i )
+//   {
+//      // Genetic operations
+//      if( Random::Probability( m_params->m_crossover_probability ) )
+//         // Respectively: mom, dad, and child
+//         Crossover( Program( old_pop, Tournament( old_pop ) ),
+//                    Program( old_pop, Tournament( old_pop ) ),
+//                    Program( new_pop, i ) );
+//      else
+//         Clone( Program( old_pop, Tournament( old_pop ) ), Program( new_pop, i ) );
+
+//      // Every genetic operator have a chance to go wrong
+//      if( Random::Probability( m_params->m_mutation_probability ) )
+//      {
+//         if( Random::Probability( 2.0/3.0 ) ) // 66%
+//            NodeMutate( Program( new_pop, i ) ); // node mutate / neighbor mutate
+//         else
+//            SubTreeMutate( Program( new_pop, i ) );
+//      }
+
    // Tournament:
    for( unsigned i = m_params->m_elitism_size; i < m_params->m_population_size; ++i )
    {
@@ -227,17 +279,16 @@ void GP::Breed( cl_uint* old_pop, cl_uint* new_pop )
          Crossover( Program( old_pop, Tournament( old_pop ) ),
                     Program( old_pop, Tournament( old_pop ) ),
                     Program( new_pop, i ) );
-      else
-         Clone( Program( old_pop, Tournament( old_pop ) ), Program( new_pop, i ) );
-
-      // Every genetic operator have a chance to go wrong
-      if( Random::Probability( m_params->m_mutation_probability ) )
+      else if ( Random::Probability( m_params->m_mutation_probability ) )
       {
+         Clone( Program( old_pop, i ), Program( new_pop, i ) );
          if( Random::Probability( 2.0/3.0 ) ) // 66%
             NodeMutate( Program( new_pop, i ) ); // node mutate / neighbor mutate
          else
             SubTreeMutate( Program( new_pop, i ) );
       }
+      else
+        Clone( Program( old_pop, i ), Program( new_pop, i ) );
 
 #ifdef PROFILING
       // Update the total number of nodes that are going to be evaluated (to be
@@ -856,6 +907,7 @@ void GP::BuildKernel()
 void GP::LoadKernel( const char* kernel_file )
 {
    std::ifstream file( kernel_file );
+   //m_kernel_src = "";
    m_kernel_src.append( std::istreambuf_iterator<char>(file), (std::istreambuf_iterator<char>()) );
 }
 
@@ -1091,9 +1143,10 @@ void GP::CreateLinearTree( cl_uint* node, unsigned size ) const
    } while( --size );
 }
 
-void GP::insertDataTraining(std::vector<std::vector<float> > data)
+void GP::insertData(std::vector<std::vector<float> > data)
 {
   input_data_matrix = data;
+  original_input_data_matrix = data;
 }
 
 // -----------------------------------------------------------------------------
@@ -1102,7 +1155,7 @@ void GP::LoadPoints( std::vector<std::vector<cl_float> > & out_x )
    using namespace util;
   int nRows = input_data_matrix.size();
   int nCols = input_data_matrix.at(0).size();
-
+  m_Y.clear();
 	for(int j = 0;j < nRows; j++)
 	{
 		std::vector<float> line_data;
@@ -1117,6 +1170,31 @@ void GP::LoadPoints( std::vector<std::vector<cl_float> > & out_x )
 	}
 	m_num_points = nRows;
 	m_x_dim = nCols - 1;
+}
+
+void GP::randomlySplitData(std::vector<std::vector<float> > original, int ratio)
+{
+	int nRows = original.size();
+	int nCols = original.at(0).size();
+	int trainingSize = (nRows * ratio)/100;
+	int testingSize = nRows - trainingSize;
+	std::vector<float> instanceTemp;
+	training_data.clear();
+	testing_data.clear();
+	std::vector<int> index;
+	for(int i = 0; i < nRows; ++i)
+		index.push_back(i);
+	std::random_shuffle(index.begin(), index.end());
+	for(int ind = 0;ind < trainingSize;ind++)
+	{
+		instanceTemp = original.at(index.at(ind));
+		training_data.push_back(instanceTemp);
+	}
+	for(int ind = 0;ind < testingSize;ind++)
+	{
+		instanceTemp = original.at(index.at(ind + trainingSize));
+		testing_data.push_back(instanceTemp);
+	}
 }
 
 // -----------------------------------------------------------------------------

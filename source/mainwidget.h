@@ -83,6 +83,7 @@ private:
 	void drawQQPlot(int x, int y);
 	void drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY);
 	void setupQualityPlot(void);
+	void setupSizePlot(void);
 	void populateTerminalList(void);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;

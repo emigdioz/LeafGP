@@ -11,6 +11,8 @@ void MainWidget::requestAlgorithmStart()
 void MainWidget::on_startButton_clicked()
 {
 	ui->qualityPlot->graph(0)->clearData();
+	ui->qualityPlot->graph(1)->clearData();
+	ui->sizePlot->graph(0)->clearData();
 	// Copy input data to worker local matrix
 	workerAlgorithm->data_matrix = input_data_matrix;
 	requestAlgorithmStart();
@@ -176,12 +178,14 @@ void MainWidget::setupQualityPlot()
 {
 	ui->qualityPlot->show();
 	ui->qualityPlot->addGraph();
+	ui->qualityPlot->addGraph();
 	ui->qualityPlot->xAxis->setRange(1,100);
-	//ui->qualityPlot->yAxis->setRange(inputData.Ymin,inputData.Ymax);
-	ui->qualityPlot->graph(0)->setName("Best");
-	ui->qualityPlot->graph(0)->setPen(QColor(255,174,0,255));
-	ui->qualityPlot->graph(0)->setBrush(QBrush(QColor(255,174,0,20)));
-	ui->qualityPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignBottom|Qt::AlignRight);
+	ui->qualityPlot->graph(0)->setName("Best solution error for training data");
+	ui->qualityPlot->graph(0)->setPen(QPen(QColor(255,174,0,255),2));
+	ui->qualityPlot->graph(1)->setName("Best solution error for testing data");
+	ui->qualityPlot->graph(1)->setPen(QPen(QColor(75,143,185,255),2));
+
+	ui->qualityPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop|Qt::AlignRight);
 	ui->qualityPlot->axisRect()->setBackground(QColor(255, 255, 255, 255));
 	ui->qualityPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
 	ui->qualityPlot->xAxis->setBasePen(QColor(255, 255, 255, 255));
@@ -192,6 +196,9 @@ void MainWidget::setupQualityPlot()
 	ui->qualityPlot->xAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
 	ui->qualityPlot->xAxis->setTickLabelColor(QColor(45,65,102,255));
 	ui->qualityPlot->xAxis->setLabelColor(QColor(45,65,102,255));
+	ui->qualityPlot->legend->setVisible(true);
+	ui->qualityPlot->legend->setFont(QFont("Roboto",10,QFont::Light));
+	ui->qualityPlot->legend->setTextColor(QColor(45,65,102,255));
 
 	QPen pen(QColor(232, 236, 242, 255));
 	pen.setWidth(2);
@@ -209,4 +216,47 @@ void MainWidget::setupQualityPlot()
 	ui->qualityPlot->yAxis->setLabelColor(QColor(45,65,102,255));
 	ui->qualityPlot->yAxis->setLabel("RMSE");
 	ui->qualityPlot->graph(0)->clearData();
+	ui->qualityPlot->graph(1)->clearData();
+}
+
+void MainWidget::setupSizePlot()
+{
+	ui->sizePlot->show();
+	ui->sizePlot->addGraph();
+	ui->sizePlot->xAxis->setRange(1,100);
+	ui->sizePlot->graph(0)->setName("Solution sizes average");
+	ui->sizePlot->graph(0)->setPen(QPen(QColor(148,204,20,255),2));
+	ui->sizePlot->graph(0)->setBrush(QBrush(QColor(148,204,20,20)));
+
+	ui->sizePlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignTop|Qt::AlignRight);
+	ui->sizePlot->axisRect()->setBackground(QColor(255, 255, 255, 255));
+	ui->sizePlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+	ui->sizePlot->xAxis->setBasePen(QColor(255, 255, 255, 255));
+	ui->sizePlot->yAxis->setBasePen(QColor(255, 255, 255, 255));
+	ui->sizePlot->xAxis->setTicks(true);
+	ui->sizePlot->xAxis->setLabel("Generation");
+	ui->sizePlot->xAxis->setTickLabelFont(QFont("Roboto",12,QFont::Light));
+	ui->sizePlot->xAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
+	ui->sizePlot->xAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->sizePlot->xAxis->setLabelColor(QColor(45,65,102,255));
+	ui->sizePlot->legend->setVisible(true);
+	ui->sizePlot->legend->setFont(QFont("Roboto",10,QFont::Light));
+	ui->sizePlot->legend->setTextColor(QColor(45,65,102,255));
+
+	QPen pen(QColor(232, 236, 242, 255));
+	pen.setWidth(2);
+	ui->sizePlot->yAxis->grid()->setPen(pen);
+	ui->sizePlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+	ui->sizePlot->yAxis->setSubTickPen(QColor(255, 255, 255, 255));
+	ui->sizePlot->xAxis->setTickPen(pen);
+	ui->sizePlot->xAxis->setSubTickPen(QColor(232, 236, 242, 255));
+	ui->sizePlot->yAxis->setTickLengthIn(0);
+	ui->sizePlot->yAxis->setSubTickLengthIn(0);
+	ui->sizePlot->yAxis->setTickLabels(true);
+	ui->sizePlot->yAxis->setTickLabelFont(QFont("Roboto",12,QFont::Light));
+	ui->sizePlot->yAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->sizePlot->yAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
+	ui->sizePlot->yAxis->setLabelColor(QColor(45,65,102,255));
+	ui->sizePlot->yAxis->setLabel("Size");
+	ui->sizePlot->graph(0)->clearData();
 }

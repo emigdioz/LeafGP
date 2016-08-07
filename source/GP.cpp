@@ -162,16 +162,28 @@ void GP::Evolve()
     float avgSize;
     float avgError;
 	 float maxError = sqrt(m_best_error/m_num_points);
+	 float testError;
+	 float maxAvgSize;
     // 3:
+	 avgSize = 0.0f;
+	 avgError = 0.0f;
+	 for(int ind = 0;ind < m_params->m_population_size;ind++)
+		avgSize += ProgramSize(Program( cur_pop, ind ));
+	 avgSize /= m_params->m_population_size;
+	 maxAvgSize = avgSize;
 
-	 locallyEvaluate(m_best_program,act,exp);
+	 locallyEvaluateTraining(m_best_program,act,exp);
+	 input_data_matrix = testing_data;
+	 testError = locallyEvaluateTesting(m_best_program);
+	 input_data_matrix = training_data;
 	 currentInfo.currentRun = curr_run;
 	 currentInfo.maxError = maxError;
 	 currentInfo.bestTrainError = sqrt(m_best_error/m_num_points);
+	 currentInfo.bestTestError = testError;
 	 currentInfo.minError = currentInfo.bestTrainError;
 	 currentInfo.bestSize = ProgramSize(m_best_program);
 	 currentInfo.avgSize = avgSize;
-	 currentInfo.avgTrainError = avgError;
+	 currentInfo.maxAvgSize = maxAvgSize;
 	 currentInfo.currentGeneration = 1;
 	 currentInfo.currentNodesExecutions = m_node_evaluations;
 	 expQ = QVector<double>::fromStdVector(exp);
@@ -200,14 +212,10 @@ void GP::Evolve()
       std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
       // ---------
       avgSize = 0.0f;
-      avgError = 0.0f;
       for(int ind = 0;ind < m_params->m_population_size;ind++)
-      {
         avgSize += ProgramSize(Program( cur_pop, ind ));
-        avgError += sqrt(m_E[ind]/m_num_points);
-      }
       avgSize /= m_params->m_population_size;
-      avgError /= m_params->m_population_size;
+		if(avgSize > maxAvgSize) maxAvgSize = avgSize;
       //************* temporal ***************************************************************************
       convertProgramToTreeStruct(thisTree,m_best_program);
       convertProgramString(m_best_program,bestIndividual);
@@ -216,14 +224,18 @@ void GP::Evolve()
 
       progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
       emit GP_send_run_progress(progress_run,curr_run);
-      locallyEvaluate(m_best_program,act,exp);
+		locallyEvaluateTraining(m_best_program,act,exp);
+		input_data_matrix = testing_data;
+		testError = locallyEvaluateTesting(m_best_program);
+		input_data_matrix = training_data;
 		currentInfo.currentRun = curr_run;
 		currentInfo.maxError = maxError;
 		currentInfo.bestTrainError = sqrt(m_best_error/m_num_points);
+		currentInfo.bestTestError = testError;
 		currentInfo.minError = currentInfo.bestTrainError;
 		currentInfo.bestSize = ProgramSize(m_best_program);
       currentInfo.avgSize = avgSize;
-      currentInfo.avgTrainError = avgError;
+		currentInfo.maxAvgSize = maxAvgSize;
       currentInfo.currentGeneration = gen;
       currentInfo.currentNodesExecutions = m_node_evaluations;
       expQ = QVector<double>::fromStdVector(exp);
@@ -1215,11 +1227,13 @@ void GP::randomlySplitData(std::vector<std::vector<float> > original, int ratio)
 		instanceTemp = original.at(index.at(ind + trainingSize));
 		testing_data.push_back(instanceTemp);
 	}
+	m_num_points = trainingSize;
+	m_num_points_testing = testingSize;
 }
 
 // -----------------------------------------------------------------------------
 
-bool GP::locallyEvaluate(const cl_uint *program, std::vector<double> &act_compress, std::vector<double> &exp_compress)
+float GP::locallyEvaluateTraining(const cl_uint *program, std::vector<double> &act_compress, std::vector<double> &exp_compress)
 {
 	float partial_error = 0.0f;
 	float partial_semantic;
@@ -1235,9 +1249,29 @@ bool GP::locallyEvaluate(const cl_uint *program, std::vector<double> &act_compre
 		expected.push_back(input_data_matrix.at(iter).at(m_x_dim));
 	}
 	rmse = sqrt(partial_error/m_num_points);
-	qDebug()<<"RMSE: "<<rmse;
+	//qDebug()<<"RMSE: "<<rmse;
 	compressOutputPairs(actual,expected,act_compress,exp_compress);
+	return rmse;
 
+}
+
+float GP::locallyEvaluateTesting(const cl_uint *program)
+{
+	float partial_error = 0.0f;
+	float partial_semantic;
+	float rmse;
+	std::vector<float> actual;
+	std::vector<float> expected;
+
+	for( uint iter = 0; iter < m_num_points_testing; iter++ )
+	{
+		partial_semantic = evaluateInstance(program,iter);
+		partial_error += pow( input_data_matrix.at(iter).at(m_x_dim) - partial_semantic, 2 );
+		actual.push_back(partial_semantic);
+		expected.push_back(input_data_matrix.at(iter).at(m_x_dim));
+	}
+	rmse = sqrt(partial_error/m_num_points_testing);
+	return rmse;
 }
 
 float GP::evaluateInstance(const cl_uint *program, int iter)

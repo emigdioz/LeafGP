@@ -134,6 +134,7 @@ public:
 		float bestTestError;
 		float minError;
 		float maxError;
+		float maxAvgSize;
 		int bestSize;
 		float avgSize;
 		float avgTrainError;		
@@ -144,7 +145,8 @@ public:
   void insertData(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
   void convertProgramString(const cl_uint* program, QString &output, int start = -1, int end = -1 );
-  bool locallyEvaluate(const cl_uint* program, std::vector<double> &act_compress, std::vector<double> &exp_compress);
+  float locallyEvaluateTraining(const cl_uint* program, std::vector<double> &act_compress, std::vector<double> &exp_compress);
+  float locallyEvaluateTesting(const cl_uint* program);
   float evaluateInstance(const cl_uint* program, int iter);
   void compressOutputPairs(std::vector<float> actual, std::vector<float> expected, std::vector<double> &actual_compressed, std::vector<double> &expected_compressed);
   void randomlySplitData(std::vector<std::vector<float> > original, int ratio);
@@ -360,6 +362,7 @@ protected:
    void LoadKernel( const char* file );
 public:
    unsigned m_num_points; /**< Total number of data (training) points. */
+	unsigned m_num_points_testing; /**< Total number of data (testing) points. */
    unsigned m_x_dim; /**< Number of input variables. */
    unsigned m_y_dim; /**< Number of output variables. Currently, always = 1. */
 

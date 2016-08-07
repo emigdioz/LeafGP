@@ -105,6 +105,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->label_105->hide();
 	ui->lineEdit_6->hide();
 	setupQualityPlot();
+	setupSizePlot();
 }
 
 MainWidget::~MainWidget()
@@ -353,6 +354,7 @@ void MainWidget::receivedBasicInfo(GP::basicInfo info)
 {
 	float yMax = ((info.maxError - info.minError) * 0.1) + info.maxError;
 	float yMin = info.minError - ((info.maxError - info.minError) * 0.1);
+	float yMaxSize = (info.maxAvgSize * 0.1) + info.maxAvgSize;
 	ui->label_88->setText(QString::number(info.currentGeneration));
 	ui->label_92->setText(QString::number(info.currentNodesExecutions));
 	ui->label_94->setText(QString::number(info.bestTrainError));
@@ -362,10 +364,16 @@ void MainWidget::receivedBasicInfo(GP::basicInfo info)
 	if(info.currentGeneration == 1)
 	{
 		ui->qualityPlot->graph(0)->clearData();
+		ui->qualityPlot->graph(1)->clearData();
+		ui->sizePlot->graph(0)->clearData();
 	}
 	ui->qualityPlot->graph(0)->addData(info.currentGeneration,info.bestTrainError);
+	ui->qualityPlot->graph(1)->addData(info.currentGeneration,info.bestTestError);
 	ui->qualityPlot->yAxis->setRange(yMin,yMax);
 	ui->qualityPlot->replot();
+	ui->sizePlot->graph(0)->addData(info.currentGeneration,info.avgSize);
+	ui->sizePlot->yAxis->setRange(-1,yMaxSize);
+	ui->sizePlot->replot();
 }
 
 void MainWidget::on_checkBox_toggled(bool checked)

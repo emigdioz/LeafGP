@@ -68,6 +68,8 @@ private slots:
 	void on_spinBox_5_valueChanged(int arg1);
 	void on_horizontalSlider_valueChanged(int value);
 
+	void on_listWidgetGP_currentRowChanged(int currentRow);
+
 private:
 	Ui::MainWidget *ui;
 	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);
@@ -80,6 +82,7 @@ private:
 	void drawRegressionPlot(int x);
 	void drawQQPlot(int x, int y);
 	void drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY);
+	void setupQualityPlot(void);
 	void populateTerminalList(void);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
@@ -101,6 +104,7 @@ private:
 	void positionLeaves(int index, int depth, int numberLeaves);
 	void positionParents(int index, int depth);
 	void setDefaultGPParameters(void);
+	int runObserver;
 };
 
 #endif // MAINWIDGET_H

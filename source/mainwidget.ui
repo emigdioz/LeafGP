@@ -245,6 +245,14 @@ QWidget#pageGPAdvanced {
 	background: rgb(255,255,255);
 }
 
+QWidget#pagePerformance {
+	background: rgb(255,255,255);
+}
+
+QWidget#pagePopulation_2 {
+	background: rgb(255,255,255);
+}
+
 QWidget#pageResults {
 	background: rgb(182,194,214);
 }
@@ -689,7 +697,7 @@ QSlider::sub-page:horizontal {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -3945,7 +3953,7 @@ QListWidget::item:hover
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="pageGPSimple">
            <layout class="QGridLayout" name="gridLayout_11">
@@ -4349,8 +4357,8 @@ QListWidget::item:hover
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>182</width>
-                                  <height>36</height>
+                                  <width>180</width>
+                                  <height>41</height>
                                  </rect>
                                 </property>
                                 <layout class="QGridLayout" name="gridLayout_73">
@@ -4565,62 +4573,229 @@ QListWidget::item:hover
            </layout>
           </widget>
           <widget class="QWidget" name="pageGPAdvanced">
-           <layout class="QGridLayout" name="gridLayout_12">
+           <layout class="QGridLayout" name="gridLayout_79">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
-             <widget class="QSplitter" name="splitter_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+             <widget class="QFrame" name="frame_35">
+              <property name="minimumSize">
+               <size>
+                <width>149</width>
+                <height>0</height>
+               </size>
               </property>
-              <widget class="QWidget" name="verticalLayoutWidget_5">
-               <layout class="QVBoxLayout" name="verticalLayout_9">
-                <item>
-                 <widget class="QLabel" name="label_11">
-                  <property name="maximumSize">
-                   <size>
-                    <width>16777215</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLabel
+              <property name="maximumSize">
+               <size>
+                <width>149</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_12">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_28">
+                 <item>
+                  <widget class="QListWidget" name="listWidgetGPAdvanced">
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QListWidget 
+{ 
+	background: rgb(45,65,102);
+	border: none;
+	font-family: Lato;
+	font-weight: 200;
+	font-size:12pt;
+}
+
+QListWidget::item
+{
+	background-image: url(:/icons/resources/images/sidebar3_back_normal.png);
+	background-position: center;
+	width: 138px;
+	height: 45px;
+	padding-left: 10px;
+	color: rgb(182,194,214);
+}
+
+QListWidget::item:selected
+{
+	background-image: url(:/icons/resources/images/sidebar3_back_selected.png);
+	background-position: center;
+	color: rgb(255, 255, 255);
+}
+
+QListWidget::item:hover
+{
+	background-image: url(:/icons/resources/images/sidebar3_back_hover.png);
+	background-position: center;
+	color: rgb(255,255,255);
+}</string>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::NoFrame</enum>
+                   </property>
+                   <property name="horizontalScrollBarPolicy">
+                    <enum>Qt::ScrollBarAlwaysOff</enum>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>Performance</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Population</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
+               <widget class="QLabel" name="label_11">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QLabel
 {
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
+	padding: 5px;
 }</string>
-                  </property>
-                  <property name="text">
-                   <string>Advanced</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="frame_11">
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-              <widget class="QFrame" name="frame_12">
-               <property name="maximumSize">
-                <size>
-                 <width>150</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-              </widget>
-             </widget>
+                </property>
+                <property name="text">
+                 <string>Advanced</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_11">
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_78">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="spacing">
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QStackedWidget" name="stackedWidgetGPAdvanced">
+                   <widget class="QWidget" name="pagePerformance">
+                    <property name="styleSheet">
+                     <string notr="true">QGroupBox {
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 14pt;
+	border: 0;
+	background-color: rgb(255,255,255);
+	margin-top: 3ex;
+}
+
+QGroupBox::title {
+	subcontrol-origin: margin;
+    subcontrol-position: top left;
+	border: 0;
+	background-color: rgb(255,255,255);
+
+}</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_80">
+                     <item row="0" column="0">
+                      <layout class="QVBoxLayout" name="verticalLayout_29">
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_10">
+                         <property name="title">
+                          <string>Solution qualities</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_81">
+                          <item row="0" column="0">
+                           <widget class="QCustomPlot" name="qualityPlot" native="true"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_11">
+                         <property name="title">
+                          <string>Solution sizes</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_82">
+                          <item row="0" column="0">
+                           <widget class="QCustomPlot" name="sizePlot" native="true"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="pagePopulation_2"/>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -4942,7 +5117,7 @@ QListWidget::item:hover
      <x>0</x>
      <y>0</y>
      <width>1035</width>
-     <height>20</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>

@@ -23,6 +23,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(ui->listWidgetData, SIGNAL(currentRowChanged(int)), ui->stackedWidgetData, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetSetup, SIGNAL(currentRowChanged(int)), ui->stackedWidgetSetup, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetGP, SIGNAL(currentRowChanged(int)), ui->stackedWidgetGP, SLOT(setCurrentIndex(int)));
+	connect(ui->listWidgetGPAdvanced, SIGNAL(currentRowChanged(int)), ui->stackedWidgetGPAdvanced, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetResults, SIGNAL(currentRowChanged(int)), ui->stackedWidgetResults, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetDataAdvanced, SIGNAL(currentRowChanged(int)), ui->stackedWidgetDataAdvanced, SLOT(setCurrentIndex(int)));
 	connect(ui->listWidgetSetupAdvanced, SIGNAL(currentRowChanged(int)), ui->stackedWidgetSetupAdvanced, SLOT(setCurrentIndex(int)));
@@ -103,6 +104,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	trainingRandomRatio = 70;
 	ui->label_105->hide();
 	ui->lineEdit_6->hide();
+	setupQualityPlot();
 }
 
 MainWidget::~MainWidget()
@@ -349,12 +351,21 @@ void MainWidget::positionParents(int index, int depth)
 
 void MainWidget::receivedBasicInfo(GP::basicInfo info)
 {
+	float yMax = ((info.maxError - info.minError) * 0.1) + info.maxError;
+	float yMin = info.minError - ((info.maxError - info.minError) * 0.1);
 	ui->label_88->setText(QString::number(info.currentGeneration));
 	ui->label_92->setText(QString::number(info.currentNodesExecutions));
-	ui->label_94->setText(QString::number(info.bestError));
+	ui->label_94->setText(QString::number(info.bestTrainError));
 	ui->label_96->setText(QString::number(info.bestSize));
 	ui->label_98->setText(QString::number(info.avgSize));
 	drawCorrelationPlotGP(info.actual,info.expected);
+	if(info.currentGeneration == 1)
+	{
+		ui->qualityPlot->graph(0)->clearData();
+	}
+	ui->qualityPlot->graph(0)->addData(info.currentGeneration,info.bestTrainError);
+	ui->qualityPlot->yAxis->setRange(yMin,yMax);
+	ui->qualityPlot->replot();
 }
 
 void MainWidget::on_checkBox_toggled(bool checked)
@@ -520,4 +531,54 @@ void MainWidget::on_horizontalSlider_valueChanged(int value)
     trainingRandomRatio = value;
     ui->label_107->setText("Training/testing ratio (" + QString::number(value) + "%/" + QString::number(100-value) + "%)");
     workerAlgorithm->trainingRatio = value;
+}
+
+void MainWidget::on_listWidgetGP_currentRowChanged(int currentRow)
+{
+	if(currentRow == 0)
+	{
+	  ui->listWidgetGP->setStyleSheet("QListWidget { background: rgb(182,194,214);"
+		 "border: none;"
+		 "font-family: Lato;"
+		 "font-weight: 200;"
+		 "font-size:12pt; }"
+
+		 "QListWidget::item { background-image: url(:/icons/resources/images/sidebar2_back_normal2.png);"
+		 "background-position: center;"
+		 "width: 138px;"
+		 "height: 45px;"
+		 "padding-left: 10px;"
+		 "color: rgb(45,65,102);}"
+
+	  "QListWidget::item:selected { background-image: url(:/icons/resources/images/sidebar2_back_selected2.png);"
+		 "background-position: center;"
+		 "color: rgb(0, 0, 0);}"
+
+	  "QListWidget::item:hover { background-image: url(:/icons/resources/images/sidebar2_back_hover2.png);"
+		 "background-position: center;"
+		 "color: rgb(0, 0, 0);}");
+	  }
+	  else
+	  {
+		 ui->listWidgetGP->setStyleSheet("QListWidget { background: rgb(182,194,214);"
+			"border: none;"
+			"font-family: Lato;"
+			"font-weight: 200;"
+			"font-size:12pt; }"
+
+			"QListWidget::item { background-image: url(:/icons/resources/images/sidebar2_back_normal.png);"
+			"background-position: center;"
+			"width: 138px;"
+			"height: 45px;"
+			"padding-left: 10px;"
+			"color: rgb(45,65,102);}"
+
+		 "QListWidget::item:selected { background-image: url(:/icons/resources/images/sidebar2_back_selected.png);"
+			"background-position: center;"
+			"color: rgb(0, 0, 0);}"
+
+		 "QListWidget::item:hover { background-image: url(:/icons/resources/images/sidebar2_back_hover.png);"
+			"background-position: center;"
+			"color: rgb(0, 0, 0);}");
+	  }
 }

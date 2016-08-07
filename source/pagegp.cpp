@@ -10,6 +10,7 @@ void MainWidget::requestAlgorithmStart()
 
 void MainWidget::on_startButton_clicked()
 {
+	ui->qualityPlot->graph(0)->clearData();
 	// Copy input data to worker local matrix
 	workerAlgorithm->data_matrix = input_data_matrix;
 	requestAlgorithmStart();
@@ -169,4 +170,43 @@ void MainWidget::drawCorrelationPlotGP(QVector<double> actualY, QVector<double> 
 	ui->correlationGPPlot->graph(1)->setData(xReg,yReg);
 	ui->correlationGPPlot->replot();
 
+}
+
+void MainWidget::setupQualityPlot()
+{
+	ui->qualityPlot->show();
+	ui->qualityPlot->addGraph();
+	ui->qualityPlot->xAxis->setRange(1,100);
+	//ui->qualityPlot->yAxis->setRange(inputData.Ymin,inputData.Ymax);
+	ui->qualityPlot->graph(0)->setName("Best");
+	ui->qualityPlot->graph(0)->setPen(QColor(255,174,0,255));
+	ui->qualityPlot->graph(0)->setBrush(QBrush(QColor(255,174,0,20)));
+	ui->qualityPlot->axisRect()->insetLayout()->setInsetAlignment(0, Qt::AlignBottom|Qt::AlignRight);
+	ui->qualityPlot->axisRect()->setBackground(QColor(255, 255, 255, 255));
+	ui->qualityPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+	ui->qualityPlot->xAxis->setBasePen(QColor(255, 255, 255, 255));
+	ui->qualityPlot->yAxis->setBasePen(QColor(255, 255, 255, 255));
+	ui->qualityPlot->xAxis->setTicks(true);
+	ui->qualityPlot->xAxis->setLabel("Generation");
+	ui->qualityPlot->xAxis->setTickLabelFont(QFont("Roboto",12,QFont::Light));
+	ui->qualityPlot->xAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
+	ui->qualityPlot->xAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->qualityPlot->xAxis->setLabelColor(QColor(45,65,102,255));
+
+	QPen pen(QColor(232, 236, 242, 255));
+	pen.setWidth(2);
+	ui->qualityPlot->yAxis->grid()->setPen(pen);
+	ui->qualityPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+	ui->qualityPlot->yAxis->setSubTickPen(QColor(255, 255, 255, 255));
+	ui->qualityPlot->xAxis->setTickPen(pen);
+	ui->qualityPlot->xAxis->setSubTickPen(QColor(232, 236, 242, 255));
+	ui->qualityPlot->yAxis->setTickLengthIn(0);
+	ui->qualityPlot->yAxis->setSubTickLengthIn(0);
+	ui->qualityPlot->yAxis->setTickLabels(true);
+	ui->qualityPlot->yAxis->setTickLabelFont(QFont("Roboto",12,QFont::Light));
+	ui->qualityPlot->yAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->qualityPlot->yAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
+	ui->qualityPlot->yAxis->setLabelColor(QColor(45,65,102,255));
+	ui->qualityPlot->yAxis->setLabel("RMSE");
+	ui->qualityPlot->graph(0)->clearData();
 }

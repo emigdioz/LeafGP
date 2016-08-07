@@ -9,7 +9,7 @@ workerGP::workerGP(QObject *parent) : QObject(parent)
   qRegisterMetaType<GP::basicInfo>();
   _working = false;
   _abort = false;
-  engineType = 0;
+  engineType = 1;
   trainingRatio = 70;
 }
 

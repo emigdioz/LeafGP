@@ -161,7 +161,25 @@ void GP::Evolve()
     // ---------
     float avgSize;
     float avgError;
+	 float maxError = sqrt(m_best_error/m_num_points);
     // 3:
+
+	 locallyEvaluate(m_best_program,act,exp);
+	 currentInfo.currentRun = curr_run;
+	 currentInfo.maxError = maxError;
+	 currentInfo.bestTrainError = sqrt(m_best_error/m_num_points);
+	 currentInfo.minError = currentInfo.bestTrainError;
+	 currentInfo.bestSize = ProgramSize(m_best_program);
+	 currentInfo.avgSize = avgSize;
+	 currentInfo.avgTrainError = avgError;
+	 currentInfo.currentGeneration = 1;
+	 currentInfo.currentNodesExecutions = m_node_evaluations;
+	 expQ = QVector<double>::fromStdVector(exp);
+	 actQ = QVector<double>::fromStdVector(act);
+	 currentInfo.actual = actQ;
+	 currentInfo.expected = expQ;
+	 emit GP_send_basic_info(currentInfo);
+
     for( unsigned gen = 2; gen <= m_params->m_number_of_generations; ++gen )
     {
       // 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16:
@@ -199,8 +217,11 @@ void GP::Evolve()
       progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
       emit GP_send_run_progress(progress_run,curr_run);
       locallyEvaluate(m_best_program,act,exp);
-      currentInfo.bestError = sqrt(m_best_error/m_num_points);
-      currentInfo.bestSize = ProgramSize(m_best_program);
+		currentInfo.currentRun = curr_run;
+		currentInfo.maxError = maxError;
+		currentInfo.bestTrainError = sqrt(m_best_error/m_num_points);
+		currentInfo.minError = currentInfo.bestTrainError;
+		currentInfo.bestSize = ProgramSize(m_best_program);
       currentInfo.avgSize = avgSize;
       currentInfo.avgTrainError = avgError;
       currentInfo.currentGeneration = gen;
@@ -211,8 +232,7 @@ void GP::Evolve()
       currentInfo.expected = expQ;
       emit GP_send_basic_info(currentInfo);
 
-    } // 19
-
+    } // 19	
     // 20:
     std::cout << "\n> Best: [" << std::setprecision(16) << sqrt(m_best_error/m_num_points) << "]\t{"
               << ProgramSize( m_best_program ) << "}\t";

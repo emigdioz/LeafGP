@@ -127,12 +127,16 @@ public:
 	typedef struct
 	{
 		int currentGeneration;
+		int currentRun;
 		long currentEvaluations;
 		long currentNodesExecutions;
-		float bestError;
+		float bestTrainError;
+		float bestTestError;
+		float minError;
+		float maxError;
 		int bestSize;
 		float avgSize;
-		float avgTrainError;
+		float avgTrainError;		
 		QVector<double> expected;
 		QVector<double> actual;
 	} basicInfo;

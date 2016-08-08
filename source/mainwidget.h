@@ -13,6 +13,7 @@
 #include "listwidget.h"
 #include "circularprogresswidget.h"
 #include "drawtreewidget.h"
+#include "populationmapwidget.h"
 #include "workergp.h"
 #include "cl.hpp"
 #include "GP.h"
@@ -61,14 +62,15 @@ private slots:
 	void parallelDevicesChecked(bool t);
 	void receivedSingleTree(GP::treeStruct data);
 	void receivedBasicInfo(GP::basicInfo info);
+	void receivedPopInfo(GP::popInfo info);
 	void on_checkBox_toggled(bool checked);
 	void on_listWidgetDataAdvanced_currentRowChanged(int currentRow);
 	void on_listWidgetData_currentRowChanged(int currentRow);
 	void on_listWidgetSetup_currentRowChanged(int currentRow);
 	void on_spinBox_5_valueChanged(int arg1);
 	void on_horizontalSlider_valueChanged(int value);
-
 	void on_listWidgetGP_currentRowChanged(int currentRow);
+
 
 private:
 	Ui::MainWidget *ui;

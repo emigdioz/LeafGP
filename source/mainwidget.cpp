@@ -4,6 +4,7 @@
 
 Q_DECLARE_METATYPE(GP::treeStruct);
 Q_DECLARE_METATYPE(GP::basicInfo);
+Q_DECLARE_METATYPE(GP::popInfo);
 
 MainWidget::MainWidget(QWidget *parent) :
 	QMainWindow(parent),
@@ -16,6 +17,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	QFontDatabase::addApplicationFont(":/fonts/resources/fonts/Roboto-Medium.ttf");
 	qRegisterMetaType<GP::treeStruct>();
 	qRegisterMetaType<GP::basicInfo>();
+	qRegisterMetaType<GP::popInfo>();
 
 	ui->tableViewDataSummary->setContextMenuPolicy(Qt::CustomContextMenu);
 	ui->listFunctionsTarget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -92,11 +94,12 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(workerAlgorithm, SIGNAL(sendRunProgress(int,int)), this, SLOT(receivedRunProgress(int,int)));
 	connect(workerAlgorithm, SIGNAL(sendSingleTree(GP::treeStruct)), this, SLOT(receivedSingleTree(GP::treeStruct)));
 	connect(workerAlgorithm, SIGNAL(sendBasicInfo(GP::basicInfo)), this, SLOT(receivedBasicInfo(GP::basicInfo)));
-
+	connect(workerAlgorithm, SIGNAL(sendPopInfo(GP::popInfo)), this, SLOT(receivedPopInfo(GP::popInfo)));
 	timerGP = new QTimer();
 	connect(timerGP, SIGNAL(timeout()), this, SLOT(showElapsedTime()));
 	connect(workerAlgorithm, SIGNAL(finished()), this, SLOT(algorithmFinished()));
-
+	connect(ui->pushButton_7, SIGNAL(clicked(bool)), ui->populationMap, SLOT(showInheritance()));
+	connect(ui->comboBox_7, SIGNAL(currentIndexChanged(int)), ui->populationMap, SLOT(updateStyle(int)));
 	ui->correlationGPPlot->hide();
 	getInfoOpenCL();
 
@@ -589,4 +592,11 @@ void MainWidget::on_listWidgetGP_currentRowChanged(int currentRow)
 			"background-position: center;"
 			"color: rgb(0, 0, 0);}");
 	  }
+}
+
+void MainWidget::receivedPopInfo(GP::popInfo info)
+{
+	if(info.currentGen == 1)
+		ui->populationMap->clearPopulation();
+	ui->populationMap->addSingleGeneration(info);
 }

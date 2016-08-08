@@ -52,7 +52,8 @@ SOURCES += source/main.cpp \
     source/GPU.cpp \
     source/params.cpp \
     source/primitives.cpp \
-    source/drawtreewidget.cpp
+    source/drawtreewidget.cpp \
+    source/populationmapwidget.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -97,7 +98,8 @@ HEADERS  += source/mainwidget.h \
     source/CL/cl_gl_ext.h \
     source/CL/cl_platform.h \
     source/CL/opencl.h \
-    source/drawtreewidget.h
+    source/drawtreewidget.h \
+    source/populationmapwidget.h
 
 FORMS    += source/mainwidget.ui
 

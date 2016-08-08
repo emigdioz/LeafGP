@@ -164,11 +164,37 @@ void GP::Evolve()
 	 float maxError = sqrt(m_best_error/m_num_points);
 	 float testError;
 	 float maxAvgSize;
+	 float normalizedFitness;
+	 float realFitness;
     // 3:
 	 avgSize = 0.0f;
 	 avgError = 0.0f;
+
+	 // Generation 1 population is always same
+	 thisPop.id.clear();
+	 thisPop.normFitness.clear();
+	 thisPop.realFitness.clear();
+	 thisPop.operatorT.clear();
+	 thisPop.parents[0].clear();
+	 thisPop.parents[1].clear();
+	 thisPop.size.clear();
+
 	 for(int ind = 0;ind < m_params->m_population_size;ind++)
-		avgSize += ProgramSize(Program( cur_pop, ind ));
+	 {
+			avgSize += ProgramSize(Program( cur_pop, ind ));
+			thisPop.id.push_back(ind + 1);
+			thisPop.operatorT.push_back(1); // Random operators
+			realFitness = sqrt(m_E[ind]/m_num_points);
+			normalizedFitness = 1.0/(1 + realFitness);
+			thisPop.normFitness.push_back(normalizedFitness);
+			thisPop.realFitness.push_back(realFitness);
+			thisPop.size.push_back(ProgramSize(Program(cur_pop,ind)));
+			thisPop.parents[0].push_back(0);
+			thisPop.parents[1].push_back(0);
+	 }
+	 thisPop.currentGen = 1;
+	 lastPop = thisPop;
+
 	 avgSize /= m_params->m_population_size;
 	 maxAvgSize = avgSize;
 
@@ -191,76 +217,98 @@ void GP::Evolve()
 	 currentInfo.actual = actQ;
 	 currentInfo.expected = expQ;
 	 emit GP_send_basic_info(currentInfo);
+	 emit GP_send_pop_info(thisPop);
 
-    for( unsigned gen = 2; gen <= m_params->m_number_of_generations; ++gen )
-    {
-      // 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16:
-      ///Breed( cur_pop, tmp_pop, errors );
-      Breed( cur_pop, tmp_pop );
-      // 17:
-      ///if( EvaluatePopulation( tmp_pop, errors ) ) break;
-      if( EvaluatePopulation( tmp_pop ) ) break;
+   for( unsigned gen = 2; gen <= m_params->m_number_of_generations; ++gen )
+   {
+     // 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16:
+     ///Breed( cur_pop, tmp_pop, errors );
+     Breed( cur_pop, tmp_pop );
+     // 17:
+     ///if( EvaluatePopulation( tmp_pop, errors ) ) break;
+     if( EvaluatePopulation( tmp_pop ) ) break;
 
-      // 18:
-      std::swap( cur_pop, tmp_pop );
+     // 18:
+     std::swap( cur_pop, tmp_pop );
 
-      // ---------
-      std::cout << "[Gen " << gen << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << sqrt(m_best_error/m_num_points) << ", size: " << ProgramSize( m_best_program ) << ")... ";
+     // ---------
+     std::cout << "[Gen " << gen << " of " << m_params->m_number_of_generations  << "] (Error: " << std::setprecision(10) << sqrt(m_best_error/m_num_points) << ", size: " << ProgramSize( m_best_program ) << ")... ";
 #ifdef PROFILING
-      std::cout << std::setprecision(2) << std::fixed << "| GPop/s: " << m_node_evaluations / (m_kernel_time/1.0E9) << std::setprecision(4) << " | Node evals: " << m_node_evaluations << " | Avg. KET(ms): " << m_kernel_time / (m_kernel_calls * 1.0E6) << " | Avg. KLT(ms): " << m_launch_time / (m_kernel_calls * 1.0E6) << " | Acc. KET(s): " << m_kernel_time/1.0E+9 << " | Acc. KLT(s): " << m_launch_time/1.0E+9 << " | Kernel calls: " << m_kernel_calls;
+     std::cout << std::setprecision(2) << std::fixed << "| GPop/s: " << m_node_evaluations / (m_kernel_time/1.0E9) << std::setprecision(4) << " | Node evals: " << m_node_evaluations << " | Avg. KET(ms): " << m_kernel_time / (m_kernel_calls * 1.0E6) << " | Avg. KLT(ms): " << m_launch_time / (m_kernel_calls * 1.0E6) << " | Acc. KET(s): " << m_kernel_time/1.0E+9 << " | Acc. KLT(s): " << m_launch_time/1.0E+9 << " | Kernel calls: " << m_kernel_calls;
 #endif
-      std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
-      // ---------
-      avgSize = 0.0f;
-      for(int ind = 0;ind < m_params->m_population_size;ind++)
-        avgSize += ProgramSize(Program( cur_pop, ind ));
-      avgSize /= m_params->m_population_size;
-		if(avgSize > maxAvgSize) maxAvgSize = avgSize;
-      //************* temporal ***************************************************************************
-      convertProgramToTreeStruct(thisTree,m_best_program);
-      convertProgramString(m_best_program,bestIndividual);
-      thisTree.syntaxPrefix = bestIndividual;
-      emit GP_send_single_tree(thisTree);
+     std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
+     // ---------
+     avgSize = 0.0f;
+     for(int ind = 0;ind < m_params->m_population_size;ind++)
+       avgSize += ProgramSize(Program( cur_pop, ind ));
+     avgSize /= m_params->m_population_size;
+     if(avgSize > maxAvgSize) maxAvgSize = avgSize;
+     //************* temporal ***************************************************************************
+     convertProgramToTreeStruct(thisTree,m_best_program);
+     convertProgramString(m_best_program,bestIndividual);
+     thisTree.syntaxPrefix = bestIndividual;
+     emit GP_send_single_tree(thisTree);
 
-      progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
-      emit GP_send_run_progress(progress_run,curr_run);
-		locallyEvaluateTraining(m_best_program,act,exp);
-		input_data_matrix = testing_data;
-		testError = locallyEvaluateTesting(m_best_program);
-		input_data_matrix = training_data;
-		currentInfo.currentRun = curr_run;
-		currentInfo.maxError = maxError;
-		currentInfo.bestTrainError = sqrt(m_best_error/m_num_points);
-		currentInfo.bestTestError = testError;
-		currentInfo.minError = currentInfo.bestTrainError;
-		currentInfo.bestSize = ProgramSize(m_best_program);
-      currentInfo.avgSize = avgSize;
-		currentInfo.maxAvgSize = maxAvgSize;
-      currentInfo.currentGeneration = gen;
-      currentInfo.currentNodesExecutions = m_node_evaluations;
-      expQ = QVector<double>::fromStdVector(exp);
-      actQ = QVector<double>::fromStdVector(act);
-      currentInfo.actual = actQ;
-      currentInfo.expected = expQ;
-      emit GP_send_basic_info(currentInfo);
+     progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
+     emit GP_send_run_progress(progress_run,curr_run);
+     locallyEvaluateTraining(m_best_program,act,exp);
+     input_data_matrix = testing_data;
+     testError = locallyEvaluateTesting(m_best_program);
+     input_data_matrix = training_data;
+     currentInfo.currentRun = curr_run;
+     currentInfo.maxError = maxError;
+     currentInfo.bestTrainError = sqrt(m_best_error/m_num_points);
+     currentInfo.bestTestError = testError;
+     currentInfo.minError = currentInfo.bestTrainError;
+     currentInfo.bestSize = ProgramSize(m_best_program);
+     currentInfo.avgSize = avgSize;
+     currentInfo.maxAvgSize = maxAvgSize;
+     currentInfo.currentGeneration = gen;
+     currentInfo.currentNodesExecutions = m_node_evaluations;
+     expQ = QVector<double>::fromStdVector(exp);
+     actQ = QVector<double>::fromStdVector(act);
+     currentInfo.actual = actQ;
+     currentInfo.expected = expQ;
+     emit GP_send_basic_info(currentInfo);
 
-    } // 19	
-    // 20:
-    std::cout << "\n> Best: [" << std::setprecision(16) << sqrt(m_best_error/m_num_points) << "]\t{"
-              << ProgramSize( m_best_program ) << "}\t";
-    PrintProgramPretty( m_best_program );
-    std::cout << std::endl;
+//     thisPop.id.clear();
+//     thisPop.normFitness.clear();
+//     thisPop.realFitness.clear();
+//     thisPop.operatorT.clear();
+//     thisPop.parents[0].clear();
+//     thisPop.parents[1].clear();
+//     thisPop.size.clear();
 
-    // Clean up
-    for(int i = 0; i < (m_params->m_population_size * MaximumProgramSize());++i)
-    {
-      pop_a[i] = NULL;
-      pop_b[i] = NULL;
-    }
-    delete[] pop_a;
-    delete[] pop_b;
-    SetProgramSize( m_best_program, 0 );
-    m_best_error = std::numeric_limits<cl_float>::max();
+     for(int ind = 0;ind < m_params->m_population_size;ind++)
+     {
+       thisPop.id[ind] = (m_params->m_population_size * (gen - 1)) + ind + 1;
+       realFitness = sqrt(m_E[ind]/m_num_points);
+       normalizedFitness = 1.0/(1 + realFitness);
+       thisPop.normFitness[ind] = normalizedFitness;
+       thisPop.realFitness[ind] = realFitness;
+       thisPop.size[ind] = ProgramSize(Program(cur_pop,ind));
+     }
+     thisPop.currentGen = gen;
+     emit GP_send_pop_info(thisPop);
+     lastPop = thisPop;
+
+   } // 19
+   // 20:
+   std::cout << "\n> Best: [" << std::setprecision(16) << sqrt(m_best_error/m_num_points) << "]\t{"
+             << ProgramSize( m_best_program ) << "}\t";
+   PrintProgramPretty( m_best_program );
+   std::cout << std::endl;
+
+   // Clean up
+   for(int i = 0; i < (m_params->m_population_size * MaximumProgramSize());++i)
+   {
+     pop_a[i] = NULL;
+     pop_b[i] = NULL;
+   }
+   delete[] pop_a;
+   delete[] pop_b;
+   SetProgramSize( m_best_program, 0 );
+   m_best_error = std::numeric_limits<cl_float>::max();
   }
 }
 
@@ -268,6 +316,8 @@ void GP::Evolve()
 ///void GP::Breed( cl_uint* old_pop, cl_uint* new_pop, const cl_float* errors )
 void GP::Breed( cl_uint* old_pop, cl_uint* new_pop )
 {
+  int Parent1;
+  int Parent2;
    // Elitism
    for( unsigned i = 0; i < m_params->m_elitism_size; ++i )
    {
@@ -278,6 +328,9 @@ void GP::Breed( cl_uint* old_pop, cl_uint* new_pop )
       // Update the total number of nodes that are going to be evaluated (to be
       // used to calculate how many GPop/s we could achieve).
       m_node_evaluations += ProgramSize( new_pop, i ) * m_num_points;
+      thisPop.parents[0][i] = lastPop.id.at(i);
+      thisPop.parents[1][i] = 0;
+      thisPop.operatorT[i] = 5; //Elistism
 #endif
    }
 
@@ -307,10 +360,17 @@ void GP::Breed( cl_uint* old_pop, cl_uint* new_pop )
    {
       // Genetic operations
       if( Random::Probability( m_params->m_crossover_probability ) )
+      {
          // Respectively: mom, dad, and child
-         Crossover( Program( old_pop, Tournament( old_pop ) ),
-                    Program( old_pop, Tournament( old_pop ) ),
+        Parent1 = Tournament( old_pop );
+        Parent2 = Tournament( old_pop );
+        Crossover( Program( old_pop, Parent1 ),
+                    Program( old_pop, Parent2 ),
                     Program( new_pop, i ) );
+        thisPop.parents[0][i] = lastPop.id.at(Parent1);
+        thisPop.parents[1][i] = lastPop.id.at(Parent2);
+        thisPop.operatorT[i] = 2;
+      }
       else if ( Random::Probability( m_params->m_mutation_probability ) )
       {
          Clone( Program( old_pop, i ), Program( new_pop, i ) );
@@ -318,9 +378,18 @@ void GP::Breed( cl_uint* old_pop, cl_uint* new_pop )
             NodeMutate( Program( new_pop, i ) ); // node mutate / neighbor mutate
          else
             SubTreeMutate( Program( new_pop, i ) );
+         thisPop.parents[0][i] = lastPop.id.at(i);
+         thisPop.parents[1][i] = 0;
+         thisPop.operatorT[i] = 3;
       }
       else
+      {
         Clone( Program( old_pop, i ), Program( new_pop, i ) );
+        thisPop.parents[0][i] = lastPop.id.at(i);
+        thisPop.parents[1][i] = 0;
+        thisPop.operatorT[i] = 4;
+      }
+
 
 #ifdef PROFILING
       // Update the total number of nodes that are going to be evaluated (to be

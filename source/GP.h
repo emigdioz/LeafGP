@@ -142,6 +142,17 @@ public:
 		QVector<double> actual;
 	} basicInfo;
 
+  typedef struct
+  {
+    std::vector<int> id;
+    std::vector<float> normFitness;
+    std::vector<float> realFitness;
+    std::vector<int> operatorT;
+    std::vector<int> size;
+    std::vector<int> parents[2];
+    int currentGen;
+  } popInfo;
+
   void insertData(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
   void convertProgramString(const cl_uint* program, QString &output, int start = -1, int end = -1 );
@@ -157,6 +168,9 @@ public:
   std::vector<std::vector<float> > training_data;
   std::vector<std::vector<float> > testing_data;
   std::vector<std::vector<float> > original_input_data_matrix;
+
+  popInfo thisPop;
+  popInfo lastPop;
 
    void Run()
    {
@@ -375,6 +389,7 @@ signals:
    void GP_send_run_progress(const int value, const int run);
    void GP_send_single_tree(GP::treeStruct singleTree);
 	void GP_send_basic_info(GP::basicInfo info);
+	void GP_send_pop_info(GP::popInfo info);
 
 private:
    QString bufferString;

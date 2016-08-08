@@ -2,11 +2,13 @@
 #include <QDebug>
 Q_DECLARE_METATYPE(GP::treeStruct);
 Q_DECLARE_METATYPE(GP::basicInfo);
+Q_DECLARE_METATYPE(GP::popInfo);
 
 workerGP::workerGP(QObject *parent) : QObject(parent)
 {
   qRegisterMetaType<GP::treeStruct>();
   qRegisterMetaType<GP::basicInfo>();
+  qRegisterMetaType<GP::popInfo>();
   _working = false;
   _abort = false;
   engineType = 1;
@@ -65,6 +67,7 @@ void workerGP::doWork()
   connect(gp_engine, SIGNAL(GP_send_run_progress(const int,const int)), this, SLOT(GP_received_run_progress(const int,const int)));
   connect(gp_engine, SIGNAL(GP_send_single_tree(GP::treeStruct)), this, SLOT(GP_received_single_tree(GP::treeStruct)));
   connect(gp_engine, SIGNAL(GP_send_basic_info(GP::basicInfo)), this, SLOT(GP_received_basic_info(GP::basicInfo)));
+  connect(gp_engine, SIGNAL(GP_send_pop_info(GP::popInfo)), this, SLOT(GP_received_pop_info(GP::popInfo)));
   // insert data to GP object
 
   gp_engine->insertData(data_matrix);
@@ -108,4 +111,9 @@ void workerGP::GP_received_single_tree(GP::treeStruct data)
 void workerGP::GP_received_basic_info(GP::basicInfo info)
 {
 	emit sendBasicInfo(info);
+}
+
+void workerGP::GP_received_pop_info(GP::popInfo info)
+{
+	emit sendPopInfo(info);
 }

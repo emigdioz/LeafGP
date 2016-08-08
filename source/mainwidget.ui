@@ -697,7 +697,7 @@ QSlider::sub-page:horizontal {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -3953,7 +3953,7 @@ QListWidget::item:hover
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="pageGPSimple">
            <layout class="QGridLayout" name="gridLayout_11">
@@ -4357,8 +4357,8 @@ QListWidget::item:hover
                                  <rect>
                                   <x>0</x>
                                   <y>0</y>
-                                  <width>180</width>
-                                  <height>41</height>
+                                  <width>331</width>
+                                  <height>50</height>
                                  </rect>
                                 </property>
                                 <layout class="QGridLayout" name="gridLayout_73">
@@ -4739,6 +4739,9 @@ QListWidget::item:hover
                  </property>
                  <item row="0" column="0">
                   <widget class="QStackedWidget" name="stackedWidgetGPAdvanced">
+                   <property name="currentIndex">
+                    <number>0</number>
+                   </property>
                    <widget class="QWidget" name="pagePerformance">
                     <property name="styleSheet">
                      <string notr="true">QGroupBox {
@@ -4789,7 +4792,117 @@ QGroupBox::title {
                      </item>
                     </layout>
                    </widget>
-                   <widget class="QWidget" name="pagePopulation_2"/>
+                   <widget class="QWidget" name="pagePopulation_2">
+                    <layout class="QGridLayout" name="gridLayout_83">
+                     <item row="0" column="0">
+                      <layout class="QVBoxLayout" name="verticalLayout_30">
+                       <item>
+                        <widget class="QScrollArea" name="scrollArea_2">
+                         <property name="styleSheet">
+                          <string notr="true">QWidget#scrollAreaWidgetContents_2 {
+	background: rgb(255, 255, 255);
+}</string>
+                         </property>
+                         <property name="frameShape">
+                          <enum>QFrame::NoFrame</enum>
+                         </property>
+                         <property name="widgetResizable">
+                          <bool>true</bool>
+                         </property>
+                         <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                          <property name="geometry">
+                           <rect>
+                            <x>0</x>
+                            <y>0</y>
+                            <width>637</width>
+                            <height>397</height>
+                           </rect>
+                          </property>
+                          <layout class="QGridLayout" name="gridLayout_84">
+                           <item row="0" column="0">
+                            <widget class="populationMapWidget" name="populationMap" native="true"/>
+                           </item>
+                          </layout>
+                         </widget>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_12">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>150</height>
+                          </size>
+                         </property>
+                         <property name="title">
+                          <string>Views</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_86">
+                          <item row="0" column="0">
+                           <layout class="QGridLayout" name="gridLayout_85">
+                            <item row="1" column="0">
+                             <widget class="QLabel" name="label_109">
+                              <property name="text">
+                               <string>Select an individual and then press</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="0" column="0">
+                             <widget class="QLabel" name="label_108">
+                              <property name="text">
+                               <string>Individual visualization type</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="0" column="1">
+                             <widget class="QComboBox" name="comboBox_7">
+                              <property name="minimumSize">
+                               <size>
+                                <width>0</width>
+                                <height>24</height>
+                               </size>
+                              </property>
+                              <item>
+                               <property name="text">
+                                <string>Fitness</string>
+                               </property>
+                              </item>
+                              <item>
+                               <property name="text">
+                                <string>Operator</string>
+                               </property>
+                              </item>
+                             </widget>
+                            </item>
+                            <item row="1" column="1">
+                             <widget class="QPushButton" name="pushButton_7">
+                              <property name="text">
+                               <string>Ancestors</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="2" column="0">
+                             <spacer name="verticalSpacer_11">
+                              <property name="orientation">
+                               <enum>Qt::Vertical</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                               <size>
+                                <width>20</width>
+                                <height>40</height>
+                               </size>
+                              </property>
+                             </spacer>
+                            </item>
+                           </layout>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
                   </widget>
                  </item>
                 </layout>
@@ -5117,7 +5230,7 @@ QListWidget::item:hover
      <x>0</x>
      <y>0</y>
      <width>1035</width>
-     <height>24</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
@@ -5173,6 +5286,12 @@ QListWidget::item:hover
    <class>drawTreeWidget</class>
    <extends>QWidget</extends>
    <header>drawtreewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>populationMapWidget</class>
+   <extends>QWidget</extends>
+   <header>populationmapwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

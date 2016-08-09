@@ -109,6 +109,26 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->lineEdit_6->hide();
 	setupQualityPlot();
 	setupSizePlot();
+	ui->label_115->setPixmap(drawSmallCircle(QColor(148,204,20,255),10));
+	ui->label_116->setPixmap(drawSmallCircle(QColor(75,143,185,255),10));
+	ui->label_117->setPixmap(drawSmallCircle(QColor(255,174,0,255),10));
+	ui->label_118->setPixmap(drawSmallCircle(QColor(255,85,85,255),10));
+	ui->label_119->setPixmap(drawSmallCircle(QColor(188,95,211,255),10));
+	ui->label_123->setPixmap(drawGradient(100,20));
+	ui->label_120->show();
+	ui->label_122->show();
+	ui->label_123->show();
+	ui->label_124->show();
+	ui->label_110->hide();
+	ui->label_111->hide();
+	ui->label_112->hide();
+	ui->label_113->hide();
+	ui->label_114->hide();
+	ui->label_115->hide();
+	ui->label_116->hide();
+	ui->label_117->hide();
+	ui->label_118->hide();
+	ui->label_119->hide();
 }
 
 MainWidget::~MainWidget()
@@ -599,4 +619,74 @@ void MainWidget::receivedPopInfo(GP::popInfo info)
 	if(info.currentGen == 1)
 		ui->populationMap->clearPopulation();
 	ui->populationMap->addSingleGeneration(info);
+}
+
+QPixmap MainWidget::drawSmallCircle(QColor color,int size)
+{
+	QPixmap pixmap(size,size);
+	QPainter painter(&pixmap);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.fillRect(0,0,10,10,QBrush(QColor(246,248,250,255)));
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(color);
+	painter.drawEllipse(0,0,size,size);
+	painter.end();
+	return pixmap;
+}
+
+QPixmap MainWidget::drawGradient(int width, int height)
+{
+	QLinearGradient linearGradient(0,0,width,0);
+	linearGradient.setColorAt(0, QColor::fromHslF(0,0.95,0.5));
+	linearGradient.setColorAt(0.125, QColor::fromHslF(0.1,0.95,0.5));
+	linearGradient.setColorAt(0.25, QColor::fromHslF(0.2,0.95,0.5));
+	linearGradient.setColorAt(0.375, QColor::fromHslF(0.3,0.95,0.5));
+	linearGradient.setColorAt(0.5, QColor::fromHslF(0.4,0.95,0.5));
+	linearGradient.setColorAt(0.625, QColor::fromHslF(0.5,0.95,0.5));
+	linearGradient.setColorAt(0.75, QColor::fromHslF(0.6,0.95,0.5));
+	linearGradient.setColorAt(0.875, QColor::fromHslF(0.7,0.95,0.5));
+	linearGradient.setColorAt(1, QColor::fromHslF(0.8,0.95,0.5));
+	QPixmap pixmap(width,height);
+	QPainter painter(&pixmap);
+	painter.fillRect(0,0,width,height,linearGradient);
+	painter.end();
+	return pixmap;
+}
+
+void MainWidget::on_comboBox_7_currentIndexChanged(int index)
+{
+  switch (index) {
+    case 0:
+      ui->label_120->show();
+      ui->label_122->show();
+      ui->label_123->show();
+      ui->label_124->show();
+      ui->label_110->hide();
+      ui->label_111->hide();
+      ui->label_112->hide();
+      ui->label_113->hide();
+      ui->label_114->hide();
+      ui->label_115->hide();
+      ui->label_116->hide();
+      ui->label_117->hide();
+      ui->label_118->hide();
+      ui->label_119->hide();
+      break;
+    case 1:
+      ui->label_120->hide();
+      ui->label_122->hide();
+      ui->label_123->hide();
+      ui->label_124->hide();
+      ui->label_110->show();
+      ui->label_111->show();
+      ui->label_112->show();
+      ui->label_113->show();
+      ui->label_114->show();
+      ui->label_115->show();
+      ui->label_116->show();
+      ui->label_117->show();
+      ui->label_118->show();
+      ui->label_119->show();
+      break;
+  }
 }

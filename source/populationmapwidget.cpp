@@ -167,7 +167,7 @@ void populationMapWidget::updateScaleFitness()
 	for(int gen = 0;gen < totalGenerations;gen++)
 	{
 		for(int ind = 0;ind < totalIndividuals;ind++)
-			Population[gen][ind].Color = QColor::fromHslF(Population.at(gen).at(ind).Fitness / maxFitness,0.95,0.5);
+			Population[gen][ind].Color = QColor::fromHslF((Population.at(gen).at(ind).Fitness / maxFitness) * 0.8,0.95,0.5);
 	}
 	forceUpdate = 1;
 	update();
@@ -198,17 +198,19 @@ void populationMapWidget::changeStyle()
 			switch(currentStyle) {
 				case STYLE_FITNESS:					
 					//Population[row][col].Color = Interpolate(QColor(219, 243, 255, 255),QColor(0, 84, 121, 255),Population.at(row).at(col).Fitness);
-					Population[row][col].Color = QColor::fromHslF(Population.at(row).at(col).Fitness / maxFitness, 0.95, 0.5);
+					Population[row][col].Color = QColor::fromHslF((Population.at(row).at(col).Fitness / maxFitness) * 0.8, 1, 0.5);
 					break;
 				case STYLE_OPERATOR:
 					if(Population[row][col].Operator == OP_RANDOM)
-						Population[row][col].Color = QColor(0,176,96,255);
+						Population[row][col].Color = QColor(148,204,20,255);
 					if(Population[row][col].Operator == OP_CROSSOVER)
-						Population[row][col].Color = QColor(10,100,164,255);
+						Population[row][col].Color = QColor(75,143,185,255);
 					if(Population[row][col].Operator == OP_MUTATION)
-						Population[row][col].Color = QColor(255,144,0,255);
+						Population[row][col].Color = QColor(255,174,0,255);
 					if(Population[row][col].Operator == OP_CLONE)
-						Population[row][col].Color = QColor(255,69,0,255);
+						Population[row][col].Color = QColor(255,85,85,255);
+					if(Population[row][col].Operator == OP_ELITIST)
+						Population[row][col].Color = QColor(188,95,211,255);
 			}
 		}
 	}

@@ -18,6 +18,9 @@
 #include "cl.hpp"
 #include "GP.h"
 #include "params.h"
+#include <QPainter>
+#include <QPixmap>
+#include <QLinearGradient>
 
 namespace Ui {
 class MainWidget;
@@ -72,6 +75,8 @@ private slots:
 	void on_listWidgetGP_currentRowChanged(int currentRow);
 
 
+	void on_comboBox_7_currentIndexChanged(int index);
+
 private:
 	Ui::MainWidget *ui;
 	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);
@@ -108,6 +113,8 @@ private:
 	void positionParents(int index, int depth);
 	void setDefaultGPParameters(void);
 	int runObserver;
+	QPixmap drawSmallCircle(QColor color, int size);
+	QPixmap drawGradient(int width, int height);
 };
 
 #endif // MAINWIDGET_H

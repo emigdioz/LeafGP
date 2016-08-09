@@ -2577,6 +2577,42 @@ QLabel
                         </widget>
                        </item>
                        <item>
+                        <widget class="QGroupBox" name="groupBox_14">
+                         <property name="title">
+                          <string>Evolution</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_91">
+                          <item row="0" column="0">
+                           <layout class="QGridLayout" name="gridLayout_90">
+                            <item row="0" column="0">
+                             <widget class="QLabel" name="label_121">
+                              <property name="text">
+                               <string>Number of generations</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="0" column="1">
+                             <widget class="QSpinBox" name="spinBox_6">
+                              <property name="minimumSize">
+                               <size>
+                                <width>0</width>
+                                <height>24</height>
+                               </size>
+                              </property>
+                              <property name="minimum">
+                               <number>1</number>
+                              </property>
+                              <property name="maximum">
+                               <number>100000</number>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
                         <spacer name="verticalSpacer_9">
                          <property name="orientation">
                           <enum>Qt::Vertical</enum>
@@ -2678,6 +2714,12 @@ QLabel
                            <height>24</height>
                           </size>
                          </property>
+                         <property name="minimum">
+                          <number>10</number>
+                         </property>
+                         <property name="maximum">
+                          <number>100000</number>
+                         </property>
                         </widget>
                        </item>
                        <item row="1" column="0">
@@ -2712,6 +2754,12 @@ QLabel
                            <height>24</height>
                           </size>
                          </property>
+                         <property name="minimum">
+                          <number>1</number>
+                         </property>
+                         <property name="maximum">
+                          <number>1000</number>
+                         </property>
                         </widget>
                        </item>
                        <item row="3" column="1">
@@ -2721,6 +2769,12 @@ QLabel
                            <width>0</width>
                            <height>24</height>
                           </size>
+                         </property>
+                         <property name="minimum">
+                          <number>2</number>
+                         </property>
+                         <property name="maximum">
+                          <number>1000</number>
                          </property>
                         </widget>
                        </item>
@@ -2773,6 +2827,9 @@ QLabel
                            <width>0</width>
                            <height>24</height>
                           </size>
+                         </property>
+                         <property name="maximum">
+                          <number>10000</number>
                          </property>
                         </widget>
                        </item>
@@ -4826,7 +4883,7 @@ QGroupBox::title {
                             <x>0</x>
                             <y>0</y>
                             <width>637</width>
-                            <height>274</height>
+                            <height>347</height>
                            </rect>
                           </property>
                           <layout class="QGridLayout" name="gridLayout_84">
@@ -4839,6 +4896,12 @@ QGroupBox::title {
                        </item>
                        <item>
                         <widget class="QFrame" name="frame_8">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>200</height>
+                          </size>
+                         </property>
                          <property name="frameShape">
                           <enum>QFrame::NoFrame</enum>
                          </property>

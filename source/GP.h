@@ -162,8 +162,7 @@ public:
   void compressOutputPairs(std::vector<float> actual, std::vector<float> expected, std::vector<double> &actual_compressed, std::vector<double> &expected_compressed);
   void randomlySplitData(std::vector<std::vector<float> > original, int ratio);
 
-  int dataPartitionType;
-  int trainingRatio;
+  int dataPartitionType;  
   std::vector<std::vector<float> > input_data_matrix;
   std::vector<std::vector<float> > training_data;
   std::vector<std::vector<float> > testing_data;

@@ -12,7 +12,6 @@ workerGP::workerGP(QObject *parent) : QObject(parent)
   _working = false;
   _abort = false;
   engineType = 1;
-  trainingRatio = 70;
 }
 
 void workerGP::abort()
@@ -72,7 +71,6 @@ void workerGP::doWork()
 
   gp_engine->insertData(data_matrix);
   gp_engine->dataPartitionType = dataPartitionType;
-  gp_engine->trainingRatio = trainingRatio;
   gp_engine->Run();
 
   mutex.lock();

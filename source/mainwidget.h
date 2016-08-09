@@ -40,7 +40,6 @@ public:
 	math_stats basicStats;
 	KDE *featurePDF;
 	std::vector<std::vector<float> > input_data_matrix;
-	int trainingRandomRatio;
 
 public slots:
 	void receivedRunProgress(int value, int run);
@@ -77,6 +76,24 @@ private slots:
 
 	void on_comboBox_7_currentIndexChanged(int index);
 
+	void on_spinBox_valueChanged(int arg1);
+
+	void on_spinBox_2_valueChanged(int arg1);
+
+	void on_spinBox_3_valueChanged(int arg1);
+
+	void on_lineEdit_textChanged(const QString &arg1);
+
+	void on_spinBox_4_valueChanged(int arg1);
+
+	void on_lineEdit_3_textEdited(const QString &arg1);
+
+	void on_lineEdit_4_textChanged(const QString &arg1);
+
+	void on_lineEdit_5_textChanged(const QString &arg1);
+
+	void on_spinBox_6_valueChanged(int arg1);
+
 private:
 	Ui::MainWidget *ui;
 	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);
@@ -111,10 +128,10 @@ private:
 	int countLeaves(int index, int count);
 	void positionLeaves(int index, int depth, int numberLeaves);
 	void positionParents(int index, int depth);
-	void setDefaultGPParameters(void);
 	int runObserver;
 	QPixmap drawSmallCircle(QColor color, int size);
 	QPixmap drawGradient(int width, int height);
+	void resetDefaultGPParameters(void);
 };
 
 #endif // MAINWIDGET_H

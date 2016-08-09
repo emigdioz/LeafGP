@@ -103,8 +103,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->correlationGPPlot->hide();
 	getInfoOpenCL();
 
-	setDefaultGPParameters(); // has to be called after worker object initialization
-	trainingRandomRatio = 70;
+	resetDefaultGPParameters(); // has to be called after worker object initialization
 	ui->label_105->hide();
 	ui->lineEdit_6->hide();
 	setupQualityPlot();
@@ -393,9 +392,11 @@ void MainWidget::receivedBasicInfo(GP::basicInfo info)
 	ui->qualityPlot->graph(0)->addData(info.currentGeneration,info.bestTrainError);
 	ui->qualityPlot->graph(1)->addData(info.currentGeneration,info.bestTestError);
 	ui->qualityPlot->yAxis->setRange(yMin,yMax);
+	ui->qualityPlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
 	ui->qualityPlot->replot();
 	ui->sizePlot->graph(0)->addData(info.currentGeneration,info.avgSize);
 	ui->sizePlot->yAxis->setRange(-1,yMaxSize);
+	ui->sizePlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
 	ui->sizePlot->replot();
 }
 
@@ -518,28 +519,6 @@ void MainWidget::on_listWidgetSetup_currentRowChanged(int currentRow)
       }
 }
 
-void MainWidget::setDefaultGPParameters()
-{
-  workerAlgorithm->gp_parameters.m_verbose = true;
-  workerAlgorithm->gp_parameters.m_print_primitives = false;
-  workerAlgorithm->gp_parameters.m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
-  workerAlgorithm->gp_parameters.m_number_of_generations = 100;
-  workerAlgorithm->gp_parameters.m_population_size = 100;
-  workerAlgorithm->gp_parameters.m_crossover_probability = 0.9;
-  workerAlgorithm->gp_parameters.m_mutation_probability = 0.1;
-  workerAlgorithm->gp_parameters.m_maximum_tree_size = 100;
-  workerAlgorithm->gp_parameters.m_minimum_tree_size = 1;
-  workerAlgorithm->gp_parameters.m_tournament_size = 3;
-  //m_device = DEVICE_GPU_FPI;
-  //m_device = DEVICE_CPU;
-  workerAlgorithm->gp_parameters.m_elitism_size = 1;
-  workerAlgorithm->gp_parameters.m_error_tolerance = -1;
-  workerAlgorithm->gp_parameters.m_max_local_size = 0;
-  workerAlgorithm->gp_parameters.m_output_file = "gpocl.out";
-  workerAlgorithm->gp_parameters.m_seed = 0;
-  workerAlgorithm->gp_parameters.m_number_of_runs = 1;
-}
-
 void MainWidget::on_spinBox_5_valueChanged(int arg1)
 {
   workerAlgorithm->gp_parameters.m_number_of_runs = arg1;
@@ -559,9 +538,8 @@ void MainWidget::on_spinBox_5_valueChanged(int arg1)
 
 void MainWidget::on_horizontalSlider_valueChanged(int value)
 {
-    trainingRandomRatio = value;
     ui->label_107->setText("Training/testing ratio (" + QString::number(value) + "%/" + QString::number(100-value) + "%)");
-    workerAlgorithm->trainingRatio = value;
+    workerAlgorithm->gp_parameters.m_trainingRatio = value;
 }
 
 void MainWidget::on_listWidgetGP_currentRowChanged(int currentRow)
@@ -689,4 +667,88 @@ void MainWidget::on_comboBox_7_currentIndexChanged(int index)
       ui->label_119->show();
       break;
   }
+}
+
+void MainWidget::resetDefaultGPParameters()
+{
+  workerAlgorithm->gp_parameters.m_verbose = true;
+  workerAlgorithm->gp_parameters.m_print_primitives = false;
+  workerAlgorithm->gp_parameters.m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
+  workerAlgorithm->gp_parameters.m_number_of_generations = 100;
+  workerAlgorithm->gp_parameters.m_population_size = 100;
+  workerAlgorithm->gp_parameters.m_crossover_probability = 0.9;
+  workerAlgorithm->gp_parameters.m_mutation_probability = 0.05;
+  workerAlgorithm->gp_parameters.m_maximum_tree_size = 100;
+  workerAlgorithm->gp_parameters.m_minimum_tree_size = 3;
+  workerAlgorithm->gp_parameters.m_tournament_size = 3;
+  workerAlgorithm->gp_parameters.m_elitism_size = 1;
+  workerAlgorithm->gp_parameters.m_error_tolerance = -1;
+  workerAlgorithm->gp_parameters.m_max_local_size = 0;
+  workerAlgorithm->gp_parameters.m_output_file = "gpocl.out";
+  workerAlgorithm->gp_parameters.m_seed = 0;
+  workerAlgorithm->gp_parameters.m_number_of_runs = 1;
+  workerAlgorithm->gp_parameters.m_trainingRatio = 70;
+
+  ui->spinBox->setValue(100); // Population size
+  ui->spinBox_6->setValue(100); // Number of generations
+  ui->comboBox_2->setCurrentIndex(0); // Initialization type: Full
+  ui->spinBox_2->setValue(3); // Minimum tree size
+  ui->spinBox_3->setValue(100); // Maximum tree size
+  ui->lineEdit->setText("0"); // Random seed
+  ui->comboBox_3->setCurrentIndex(1); // Selection type: Tournament
+  ui->spinBox_4->setValue(3); // Tournament size
+  ui->lineEdit_3->setText("0.9"); // Crossover probability
+  ui->lineEdit_4->setText("0.05"); // Mutation probability
+  ui->lineEdit_5->setText("0.05"); // Reproduction probability
+  ui->spinBox_5->setValue(1); // Number of runs
+  ui->horizontalSlider->setValue(70); // Training/Testing ratio
+  ui->populationMap->setTotalIndividuals(100);
+  ui->populationMap->setTotalGenerations(100);
+
+}
+void MainWidget::on_spinBox_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_population_size = arg1;
+  ui->populationMap->setTotalIndividuals(arg1);
+}
+
+void MainWidget::on_spinBox_2_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_minimum_tree_size = arg1;
+}
+
+void MainWidget::on_spinBox_3_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_maximum_tree_size = arg1;
+}
+
+void MainWidget::on_lineEdit_textChanged(const QString &arg1)
+{
+  workerAlgorithm->gp_parameters.m_seed = arg1.toInt();
+}
+
+void MainWidget::on_spinBox_4_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_tournament_size = arg1;
+}
+
+void MainWidget::on_lineEdit_3_textEdited(const QString &arg1)
+{
+    workerAlgorithm->gp_parameters.m_crossover_probability = arg1.toFloat();
+}
+
+void MainWidget::on_lineEdit_4_textChanged(const QString &arg1)
+{
+    workerAlgorithm->gp_parameters.m_mutation_probability = arg1.toFloat();
+}
+
+void MainWidget::on_lineEdit_5_textChanged(const QString &arg1)
+{
+    workerAlgorithm->gp_parameters.m_clone_probability = arg1.toFloat();
+}
+
+void MainWidget::on_spinBox_6_valueChanged(int arg1)
+{
+    workerAlgorithm->gp_parameters.m_number_of_generations = arg1;
+    ui->populationMap->setTotalGenerations(arg1);
 }

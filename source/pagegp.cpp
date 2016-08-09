@@ -179,7 +179,7 @@ void MainWidget::setupQualityPlot()
 	ui->qualityPlot->show();
 	ui->qualityPlot->addGraph();
 	ui->qualityPlot->addGraph();
-	ui->qualityPlot->xAxis->setRange(1,100);
+	ui->qualityPlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
 	ui->qualityPlot->graph(0)->setName("Best solution error for training data");
 	ui->qualityPlot->graph(0)->setPen(QPen(QColor(255,174,0,255),2));
 	ui->qualityPlot->graph(1)->setName("Best solution error for testing data");
@@ -223,7 +223,7 @@ void MainWidget::setupSizePlot()
 {
 	ui->sizePlot->show();
 	ui->sizePlot->addGraph();
-	ui->sizePlot->xAxis->setRange(1,100);
+	ui->sizePlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
 	ui->sizePlot->graph(0)->setName("Solution sizes average");
 	ui->sizePlot->graph(0)->setPen(QPen(QColor(148,204,20,255),2));
 	ui->sizePlot->graph(0)->setBrush(QBrush(QColor(148,204,20,20)));

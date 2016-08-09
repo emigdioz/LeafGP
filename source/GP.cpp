@@ -114,7 +114,7 @@ void GP::Evolve()
 
     // Kernel has to be loaded each run since data can change
     if( m_params->m_print_primitives ) { m_primitives.ShowAvailablePrimitives(); return; }
-    randomlySplitData(original_input_data_matrix,trainingRatio);
+    randomlySplitData(original_input_data_matrix,m_params->m_trainingRatio);
     // copy training data to input_matrix
     input_data_matrix = training_data;
     LoadPoints();

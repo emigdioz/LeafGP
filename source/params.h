@@ -95,8 +95,10 @@ public:
    int m_max_local_size; /**< The maximum allowed work group size. */
    float m_crossover_probability; /**< Crossover probability */
    float m_mutation_probability; /**< Mutation probability */
+   float m_clone_probability;
    float m_error_tolerance; /**< Error tolerance (stop criterion) */
    int m_number_of_runs;
+   int m_trainingRatio;
 
    std::string m_output_file; /**< output filename. */
 

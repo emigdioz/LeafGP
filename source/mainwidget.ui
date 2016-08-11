@@ -1746,7 +1746,7 @@ QWidget#pageProcessing {
 }</string>
                    </property>
                    <property name="currentIndex">
-                    <number>1</number>
+                    <number>0</number>
                    </property>
                    <widget class="QWidget" name="pageSummary">
                     <layout class="QGridLayout" name="gridLayout_29">
@@ -2158,7 +2158,7 @@ QListWidget::item:hover
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="pageSetupSimple">
            <layout class="QGridLayout" name="gridLayout_7">
@@ -2187,12 +2187,82 @@ QListWidget::item:hover
               </item>
               <item>
                <widget class="QFrame" name="frame_6">
+                <property name="styleSheet">
+                 <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: 200;
+	font-size: 9pt;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: rgb(45,65,102);
+}</string>
+                </property>
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
+                <layout class="QGridLayout" name="gridLayout_92">
+                 <item row="0" column="0">
+                  <layout class="QVBoxLayout" name="verticalLayout_31">
+                   <item>
+                    <widget class="QLabel" name="label_125">
+                     <property name="text">
+                      <string>Suggested parameters are used based on loaded data</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_15">
+                     <property name="title">
+                      <string>Autotuning</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_94">
+                      <item row="0" column="0">
+                       <layout class="QGridLayout" name="gridLayout_93">
+                        <item row="0" column="1">
+                         <widget class="QPushButton" name="pushButton_8">
+                          <property name="text">
+                           <string>Autofind parameters</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="2">
+                         <spacer name="horizontalSpacer_6">
+                          <property name="orientation">
+                           <enum>Qt::Horizontal</enum>
+                          </property>
+                          <property name="sizeHint" stdset="0">
+                           <size>
+                            <width>40</width>
+                            <height>20</height>
+                           </size>
+                          </property>
+                         </spacer>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item row="1" column="0">
+                  <spacer name="verticalSpacer_13">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -2303,6 +2373,9 @@ QListWidget::item:hover
                    </property>
                    <property name="horizontalScrollBarPolicy">
                     <enum>Qt::ScrollBarAlwaysOff</enum>
+                   </property>
+                   <property name="currentRow">
+                    <number>0</number>
                    </property>
                    <item>
                     <property name="text">
@@ -4214,7 +4287,7 @@ QListWidget::item:hover
                             <rect>
                              <x>10</x>
                              <y>10</y>
-                             <width>79</width>
+                             <width>141</width>
                              <height>23</height>
                             </rect>
                            </property>
@@ -4382,7 +4455,7 @@ QListWidget::item:hover
 }</string>
                                </property>
                                <property name="text">
-                                <string>Best solution</string>
+                                <string>Tree representation</string>
                                </property>
                                <property name="alignment">
                                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -4392,53 +4465,78 @@ QListWidget::item:hover
                              <item>
                               <widget class="drawTreeWidget" name="expressTreeWidget" native="true"/>
                              </item>
-                             <item>
-                              <widget class="QScrollArea" name="scrollArea">
-                               <property name="maximumSize">
-                                <size>
-                                 <width>16777215</width>
-                                 <height>50</height>
-                                </size>
-                               </property>
-                               <property name="frameShape">
-                                <enum>QFrame::NoFrame</enum>
-                               </property>
-                               <property name="verticalScrollBarPolicy">
-                                <enum>Qt::ScrollBarAlwaysOff</enum>
-                               </property>
-                               <property name="widgetResizable">
-                                <bool>true</bool>
-                               </property>
-                               <widget class="QWidget" name="scrollAreaWidgetContents">
-                                <property name="geometry">
-                                 <rect>
-                                  <x>0</x>
-                                  <y>0</y>
-                                  <width>331</width>
-                                  <height>50</height>
-                                 </rect>
-                                </property>
-                                <layout class="QGridLayout" name="gridLayout_73">
-                                 <item row="0" column="0">
-                                  <widget class="QLabel" name="label_103">
-                                   <property name="text">
-                                    <string/>
-                                   </property>
-                                   <property name="textInteractionFlags">
-                                    <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-                                   </property>
-                                  </widget>
-                                 </item>
-                                </layout>
-                               </widget>
-                              </widget>
-                             </item>
                             </layout>
                            </item>
                           </layout>
                          </widget>
                         </item>
                        </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_16">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>100</height>
+                      </size>
+                     </property>
+                     <property name="title">
+                      <string>Best solution</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_95">
+                      <item row="0" column="0">
+                       <widget class="QScrollArea" name="scrollArea">
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>50</height>
+                         </size>
+                        </property>
+                        <property name="frameShape">
+                         <enum>QFrame::NoFrame</enum>
+                        </property>
+                        <property name="verticalScrollBarPolicy">
+                         <enum>Qt::ScrollBarAlwaysOff</enum>
+                        </property>
+                        <property name="widgetResizable">
+                         <bool>true</bool>
+                        </property>
+                        <widget class="QWidget" name="scrollAreaWidgetContents">
+                         <property name="geometry">
+                          <rect>
+                           <x>0</x>
+                           <y>0</y>
+                           <width>754</width>
+                           <height>50</height>
+                          </rect>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_73">
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_103">
+                            <property name="styleSheet">
+                             <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: normal;
+	font-size: 9pt;
+	padding: 3px;
+	color: rgb(45,65,102);
+}</string>
+                            </property>
+                            <property name="text">
+                             <string/>
+                            </property>
+                            <property name="textInteractionFlags">
+                             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </widget>
                       </item>
                      </layout>
                     </widget>
@@ -4729,6 +4827,9 @@ QListWidget::item:hover
                    <property name="horizontalScrollBarPolicy">
                     <enum>Qt::ScrollBarAlwaysOff</enum>
                    </property>
+                   <property name="currentRow">
+                    <number>0</number>
+                   </property>
                    <item>
                     <property name="text">
                      <string>Performance</string>
@@ -4985,6 +5086,11 @@ QGroupBox::title {
                                      <string>Operator</string>
                                     </property>
                                    </item>
+                                   <item>
+                                    <property name="text">
+                                     <string>Size</string>
+                                    </property>
+                                   </item>
                                   </widget>
                                  </item>
                                  <item row="1" column="1">
@@ -5096,7 +5202,7 @@ QGroupBox::title {
                                    </property>
                                   </widget>
                                  </item>
-                                 <item row="6" column="0">
+                                 <item row="7" column="0">
                                   <spacer name="verticalSpacer_12">
                                    <property name="orientation">
                                     <enum>Qt::Vertical</enum>
@@ -5108,6 +5214,13 @@ QGroupBox::title {
                                     </size>
                                    </property>
                                   </spacer>
+                                 </item>
+                                 <item row="0" column="2">
+                                  <widget class="QLabel" name="label_123">
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                  </widget>
                                  </item>
                                  <item row="2" column="0">
                                   <widget class="QLabel" name="label_111">
@@ -5123,8 +5236,29 @@ QGroupBox::title {
                                    </property>
                                   </widget>
                                  </item>
-                                 <item row="0" column="2">
-                                  <widget class="QLabel" name="label_123">
+                                 <item row="6" column="0">
+                                  <widget class="QLabel" name="label_126">
+                                   <property name="text">
+                                    <string>Relative size</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="6" column="1">
+                                  <widget class="QLabel" name="label_127">
+                                   <property name="text">
+                                    <string>Small</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="6" column="3">
+                                  <widget class="QLabel" name="label_128">
+                                   <property name="text">
+                                    <string>Large</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="6" column="2">
+                                  <widget class="QLabel" name="label_129">
                                    <property name="text">
                                     <string/>
                                    </property>

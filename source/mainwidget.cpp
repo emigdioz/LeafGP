@@ -114,6 +114,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->label_118->setPixmap(drawSmallCircle(QColor(255,85,85,255),10));
 	ui->label_119->setPixmap(drawSmallCircle(QColor(188,95,211,255),10));
 	ui->label_123->setPixmap(drawGradient(100,20));
+	ui->label_129->setPixmap(drawGradient(100,20));
 	ui->label_120->show();
 	ui->label_122->show();
 	ui->label_123->show();
@@ -128,6 +129,10 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->label_117->hide();
 	ui->label_118->hide();
 	ui->label_119->hide();
+	ui->label_126->hide();
+	ui->label_127->hide();
+	ui->label_128->hide();
+	ui->label_129->hide();
 }
 
 MainWidget::~MainWidget()
@@ -649,6 +654,10 @@ void MainWidget::on_comboBox_7_currentIndexChanged(int index)
       ui->label_117->hide();
       ui->label_118->hide();
       ui->label_119->hide();
+      ui->label_126->hide();
+      ui->label_127->hide();
+      ui->label_128->hide();
+      ui->label_129->hide();
       break;
     case 1:
       ui->label_120->hide();
@@ -665,7 +674,30 @@ void MainWidget::on_comboBox_7_currentIndexChanged(int index)
       ui->label_117->show();
       ui->label_118->show();
       ui->label_119->show();
+      ui->label_126->hide();
+      ui->label_127->hide();
+      ui->label_128->hide();
+      ui->label_129->hide();
       break;
+    case 2:
+      ui->label_120->hide();
+      ui->label_122->hide();
+      ui->label_123->hide();
+      ui->label_124->hide();
+      ui->label_110->hide();
+      ui->label_111->hide();
+      ui->label_112->hide();
+      ui->label_113->hide();
+      ui->label_114->hide();
+      ui->label_115->hide();
+      ui->label_116->hide();
+      ui->label_117->hide();
+      ui->label_118->hide();
+      ui->label_119->hide();
+      ui->label_126->show();
+      ui->label_127->show();
+      ui->label_128->show();
+      ui->label_129->show();
   }
 }
 

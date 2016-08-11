@@ -24,6 +24,7 @@ populationMapWidget::populationMapWidget(QWidget *parent)
 	individualSelected[1] = -1; // y
 	inheritanceSelected = false;
 	maxFitness = 0;
+	maxSize = 0;
 }
 
 
@@ -127,6 +128,7 @@ void populationMapWidget::addSingleGeneration(GP::popInfo data)
 		tempInd.Color = QColor::fromHslF(tempInd.Fitness, 0.95, 0.5);
 		tempGen.append(tempInd);
 		if(tempInd.Fitness > maxFitness) maxFitness = tempInd.Fitness;
+		if(tempInd.Size > maxSize) maxSize = tempInd.Size;
 	}
 	qSort(tempGen.begin(),tempGen.end(),[](const Individual& a, const Individual& b) { return a.Fitness > b.Fitness; });
 
@@ -139,6 +141,11 @@ void populationMapWidget::addSingleGeneration(GP::popInfo data)
 	colorIndividual(QColor(255,204,0,255),0,totalGenerations-1);  // temporal
 	forceUpdate = 1;
 	update();
+	if(totalGenerations == 1)
+	{
+		maxFitness = 0;
+		maxSize = 0;
+	}
 	if(totalGenerations == maxGenerations) updateScaleFitness();
 }
 
@@ -211,6 +218,10 @@ void populationMapWidget::changeStyle()
 						Population[row][col].Color = QColor(255,85,85,255);
 					if(Population[row][col].Operator == OP_ELITIST)
 						Population[row][col].Color = QColor(188,95,211,255);
+					break;
+				case STYLE_SIZE:
+					Population[row][col].Color = QColor::fromHslF(((float)Population.at(row).at(col).Size / maxSize) * 0.8, 1, 0.5);
+					break;
 			}
 		}
 	}

@@ -95,6 +95,7 @@ private:
 	int individualSelected[2];
 	bool inheritanceSelected;
 	float maxFitness;
+	int maxSize;
 };
 
 #endif // POPULATIONMAPWIDGET_H

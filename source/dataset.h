@@ -6,6 +6,9 @@
 #include <QString>
 #include <QStandardItemModel>
 #include "benchmark.h"
+#include <QMessageBox>
+#include <QFileDialog>
+#include "matio.h"
 
 class Dataset
 {

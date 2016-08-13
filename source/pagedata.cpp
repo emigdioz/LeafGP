@@ -4,46 +4,47 @@
 
 void MainWidget::on_loadButton_pressed()
 {
-	QString fileName = QFileDialog::getOpenFileName (this, "Open CSV file",
-																	 QDir::currentPath(), "CSV (*.csv)");
+
+	QString fileName = QFileDialog::getOpenFileName (this, "Import data file",
+																	 QDir::currentPath(), "Comma Separated Values (*.csv);;Matlab (uncompressed V6) (*.mat)");
 	QFileInfo infoFile(fileName);
 
-	if(inputData.readFile(fileName))
-	{
-		int nSamples,nFeatures;
-		nSamples = inputData.getSamples();
-		nFeatures = inputData.getFeatures();
-		ui->label_20->setText("File name:");
-		ui->label_21->setText(fileName.section("/",-1,-1));
-		ui->label_22->setText("File size:");
-		ui->label_23->setText(QString::number(infoFile.size()) + " bytes");
-		ui->label_28->setText("File format:");
-		ui->label_29->setText("CSV");
-		ui->label_24->setText("Number of features:");
-		ui->label_25->setText(QString::number(nFeatures));
-		ui->label_26->setText("Number of samples:");
-		ui->label_27->setText(QString::number(nSamples));
-		ui->InfoBox->show();
-		populatePreviewPlot(nSamples);
-		ui->label_31->hide();
-		setTableDataItemsAligment(Qt::AlignCenter);
-		setTableHeaderLabels();
-		ui->tableViewDataSummary->setModel(inputData.model);
-		ui->tableViewDataSummary->show();
-		ui->selectorWidget->setNumberVariables(nFeatures);
-		ui->selectorWidget->setInitialSelection(0,0);
-		ui->label_51->show();
-		ui->label_52->show();
-		ui->label_53->show();
-		ui->label_54->show();
-		ui->selectorWidget->show();
-		ui->correlationPlot->show();
-		ui->regressionPlot->show();
-		ui->qqPlot->show();
-		updateOtherPlots(0,0);
-		populateTerminalList();
-		populateDataForGP();
-	}
+		if(inputData.readFile(fileName))
+		{
+			int nSamples,nFeatures;
+			nSamples = inputData.getSamples();
+			nFeatures = inputData.getFeatures();
+			ui->label_20->setText("File name:");
+			ui->label_21->setText(fileName.section("/",-1,-1));
+			ui->label_22->setText("File size:");
+			ui->label_23->setText(QString::number(infoFile.size()) + " bytes");
+			ui->label_28->setText("File format:");
+			ui->label_29->setText("CSV");
+			ui->label_24->setText("Number of features:");
+			ui->label_25->setText(QString::number(nFeatures));
+			ui->label_26->setText("Number of samples:");
+			ui->label_27->setText(QString::number(nSamples));
+			ui->InfoBox->show();
+			populatePreviewPlot(nSamples);
+			ui->label_31->hide();
+			setTableDataItemsAligment(Qt::AlignCenter);
+			setTableHeaderLabels();
+			ui->tableViewDataSummary->setModel(inputData.model);
+			ui->tableViewDataSummary->show();
+			ui->selectorWidget->setNumberVariables(nFeatures);
+			ui->selectorWidget->setInitialSelection(0,0);
+			ui->label_51->show();
+			ui->label_52->show();
+			ui->label_53->show();
+			ui->label_54->show();
+			ui->selectorWidget->show();
+			ui->correlationPlot->show();
+			ui->regressionPlot->show();
+			ui->qqPlot->show();
+			updateOtherPlots(0,0);
+			populateTerminalList();
+			populateDataForGP();
+		}
 }
 
 void MainWidget::on_comboBox_activated(int index)

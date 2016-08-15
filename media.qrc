@@ -53,5 +53,7 @@
         <file>resources/images/sidebar2_back_normal2.png</file>
         <file>resources/images/sidebar2_back_selected2.png</file>
         <file>resources/images/checkbox_checkeddisabled.png</file>
+        <file>resources/images/icon_app</file>
+        <file>resources/images/icon_app_big</file>
     </qresource>
 </RCC>

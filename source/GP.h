@@ -151,6 +151,7 @@ public:
     std::vector<int> size;
     std::vector<int> parents[2];
     int currentGen;
+    int currentRun;
   } popInfo;
 
   void insertData(std::vector<std::vector<float> > data);

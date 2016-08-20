@@ -193,6 +193,7 @@ void GP::Evolve()
 			thisPop.parents[1].push_back(0);
 	 }
 	 thisPop.currentGen = 1;
+	 thisPop.currentRun = curr_run;
 	 lastPop = thisPop;
 
 	 avgSize /= m_params->m_population_size;
@@ -271,14 +272,6 @@ void GP::Evolve()
      currentInfo.expected = expQ;
      emit GP_send_basic_info(currentInfo);
 
-//     thisPop.id.clear();
-//     thisPop.normFitness.clear();
-//     thisPop.realFitness.clear();
-//     thisPop.operatorT.clear();
-//     thisPop.parents[0].clear();
-//     thisPop.parents[1].clear();
-//     thisPop.size.clear();
-
      for(int ind = 0;ind < m_params->m_population_size;ind++)
      {
        thisPop.id[ind] = (m_params->m_population_size * (gen - 1)) + ind + 1;
@@ -289,6 +282,7 @@ void GP::Evolve()
        thisPop.size[ind] = ProgramSize(Program(cur_pop,ind));
      }
      thisPop.currentGen = gen;
+     thisPop.currentRun = curr_run;
      emit GP_send_pop_info(thisPop);
      lastPop = thisPop;
 

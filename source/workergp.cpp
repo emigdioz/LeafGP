@@ -11,7 +11,7 @@ workerGP::workerGP(QObject *parent) : QObject(parent)
   qRegisterMetaType<GP::popInfo>();
   _working = false;
   _abort = false;
-  engineType = 1;
+  engineType = 0;
 }
 
 void workerGP::abort()

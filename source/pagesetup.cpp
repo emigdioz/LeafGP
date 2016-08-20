@@ -95,8 +95,6 @@ void MainWidget::showDeleteMenu(const QPoint &pos)
 		myMenu.exec(mapToGlobal(globalPos));
 }
 
-
-
 void MainWidget::on_actionRemove_triggered()
 {
 	qDeleteAll(ui->listFunctionsTarget->selectedItems());
@@ -116,4 +114,91 @@ void MainWidget::terminalListNames(QString name)
 {
 	ui->label_75->setText(name);
 	ui->lineEdit_2->setText(name);
+}
+
+void MainWidget::on_spinBox_5_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_number_of_runs = arg1;
+  userExperiment.gpParams.m_number_of_runs = arg1;
+  if(arg1 == 1)
+  {
+    ui->circularProgress->setDoubleProgress(false);
+    ui->label_105->hide();
+    ui->lineEdit_6->hide();
+    ui->label_130->show();
+  }
+  else
+  {
+    ui->circularProgress->setDoubleProgress(true);
+    ui->label_105->show();
+    ui->lineEdit_6->show();
+    ui->label_130->hide();
+  }
+}
+
+void MainWidget::on_horizontalSlider_valueChanged(int value)
+{
+    ui->label_107->setText("Training/testing ratio (" + QString::number(value) + "%/" + QString::number(100-value) + "%)");
+    workerAlgorithm->gp_parameters.m_trainingRatio = value;
+    userExperiment.gpParams.m_trainingRatio = value;
+    int trainingSize = (input_data_matrix.size() * value)/100;
+    int testingSize = input_data_matrix.size() - trainingSize;
+    userExperiment.trainingPartitionSize = trainingSize;
+    userExperiment.testingPartitionSize = testingSize;
+}
+
+void MainWidget::on_spinBox_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_population_size = arg1;
+  userExperiment.gpParams.m_population_size = arg1;
+  ui->populationMap->setTotalIndividuals(arg1);
+}
+
+void MainWidget::on_spinBox_2_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_minimum_tree_size = arg1;
+  userExperiment.gpParams.m_minimum_tree_size = arg1;
+}
+
+void MainWidget::on_spinBox_3_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_maximum_tree_size = arg1;
+  userExperiment.gpParams.m_maximum_tree_size = arg1;
+}
+
+void MainWidget::on_lineEdit_textChanged(const QString &arg1)
+{
+  workerAlgorithm->gp_parameters.m_seed = arg1.toInt();
+  userExperiment.gpParams.m_seed = arg1.toInt();
+}
+
+void MainWidget::on_spinBox_4_valueChanged(int arg1)
+{
+  workerAlgorithm->gp_parameters.m_tournament_size = arg1;
+  userExperiment.gpParams.m_tournament_size = arg1;
+}
+
+void MainWidget::on_lineEdit_3_textEdited(const QString &arg1)
+{
+    workerAlgorithm->gp_parameters.m_crossover_probability = arg1.toFloat();
+    userExperiment.gpParams.m_crossover_probability = arg1.toFloat();
+}
+
+void MainWidget::on_lineEdit_4_textChanged(const QString &arg1)
+{
+    workerAlgorithm->gp_parameters.m_mutation_probability = arg1.toFloat();
+    userExperiment.gpParams.m_mutation_probability = arg1.toFloat();
+}
+
+void MainWidget::on_lineEdit_5_textChanged(const QString &arg1)
+{
+    workerAlgorithm->gp_parameters.m_clone_probability = arg1.toFloat();
+    userExperiment.gpParams.m_clone_probability = arg1.toFloat();
+}
+
+void MainWidget::on_spinBox_6_valueChanged(int arg1)
+{
+    workerAlgorithm->gp_parameters.m_number_of_generations = arg1;
+    userExperiment.gpParams.m_number_of_generations = arg1;
+    ui->populationMap->setTotalGenerations(arg1);
 }

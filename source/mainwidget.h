@@ -21,6 +21,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QLinearGradient>
+#include "gpexperiment.h"
 
 namespace Ui {
 class MainWidget;
@@ -40,6 +41,7 @@ public:
 	math_stats basicStats;
 	KDE *featurePDF;
 	std::vector<std::vector<float> > input_data_matrix;
+	gpExperiment userExperiment;
 
 public slots:
 	void receivedRunProgress(int value, int run);
@@ -72,27 +74,17 @@ private slots:
 	void on_spinBox_5_valueChanged(int arg1);
 	void on_horizontalSlider_valueChanged(int value);
 	void on_listWidgetGP_currentRowChanged(int currentRow);
-
-
 	void on_comboBox_7_currentIndexChanged(int index);
-
 	void on_spinBox_valueChanged(int arg1);
-
 	void on_spinBox_2_valueChanged(int arg1);
-
 	void on_spinBox_3_valueChanged(int arg1);
-
 	void on_lineEdit_textChanged(const QString &arg1);
-
 	void on_spinBox_4_valueChanged(int arg1);
-
 	void on_lineEdit_3_textEdited(const QString &arg1);
-
 	void on_lineEdit_4_textChanged(const QString &arg1);
-
 	void on_lineEdit_5_textChanged(const QString &arg1);
-
 	void on_spinBox_6_valueChanged(int arg1);
+	void on_listWidgetResults_currentRowChanged(int currentRow);
 
 private:
 	Ui::MainWidget *ui;
@@ -131,7 +123,8 @@ private:
 	int runObserver;
 	QPixmap drawSmallCircle(QColor color, int size);
 	QPixmap drawGradient(int width, int height);
-	void resetDefaultGPParameters(void);
+	void resetDefaultGPParameters(void);	
+	gpExperiment::popData currPop;
 };
 
 #endif // MAINWIDGET_H

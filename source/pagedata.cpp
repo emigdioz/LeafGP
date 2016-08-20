@@ -101,16 +101,23 @@ void MainWidget::on_comboBox_activated(int index)
 void MainWidget::populateDataForGP()
 {
 	int nRows = inputData.getSamples();
-	int nCols = inputData.getFeatures() + 1;
+	int nCols = inputData.getFeatures();
 	input_data_matrix.clear();
+	userExperiment.dataX.clear();
+	userExperiment.dataY.clear();
 	for(int j = 0;j < nRows; j++)
 	{
 		std::vector<float> line_data;
+		QVector<float> line_data2;
 		for(int i = 0;i < nCols; i++)
 		{
 			line_data.push_back(inputData.model->item(j,i)->text().toFloat());
+			line_data2.push_back(inputData.model->item(j,i)->text().toFloat());
 		}
+		line_data.push_back(inputData.model->item(j,nCols)->text().toFloat());
 		input_data_matrix.push_back(line_data);
+		userExperiment.dataX.push_back(line_data2);
+		userExperiment.dataY.push_back(inputData.model->item(j,nCols)->text().toFloat());
 	}
 }
 

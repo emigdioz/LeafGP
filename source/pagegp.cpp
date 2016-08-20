@@ -13,6 +13,26 @@ void MainWidget::on_startButton_clicked()
 	ui->qualityPlot->graph(0)->clearData();
 	ui->qualityPlot->graph(1)->clearData();
 	ui->sizePlot->graph(0)->clearData();
+	// clear data vectors and preallocate space
+	userExperiment.nodeEvaluations.clear();
+	userExperiment.objectiveEvaluations.clear();
+	userExperiment.averageSize.clear();
+	userExperiment.averageTrainingFitness.clear();
+	userExperiment.averageTestingFitness.clear();
+	userExperiment.medianTestingFitness.clear();
+	userExperiment.medianTrainingFitness.clear();
+	userExperiment.population.clear();
+//	userExperiment.nodeEvaluations.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.objectiveEvaluations.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.averageSize.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.averageTrainingFitness.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.averageTestingFitness.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.medianTrainingFitness.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.medianTestingFitness.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	//userExperiment.population.fill(userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.bestSize.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.bestTrainingFitness.fill(-1,userExperiment.gpParams.m_number_of_runs);
+//	userExperiment.bestTestingFitness.fill(-1,userExperiment.gpParams.m_number_of_runs);
 	// Copy input data to worker local matrix
 	workerAlgorithm->data_matrix = input_data_matrix;
 	requestAlgorithmStart();
@@ -259,4 +279,222 @@ void MainWidget::setupSizePlot()
 	ui->sizePlot->yAxis->setLabelColor(QColor(45,65,102,255));
 	ui->sizePlot->yAxis->setLabel("Size");
 	ui->sizePlot->graph(0)->clearData();
+}
+
+void MainWidget::receivedSingleTree(GP::treeStruct data)
+{
+  selectedTree = data;
+  int nLeaves = 0;
+  for (int i = 0; i < selectedTree.name.size(); i++) {
+      nLeaves = countLeaves(i, nLeaves);
+  }
+  positionLeaves(0,0,nLeaves);
+  positionParents(0,0);
+  ui->expressTreeWidget->setData(selectedTree.posX,
+                      selectedTree.posY,
+                      selectedTree.name,
+                      selectedTree.arity);
+  ui->expressTreeWidget->setLinkColor(QColor(255,174,0,255));
+  ui->expressTreeWidget->setNodeColor(QColor(255,174,0,255));
+  ui->expressTreeWidget->setNodeHoverColor(QColor(148,204,20,255));
+  ui->label_103->setText(data.syntaxPrefix);
+  //qDebug()<<nLeaves;
+}
+
+int MainWidget::countLeaves(int index, int count)
+{
+  if (selectedTree.subTreeSize[index] == 1) {
+      selectedTree.index[index] = count;
+      count += 1;
+  }
+  return count;
+}
+
+void MainWidget::positionLeaves(int index, int depth, int numberLeaves)
+{
+  if (selectedTree.subTreeSize[index] == 1) {
+      selectedTree.posX[index] = (float)selectedTree.index[index] / (numberLeaves - 1);
+      selectedTree.posY[index] = depth;
+  }
+  unsigned int j = index + 1;
+  for (int i = 0; i < selectedTree.arity[index]; i++) {
+      positionLeaves(j, depth + 1, numberLeaves);
+      j += selectedTree.subTreeSize[j];
+  }
+}
+
+void MainWidget::positionParents(int index, int depth)
+{
+  unsigned int j = index + 1;
+  for (int i = 0; i < selectedTree.arity[index]; i++) {
+      positionParents(j, depth + 1);
+      j += selectedTree.subTreeSize[j];
+  }
+  if (selectedTree.subTreeSize[index] > 1) {
+      float x = 0;
+      int counter = 0;
+      for (int k = 0; k < selectedTree.arity[index]; k++) {
+          do // Search for childrens
+          {
+              if (selectedTree.posY[index + counter] == (depth + 1)) {
+                  x += selectedTree.posX[index + counter];
+                  counter += 1;
+                  break;
+              }
+              counter += 1;
+          } while ((index + counter) < selectedTree.name.size());
+      }
+      selectedTree.posX[index] = x / selectedTree.arity[index];
+      selectedTree.posY[index] = depth;
+  }
+}
+
+void MainWidget::receivedBasicInfo(GP::basicInfo info)
+{
+	float yMax = ((info.maxError - info.minError) * 0.1) + info.maxError;
+	float yMin = info.minError - ((info.maxError - info.minError) * 0.1);
+	float yMaxSize = (info.maxAvgSize * 0.1) + info.maxAvgSize;
+	ui->label_88->setText(QString::number(info.currentGeneration));
+	ui->label_92->setText(QString::number(info.currentNodesExecutions));
+	ui->label_94->setText(QString::number(info.bestTrainError));
+	ui->label_96->setText(QString::number(info.bestSize));
+	ui->label_98->setText(QString::number(info.avgSize));
+	drawCorrelationPlotGP(info.actual,info.expected);
+	if(info.currentGeneration == 1)
+	{
+		ui->qualityPlot->graph(0)->clearData();
+		ui->qualityPlot->graph(1)->clearData();
+		ui->sizePlot->graph(0)->clearData();
+	}
+	ui->qualityPlot->graph(0)->addData(info.currentGeneration,info.bestTrainError);
+	ui->qualityPlot->graph(1)->addData(info.currentGeneration,info.bestTestError);
+	ui->qualityPlot->yAxis->setRange(yMin,yMax);
+	ui->qualityPlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
+	ui->qualityPlot->replot();
+	ui->sizePlot->graph(0)->addData(info.currentGeneration,info.avgSize);
+	ui->sizePlot->yAxis->setRange(-1,yMaxSize);
+	ui->sizePlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
+	ui->sizePlot->replot();
+	if(info.currentGeneration == workerAlgorithm->gp_parameters.m_number_of_generations)
+	{
+		userExperiment.nodeEvaluations.push_back(info.currentNodesExecutions);
+		userExperiment.bestTrainingFitness.push_back(info.bestTrainError);
+		userExperiment.bestTestingFitness.push_back(info.bestTestError);
+		userExperiment.bestSize.push_back(info.bestSize);
+		userExperiment.averageSize.push_back(info.avgSize);
+	}
+}
+
+void MainWidget::receivedPopInfo(GP::popInfo info)
+{
+
+	if(info.currentGen == 1)
+	{
+		ui->populationMap->clearPopulation();
+	}
+	ui->populationMap->addSingleGeneration(info);
+	//QVector<int> cID = QVector::fromStdVector(info.id);
+	//currPop.id.push_back(cID);
+
+	if(info.currentGen == workerAlgorithm->gp_parameters.m_number_of_generations)
+	{
+		//userExperiment.population.push_back(currPop.id);
+	}
+}
+
+QPixmap MainWidget::drawSmallCircle(QColor color,int size)
+{
+	QPixmap pixmap(size,size);
+	QPainter painter(&pixmap);
+	painter.setRenderHint(QPainter::Antialiasing);
+	painter.fillRect(0,0,10,10,QBrush(QColor(246,248,250,255)));
+	painter.setPen(Qt::NoPen);
+	painter.setBrush(color);
+	painter.drawEllipse(0,0,size,size);
+	painter.end();
+	return pixmap;
+}
+
+QPixmap MainWidget::drawGradient(int width, int height)
+{
+	QLinearGradient linearGradient(0,0,width,0);
+	linearGradient.setColorAt(0, QColor::fromHslF(0,0.95,0.5));
+	linearGradient.setColorAt(0.125, QColor::fromHslF(0.1,0.95,0.5));
+	linearGradient.setColorAt(0.25, QColor::fromHslF(0.2,0.95,0.5));
+	linearGradient.setColorAt(0.375, QColor::fromHslF(0.3,0.95,0.5));
+	linearGradient.setColorAt(0.5, QColor::fromHslF(0.4,0.95,0.5));
+	linearGradient.setColorAt(0.625, QColor::fromHslF(0.5,0.95,0.5));
+	linearGradient.setColorAt(0.75, QColor::fromHslF(0.6,0.95,0.5));
+	linearGradient.setColorAt(0.875, QColor::fromHslF(0.7,0.95,0.5));
+	linearGradient.setColorAt(1, QColor::fromHslF(0.8,0.95,0.5));
+	QPixmap pixmap(width,height);
+	QPainter painter(&pixmap);
+	painter.fillRect(0,0,width,height,linearGradient);
+	painter.end();
+	return pixmap;
+}
+
+void MainWidget::on_comboBox_7_currentIndexChanged(int index)
+{
+  switch (index) {
+    case 0:
+      ui->label_120->show();
+      ui->label_122->show();
+      ui->label_123->show();
+      ui->label_124->show();
+      ui->label_110->hide();
+      ui->label_111->hide();
+      ui->label_112->hide();
+      ui->label_113->hide();
+      ui->label_114->hide();
+      ui->label_115->hide();
+      ui->label_116->hide();
+      ui->label_117->hide();
+      ui->label_118->hide();
+      ui->label_119->hide();
+      ui->label_126->hide();
+      ui->label_127->hide();
+      ui->label_128->hide();
+      ui->label_129->hide();
+      break;
+    case 1:
+      ui->label_120->hide();
+      ui->label_122->hide();
+      ui->label_123->hide();
+      ui->label_124->hide();
+      ui->label_110->show();
+      ui->label_111->show();
+      ui->label_112->show();
+      ui->label_113->show();
+      ui->label_114->show();
+      ui->label_115->show();
+      ui->label_116->show();
+      ui->label_117->show();
+      ui->label_118->show();
+      ui->label_119->show();
+      ui->label_126->hide();
+      ui->label_127->hide();
+      ui->label_128->hide();
+      ui->label_129->hide();
+      break;
+    case 2:
+      ui->label_120->hide();
+      ui->label_122->hide();
+      ui->label_123->hide();
+      ui->label_124->hide();
+      ui->label_110->hide();
+      ui->label_111->hide();
+      ui->label_112->hide();
+      ui->label_113->hide();
+      ui->label_114->hide();
+      ui->label_115->hide();
+      ui->label_116->hide();
+      ui->label_117->hide();
+      ui->label_118->hide();
+      ui->label_119->hide();
+      ui->label_126->show();
+      ui->label_127->show();
+      ui->label_128->show();
+      ui->label_129->show();
+  }
 }

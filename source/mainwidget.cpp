@@ -32,6 +32,8 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(ui->tableViewDataSummary, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showSelectionMenu(const QPoint&)));
 	connect(ui->listFunctionsTarget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showDeleteMenu(const QPoint&)));
 	connect(ui->selectorWidget, SIGNAL(sendSelectedCoordinates(int,int)), this, SLOT(updateOtherPlots(int,int)));
+	connect(ui->listWidgetResultsAdvanced, SIGNAL(currentRowChanged(int)), ui->stackedWidgetResultsAdvanced, SLOT(setCurrentIndex(int)));
+
 	QSizePolicy sp_retain = ui->InfoBox->sizePolicy();
 	sp_retain.setRetainSizeWhenHidden(true);
 	ui->InfoBox->setSizePolicy(sp_retain);
@@ -309,101 +311,7 @@ void MainWidget::parallelDevicesChecked(bool t)
   workerAlgorithm->engineType = type;
 }
 
-void MainWidget::receivedSingleTree(GP::treeStruct data)
-{
-  selectedTree = data;
-  int nLeaves = 0;
-  for (int i = 0; i < selectedTree.name.size(); i++) {
-      nLeaves = countLeaves(i, nLeaves);
-  }
-  positionLeaves(0,0,nLeaves);
-  positionParents(0,0);
-  ui->expressTreeWidget->setData(selectedTree.posX,
-                      selectedTree.posY,
-                      selectedTree.name,
-                      selectedTree.arity);
-  ui->expressTreeWidget->setLinkColor(QColor(255,174,0,255));
-  ui->expressTreeWidget->setNodeColor(QColor(255,174,0,255));
-  ui->expressTreeWidget->setNodeHoverColor(QColor(148,204,20,255));
-  ui->label_103->setText(data.syntaxPrefix);
-  //qDebug()<<nLeaves;
-}
 
-int MainWidget::countLeaves(int index, int count)
-{
-  if (selectedTree.subTreeSize[index] == 1) {
-      selectedTree.index[index] = count;
-      count += 1;
-  }
-  return count;
-}
-
-void MainWidget::positionLeaves(int index, int depth, int numberLeaves)
-{
-  if (selectedTree.subTreeSize[index] == 1) {
-      selectedTree.posX[index] = (float)selectedTree.index[index] / (numberLeaves - 1);
-      selectedTree.posY[index] = depth;
-  }
-  unsigned int j = index + 1;
-  for (int i = 0; i < selectedTree.arity[index]; i++) {
-      positionLeaves(j, depth + 1, numberLeaves);
-      j += selectedTree.subTreeSize[j];
-  }
-}
-
-void MainWidget::positionParents(int index, int depth)
-{
-  unsigned int j = index + 1;
-  for (int i = 0; i < selectedTree.arity[index]; i++) {
-      positionParents(j, depth + 1);
-      j += selectedTree.subTreeSize[j];
-  }
-  if (selectedTree.subTreeSize[index] > 1) {
-      float x = 0;
-      int counter = 0;
-      for (int k = 0; k < selectedTree.arity[index]; k++) {
-          do // Search for childrens
-          {
-              if (selectedTree.posY[index + counter] == (depth + 1)) {
-                  x += selectedTree.posX[index + counter];
-                  counter += 1;
-                  break;
-              }
-              counter += 1;
-          } while ((index + counter) < selectedTree.name.size());
-      }
-      selectedTree.posX[index] = x / selectedTree.arity[index];
-      selectedTree.posY[index] = depth;
-  }
-}
-
-void MainWidget::receivedBasicInfo(GP::basicInfo info)
-{
-	float yMax = ((info.maxError - info.minError) * 0.1) + info.maxError;
-	float yMin = info.minError - ((info.maxError - info.minError) * 0.1);
-	float yMaxSize = (info.maxAvgSize * 0.1) + info.maxAvgSize;
-	ui->label_88->setText(QString::number(info.currentGeneration));
-	ui->label_92->setText(QString::number(info.currentNodesExecutions));
-	ui->label_94->setText(QString::number(info.bestTrainError));
-	ui->label_96->setText(QString::number(info.bestSize));
-	ui->label_98->setText(QString::number(info.avgSize));
-	drawCorrelationPlotGP(info.actual,info.expected);
-	if(info.currentGeneration == 1)
-	{
-		ui->qualityPlot->graph(0)->clearData();
-		ui->qualityPlot->graph(1)->clearData();
-		ui->sizePlot->graph(0)->clearData();
-	}
-	ui->qualityPlot->graph(0)->addData(info.currentGeneration,info.bestTrainError);
-	ui->qualityPlot->graph(1)->addData(info.currentGeneration,info.bestTestError);
-	ui->qualityPlot->yAxis->setRange(yMin,yMax);
-	ui->qualityPlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
-	ui->qualityPlot->replot();
-	ui->sizePlot->graph(0)->addData(info.currentGeneration,info.avgSize);
-	ui->sizePlot->yAxis->setRange(-1,yMaxSize);
-	ui->sizePlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
-	ui->sizePlot->replot();
-}
 
 void MainWidget::on_checkBox_toggled(bool checked)
 {
@@ -524,29 +432,6 @@ void MainWidget::on_listWidgetSetup_currentRowChanged(int currentRow)
       }
 }
 
-void MainWidget::on_spinBox_5_valueChanged(int arg1)
-{
-  workerAlgorithm->gp_parameters.m_number_of_runs = arg1;
-  if(arg1 == 1)
-  {
-    ui->circularProgress->setDoubleProgress(false);
-    ui->label_105->hide();
-    ui->lineEdit_6->hide();
-  }
-  else
-  {
-    ui->circularProgress->setDoubleProgress(true);
-    ui->label_105->show();
-    ui->lineEdit_6->show();
-  }
-}
-
-void MainWidget::on_horizontalSlider_valueChanged(int value)
-{
-    ui->label_107->setText("Training/testing ratio (" + QString::number(value) + "%/" + QString::number(100-value) + "%)");
-    workerAlgorithm->gp_parameters.m_trainingRatio = value;
-}
-
 void MainWidget::on_listWidgetGP_currentRowChanged(int currentRow)
 {
 	if(currentRow == 0)
@@ -597,129 +482,77 @@ void MainWidget::on_listWidgetGP_currentRowChanged(int currentRow)
 	  }
 }
 
-void MainWidget::receivedPopInfo(GP::popInfo info)
+void MainWidget::on_listWidgetResults_currentRowChanged(int currentRow)
 {
-	if(info.currentGen == 1)
-		ui->populationMap->clearPopulation();
-	ui->populationMap->addSingleGeneration(info);
-}
+	if(currentRow == 0 || currentRow == 2)
+	{
+		ui->listWidgetResults->setStyleSheet("QListWidget { background: rgb(182,194,214);"
+		 "border: none;"
+		 "font-family: Lato;"
+		 "font-weight: 200;"
+		 "font-size:12pt; }"
 
-QPixmap MainWidget::drawSmallCircle(QColor color,int size)
-{
-	QPixmap pixmap(size,size);
-	QPainter painter(&pixmap);
-	painter.setRenderHint(QPainter::Antialiasing);
-	painter.fillRect(0,0,10,10,QBrush(QColor(246,248,250,255)));
-	painter.setPen(Qt::NoPen);
-	painter.setBrush(color);
-	painter.drawEllipse(0,0,size,size);
-	painter.end();
-	return pixmap;
-}
+		 "QListWidget::item { background-image: url(:/icons/resources/images/sidebar2_back_normal2.png);"
+		 "background-position: center;"
+		 "width: 138px;"
+		 "height: 45px;"
+		 "padding-left: 10px;"
+		 "color: rgb(45,65,102);}"
 
-QPixmap MainWidget::drawGradient(int width, int height)
-{
-	QLinearGradient linearGradient(0,0,width,0);
-	linearGradient.setColorAt(0, QColor::fromHslF(0,0.95,0.5));
-	linearGradient.setColorAt(0.125, QColor::fromHslF(0.1,0.95,0.5));
-	linearGradient.setColorAt(0.25, QColor::fromHslF(0.2,0.95,0.5));
-	linearGradient.setColorAt(0.375, QColor::fromHslF(0.3,0.95,0.5));
-	linearGradient.setColorAt(0.5, QColor::fromHslF(0.4,0.95,0.5));
-	linearGradient.setColorAt(0.625, QColor::fromHslF(0.5,0.95,0.5));
-	linearGradient.setColorAt(0.75, QColor::fromHslF(0.6,0.95,0.5));
-	linearGradient.setColorAt(0.875, QColor::fromHslF(0.7,0.95,0.5));
-	linearGradient.setColorAt(1, QColor::fromHslF(0.8,0.95,0.5));
-	QPixmap pixmap(width,height);
-	QPainter painter(&pixmap);
-	painter.fillRect(0,0,width,height,linearGradient);
-	painter.end();
-	return pixmap;
-}
+		"QListWidget::item:selected { background-image: url(:/icons/resources/images/sidebar2_back_selected2.png);"
+		 "background-position: center;"
+		 "color: rgb(0, 0, 0);}"
 
-void MainWidget::on_comboBox_7_currentIndexChanged(int index)
-{
-  switch (index) {
-    case 0:
-      ui->label_120->show();
-      ui->label_122->show();
-      ui->label_123->show();
-      ui->label_124->show();
-      ui->label_110->hide();
-      ui->label_111->hide();
-      ui->label_112->hide();
-      ui->label_113->hide();
-      ui->label_114->hide();
-      ui->label_115->hide();
-      ui->label_116->hide();
-      ui->label_117->hide();
-      ui->label_118->hide();
-      ui->label_119->hide();
-      ui->label_126->hide();
-      ui->label_127->hide();
-      ui->label_128->hide();
-      ui->label_129->hide();
-      break;
-    case 1:
-      ui->label_120->hide();
-      ui->label_122->hide();
-      ui->label_123->hide();
-      ui->label_124->hide();
-      ui->label_110->show();
-      ui->label_111->show();
-      ui->label_112->show();
-      ui->label_113->show();
-      ui->label_114->show();
-      ui->label_115->show();
-      ui->label_116->show();
-      ui->label_117->show();
-      ui->label_118->show();
-      ui->label_119->show();
-      ui->label_126->hide();
-      ui->label_127->hide();
-      ui->label_128->hide();
-      ui->label_129->hide();
-      break;
-    case 2:
-      ui->label_120->hide();
-      ui->label_122->hide();
-      ui->label_123->hide();
-      ui->label_124->hide();
-      ui->label_110->hide();
-      ui->label_111->hide();
-      ui->label_112->hide();
-      ui->label_113->hide();
-      ui->label_114->hide();
-      ui->label_115->hide();
-      ui->label_116->hide();
-      ui->label_117->hide();
-      ui->label_118->hide();
-      ui->label_119->hide();
-      ui->label_126->show();
-      ui->label_127->show();
-      ui->label_128->show();
-      ui->label_129->show();
-  }
+		"QListWidget::item:hover { background-image: url(:/icons/resources/images/sidebar2_back_hover2.png);"
+		 "background-position: center;"
+		 "color: rgb(0, 0, 0);}");
+		}
+		else
+		{
+		 ui->listWidgetResults->setStyleSheet("QListWidget { background: rgb(182,194,214);"
+			"border: none;"
+			"font-family: Lato;"
+			"font-weight: 200;"
+			"font-size:12pt; }"
+
+			"QListWidget::item { background-image: url(:/icons/resources/images/sidebar2_back_normal.png);"
+			"background-position: center;"
+			"width: 138px;"
+			"height: 45px;"
+			"padding-left: 10px;"
+			"color: rgb(45,65,102);}"
+
+		 "QListWidget::item:selected { background-image: url(:/icons/resources/images/sidebar2_back_selected.png);"
+			"background-position: center;"
+			"color: rgb(0, 0, 0);}"
+
+		 "QListWidget::item:hover { background-image: url(:/icons/resources/images/sidebar2_back_hover.png);"
+			"background-position: center;"
+			"color: rgb(0, 0, 0);}");
+		}
 }
 
 void MainWidget::resetDefaultGPParameters()
 {
-  workerAlgorithm->gp_parameters.m_verbose = true;
-  workerAlgorithm->gp_parameters.m_print_primitives = false;
-  workerAlgorithm->gp_parameters.m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
-  workerAlgorithm->gp_parameters.m_number_of_generations = 100;
-  workerAlgorithm->gp_parameters.m_population_size = 100;
-  workerAlgorithm->gp_parameters.m_crossover_probability = 0.9;
-  workerAlgorithm->gp_parameters.m_mutation_probability = 0.05;
-  workerAlgorithm->gp_parameters.m_maximum_tree_size = 100;
-  workerAlgorithm->gp_parameters.m_minimum_tree_size = 3;
-  workerAlgorithm->gp_parameters.m_tournament_size = 3;
-  workerAlgorithm->gp_parameters.m_elitism_size = 1;
-  workerAlgorithm->gp_parameters.m_error_tolerance = -1;
-  workerAlgorithm->gp_parameters.m_max_local_size = 0;
-  workerAlgorithm->gp_parameters.m_output_file = "gpocl.out";
-  workerAlgorithm->gp_parameters.m_seed = 0;
-  workerAlgorithm->gp_parameters.m_number_of_runs = 1;
-  workerAlgorithm->gp_parameters.m_trainingRatio = 70;
+  userExperiment.gpParams.m_verbose = true;
+  userExperiment.gpParams.m_print_primitives = false;
+  userExperiment.gpParams.m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
+  userExperiment.gpParams.m_number_of_generations = 100;
+  userExperiment.gpParams.m_population_size = 100;
+  userExperiment.gpParams.m_crossover_probability = 0.9;
+  userExperiment.gpParams.m_mutation_probability = 0.05;
+  userExperiment.gpParams.m_maximum_tree_size = 100;
+  userExperiment.gpParams.m_minimum_tree_size = 3;
+  userExperiment.gpParams.m_tournament_size = 3;
+  userExperiment.gpParams.m_elitism_size = 1;
+  userExperiment.gpParams.m_error_tolerance = -1;
+  userExperiment.gpParams.m_max_local_size = 0;
+  userExperiment.gpParams.m_output_file = "gpocl.out";
+  userExperiment.gpParams.m_seed = 0;
+  userExperiment.gpParams.m_number_of_runs = 1;
+  userExperiment.gpParams.m_trainingRatio = 70;
+
+  workerAlgorithm->gp_parameters = userExperiment.gpParams;
 
   ui->spinBox->setValue(100); // Population size
   ui->spinBox_6->setValue(100); // Number of generations
@@ -737,50 +570,4 @@ void MainWidget::resetDefaultGPParameters()
   ui->populationMap->setTotalIndividuals(100);
   ui->populationMap->setTotalGenerations(100);
 
-}
-void MainWidget::on_spinBox_valueChanged(int arg1)
-{
-  workerAlgorithm->gp_parameters.m_population_size = arg1;
-  ui->populationMap->setTotalIndividuals(arg1);
-}
-
-void MainWidget::on_spinBox_2_valueChanged(int arg1)
-{
-  workerAlgorithm->gp_parameters.m_minimum_tree_size = arg1;
-}
-
-void MainWidget::on_spinBox_3_valueChanged(int arg1)
-{
-  workerAlgorithm->gp_parameters.m_maximum_tree_size = arg1;
-}
-
-void MainWidget::on_lineEdit_textChanged(const QString &arg1)
-{
-  workerAlgorithm->gp_parameters.m_seed = arg1.toInt();
-}
-
-void MainWidget::on_spinBox_4_valueChanged(int arg1)
-{
-  workerAlgorithm->gp_parameters.m_tournament_size = arg1;
-}
-
-void MainWidget::on_lineEdit_3_textEdited(const QString &arg1)
-{
-    workerAlgorithm->gp_parameters.m_crossover_probability = arg1.toFloat();
-}
-
-void MainWidget::on_lineEdit_4_textChanged(const QString &arg1)
-{
-    workerAlgorithm->gp_parameters.m_mutation_probability = arg1.toFloat();
-}
-
-void MainWidget::on_lineEdit_5_textChanged(const QString &arg1)
-{
-    workerAlgorithm->gp_parameters.m_clone_probability = arg1.toFloat();
-}
-
-void MainWidget::on_spinBox_6_valueChanged(int arg1)
-{
-    workerAlgorithm->gp_parameters.m_number_of_generations = arg1;
-    ui->populationMap->setTotalGenerations(arg1);
 }

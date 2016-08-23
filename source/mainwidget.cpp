@@ -111,6 +111,8 @@ MainWidget::MainWidget(QWidget *parent) :
 	setupQualityPlot();
 	setupSizePlot();
 	setupBoxplots();
+	setupQualityRunPlot();
+	setupSizeRunPlot();
 	ui->label_115->setPixmap(drawSmallCircle(QColor(148,204,20,255),10));
 	ui->label_116->setPixmap(drawSmallCircle(QColor(75,143,185,255),10));
 	ui->label_117->setPixmap(drawSmallCircle(QColor(255,174,0,255),10));
@@ -136,6 +138,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->label_127->hide();
 	ui->label_128->hide();
 	ui->label_129->hide();
+	connect(ui->populationMapRun, SIGNAL(individualIsSelected(int&,int&)), this, SLOT(individualMapSelected(int&,int&)));
 }
 
 MainWidget::~MainWidget()

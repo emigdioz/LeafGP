@@ -74,41 +74,39 @@ void populationMapWidget::addGeneration()
 	totalGenerations++;
 }
 
-void populationMapWidget::addData(QList<QStringList> data)
+void populationMapWidget::addData(gpExperiment::popData input)
 {
-	QStringList temp;
-	QVector<Individual> tempGen;
 	Individual tempInd;
-	int count = 1;
-	for(int i = 0;i < data.size();++i)
+	QVector<Individual> tempGen;
+	int popSize = input.realFitness.at(0).size();
+	int nGenerations = input.realFitness.size();
+	for(int gen = 0;gen < nGenerations;gen++)
 	{
-		temp = data.at(i);
-		tempInd.Id = temp.at(0).toInt();
-		tempInd.Fitness = temp.at(1).toDouble();
-		if(temp.at(2).compare("crossover") == 0)
-			tempInd.Operator = OP_CROSSOVER;
-		if(temp.at(2).compare("reproduction") == 0)
-			tempInd.Operator = OP_CLONE;
-		if(temp.at(2).compare("random") == 0)
-			tempInd.Operator = OP_RANDOM;
-		if(temp.at(2).compare("mutation") == 0)
-			tempInd.Operator = OP_MUTATION;
-		if(temp.at(2).compare("elitist") == 0)
-			tempInd.Operator = OP_ELITIST;
-		//tempInd.Color = Interpolate(QColor(219, 243, 255, 255),QColor(0, 84, 121, 255),tempInd.Fitness);
-		tempInd.Color = QColor::fromHslF(tempInd.Fitness, 0.95, 0.5);
-		tempInd.Parents[0] = temp.at(3).toInt();
-		tempInd.Parents[1] = temp.at(4).toInt();
-		tempGen.append(tempInd);
-		if(count == totalIndividuals)
+		for(int ind = 0;ind < popSize;ind++)
 		{
-			Population.append(tempGen);
-			totalGenerations++;
-			tempGen.clear();
-			count = 0;
+			tempInd.Id = input.id.at(gen).at(ind);
+			tempInd.Fitness = input.normalizedFitness.at(gen).at(ind);
+			tempInd.RealFitness = input.realFitness.at(gen).at(ind);
+			tempInd.Operator = input.operatorType.at(gen).at(ind);
+			tempInd.Parents[0] = input.parents[0].at(gen).at(ind);
+			tempInd.Parents[1] = input.parents[1].at(gen).at(ind);
+			tempInd.Size = input.size.at(gen).at(ind);
+			tempInd.Color = QColor::fromHslF(tempInd.Fitness, 0.95, 0.5);
+			tempGen.append(tempInd);
+			if(tempInd.Fitness > maxFitness) maxFitness = tempInd.Fitness;
+			if(tempInd.Size > maxSize) maxSize = tempInd.Size;
 		}
-		count++;
+		qSort(tempGen.begin(),tempGen.end(),[](const Individual& a, const Individual& b) { return a.Fitness > b.Fitness; });
+		Population.append(tempGen);
 	}
+	totalGenerations = nGenerations;
+	adjustSize();
+	forceUpdate = 0;
+	update();
+	colorIndividual(QColor(255,204,0,255),0,totalGenerations-1);  // temporal
+	forceUpdate = 1;
+	update();
+	updateScaleFitness();
 }
 
 void populationMapWidget::addSingleGeneration(GP::popInfo data)
@@ -451,6 +449,7 @@ void populationMapWidget::mousePressEvent(QMouseEvent *event)
 			painter.drawLine(currentIndividual*IndSize+(IndSize/2)+leftMargin,currentGeneration*IndSize+1,currentIndividual*IndSize+(IndSize/2)+leftMargin,currentGeneration*IndSize+IndSize-1);
 			painter.drawLine(currentIndividual*IndSize+1+leftMargin,currentGeneration*IndSize+(IndSize/2),currentIndividual*IndSize+IndSize-1+leftMargin,currentGeneration*IndSize+(IndSize/2));
 			update();
+			emit individualIsSelected(posX,posY);
 		}
 	}
 	if (event->button() == Qt::RightButton)

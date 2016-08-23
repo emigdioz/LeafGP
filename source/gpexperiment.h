@@ -58,6 +58,7 @@ public:
     QVector<float> bestSize;
     QVector<float> bestNormalizedTestingFitness;
     QVector<float> bestRealTestingFitness;
+    QVector<float> avgSize;
     QVector<double> expectedOutput;
     QVector<double> actualOutput;
   } popData;

@@ -162,6 +162,7 @@ public:
     float bestSize;
     float bestNormalizedTestingFitness;
     float bestRealTestingFitness;
+    float avgSize;
     QVector<double> expectedOutput;
     QVector<double> actualOutput;
   } popInfo;

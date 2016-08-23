@@ -8,6 +8,7 @@
 #include <QColor>
 #include <QString>
 #include "GP.h"
+#include "gpexperiment.h"
 
 QT_BEGIN_NAMESPACE
 class QMouseEvent;
@@ -30,10 +31,11 @@ class populationMapWidget : public QWidget
 public:
   populationMapWidget(QWidget *parent = 0);
   QSize sizeHint() const Q_DECL_OVERRIDE;
-  void addData(QList<QStringList> data); //temporal
+  void addData(gpExperiment::popData input);
   void addSingleGeneration(GP::popInfo data);
 
 signals:
+  void individualIsSelected(int &ind, int &gen);
 
 protected:
 	void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;

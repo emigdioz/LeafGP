@@ -101,6 +101,8 @@ void MainWidget::algorithmFinished()
   timerGP->stop();
   if(workerAlgorithm->gp_parameters.m_number_of_runs > 1)
     drawBoxplots();
+
+  populateRunsSelectionList();
 }
 
 void MainWidget::drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY)
@@ -201,83 +203,6 @@ void MainWidget::drawCorrelationPlotGP(QVector<double> actualY, QVector<double> 
 
 }
 
-void MainWidget::drawBoxplots()
-{
-  math_stats localTool;
-  double Q1train, Q2train, Q3train, maxtrain, mintrain,
-      Q1test, Q2test, Q3test, maxtest, mintest,
-      Q1avgsize, Q2avgsize, Q3avgsize, maxavgsize, minavgsize,
-      Q1bestsize, Q2bestsize, Q3bestsize, maxbestsize, minbestsize;
-  double min1, max1,min2,max2;
-  QVector<double> outliersBestTrain;
-  QVector<double> outliersBestTest;
-  std::vector<double> bestTrain;
-  std::vector<double> bestTest;
-  QVector<double> outliersAvgSize;
-  QVector<double> outliersBestSize;
-  std::vector<double> averageSize;
-  std::vector<double> betterSize;
-  for(int i = 0;i < workerAlgorithm->gp_parameters.m_number_of_runs;i++)
-  {
-    bestTrain.push_back(userExperiment.population.at(i).bestRealTrainingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations-1));
-    bestTest.push_back(userExperiment.population.at(i).bestRealTestingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations-1));
-    averageSize.push_back(userExperiment.averageSize.at(i));
-    betterSize.push_back(userExperiment.population.at(i).bestSize.at(workerAlgorithm->gp_parameters.m_number_of_generations-1));
-  }
-  localTool.computeQuartiles(bestTrain,Q1train, Q2train, Q3train, mintrain, maxtrain, outliersBestTrain);
-  localTool.computeQuartiles(bestTest,Q1test, Q2test, Q3test, mintest, maxtest, outliersBestTest);
-  localTool.computeQuartiles(averageSize,Q1avgsize, Q2avgsize, Q3avgsize, minavgsize, maxavgsize, outliersAvgSize);
-  localTool.computeQuartiles(betterSize,Q1bestsize, Q2bestsize, Q3bestsize, minbestsize, maxbestsize, outliersBestSize);
-  if (mintrain < mintest)
-      min1 = mintrain;
-  else
-      min1 = mintest;
-  if (maxtrain > maxtest)
-      max1 = maxtrain;
-  else
-      max1 = maxtest;
-  if (minavgsize < minbestsize)
-      min2 = minavgsize;
-  else
-      min2 = minbestsize;
-  if (maxavgsize > maxbestsize)
-      max2 = maxavgsize;
-  else
-      max2 = maxbestsize;
-  bestTrainFitness->setKey(1);
-  bestTrainFitness->setMinimum(mintrain);
-  bestTrainFitness->setLowerQuartile(Q1train);
-  bestTrainFitness->setMedian(Q2train);
-  bestTrainFitness->setUpperQuartile(Q3train);
-  bestTrainFitness->setMaximum(maxtrain);
-  bestTrainFitness->setOutliers(outliersBestTrain);
-  bestTestFitness->setKey(2);
-  bestTestFitness->setMinimum(mintest);
-  bestTestFitness->setLowerQuartile(Q1test);
-  bestTestFitness->setMedian(Q2test);
-  bestTestFitness->setUpperQuartile(Q3test);
-  bestTestFitness->setMaximum(maxtest);
-  bestTestFitness->setOutliers(outliersBestTest);
-  avgSize->setKey(1);
-  avgSize->setMinimum(minavgsize);
-  avgSize->setLowerQuartile(Q1avgsize);
-  avgSize->setMedian(Q2avgsize);
-  avgSize->setUpperQuartile(Q3avgsize);
-  avgSize->setMaximum(maxavgsize);
-  avgSize->setOutliers(outliersAvgSize);
-  bestSize->setKey(2);
-  bestSize->setMinimum(minbestsize);
-  bestSize->setLowerQuartile(Q1bestsize);
-  bestSize->setMedian(Q2bestsize);
-  bestSize->setUpperQuartile(Q3bestsize);
-  bestSize->setMaximum(maxbestsize);
-  bestSize->setOutliers(outliersBestSize);
-  ui->boxplotQuality->yAxis->setRange(min1 - ((max1 - min1) * 0.2), max1 + ((max1 - min1) * 0.2));
-  ui->boxplotQuality->replot();
-  ui->boxplotSize->yAxis->setRange(min2 - ((max2 - min2) * 0.2), max2 + ((max2 - min2) * 0.2));
-  ui->boxplotSize->replot();
-}
-
 void MainWidget::setupQualityPlot()
 {
 	ui->qualityPlot->show();
@@ -365,145 +290,7 @@ void MainWidget::setupSizePlot()
 	ui->sizePlot->graph(0)->clearData();
 }
 
-void MainWidget::setupBoxplots()
-{
-  bestTrainFitness = new QCPStatisticalBox(ui->boxplotQuality->xAxis, ui->boxplotQuality->yAxis);
-  bestTestFitness = new QCPStatisticalBox(ui->boxplotQuality->xAxis, ui->boxplotQuality->yAxis);
-  avgSize = new QCPStatisticalBox(ui->boxplotSize->xAxis, ui->boxplotSize->yAxis);
-  bestSize = new QCPStatisticalBox(ui->boxplotSize->xAxis, ui->boxplotSize->yAxis);
 
-  ui->boxplotSize->addPlottable(bestTrainFitness);
-  ui->boxplotSize->addPlottable(bestTestFitness);
-
-  QPen pen(QColor(232, 236, 242, 255));
-  pen.setWidth(2);
-  QColor green1(148, 204, 20, 100);
-  QColor orange1(255, 174, 0, 100);
-  QColor green2(148, 204, 20, 255);
-  QColor orange2(255, 174, 0, 255);
-  QColor purple1(188, 95, 211, 100);
-  QColor red1(255, 85, 85, 100);
-  QColor purple2(188, 95, 211, 255);
-  QColor red2(255, 85, 85, 255);
-  QBrush boxBrush1(green1);
-  QBrush boxBrush2(orange1);
-  QPen pen1(green2);
-  QPen pen2(orange2);
-  pen1.setWidth(2);
-  pen2.setWidth(2);
-  QCPScatterStyle box1Style;
-  QCPScatterStyle box2Style;
-  box1Style.setBrush(boxBrush1);
-  box1Style.setPen(Qt::NoPen);
-  box1Style.setShape(QCPScatterStyle::ssCircle);
-  box2Style.setBrush(boxBrush2);
-  box2Style.setPen(Qt::NoPen);
-  box2Style.setShape(QCPScatterStyle::ssCircle);
-  avgSize->setBrush(boxBrush1);
-  avgSize->setPen(pen1);
-  avgSize->setOutlierStyle(box1Style);
-  avgSize->setMedianPen(pen1);
-  avgSize->setWhiskerPen(pen1);
-  avgSize->setWhiskerBarPen(pen1);
-  bestSize->setBrush(boxBrush2);
-  bestSize->setPen(pen2);
-  bestSize->setOutlierStyle(box2Style);
-  bestSize->setMedianPen(pen2);
-  bestSize->setWhiskerPen(pen2);
-  bestSize->setWhiskerBarPen(pen2);
-  ui->boxplotSize->axisRect()->setBackground(QColor(255, 255, 255, 255));
-
-  ui->boxplotSize->xAxis->setSubTickCount(0);
-  ui->boxplotSize->xAxis->setTickLength(0, 4);
-  ui->boxplotSize->xAxis->setTickLabelRotation(20);
-  ui->boxplotSize->xAxis->setAutoTicks(false);
-  ui->boxplotSize->xAxis->setAutoTickLabels(false);
-  ui->boxplotSize->xAxis->setTickVector(QVector<double>() << 1 << 2);
-  ui->boxplotSize->xAxis->setTickVectorLabels(QVector<QString>() << "Average" << "Best");
-  ui->boxplotSize->xAxis->scaleRange(0.6, 0.5);
-  ui->boxplotSize->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-  ui->boxplotSize->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
-  ui->boxplotSize->xAxis->setBasePen(QColor(255, 255, 255, 255));
-  ui->boxplotSize->xAxis->setTicks(true);
-  ui->boxplotSize->xAxis->setTickLabelFont(QFont("Roboto",10,QFont::Light));
-  ui->boxplotSize->xAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
-  ui->boxplotSize->xAxis->setTickLabelColor(QColor(45,65,102,255));
-  ui->boxplotSize->xAxis->setLabelColor(QColor(45,65,102,255));
-
-	ui->boxplotSize->yAxis->setBasePen(QColor(255, 255, 255, 255));
-	ui->boxplotSize->yAxis->grid()->setPen(pen);
-	ui->boxplotSize->yAxis->setTickLengthIn(0);
-	ui->boxplotSize->yAxis->setSubTickLengthIn(0);
-	ui->boxplotSize->yAxis->setTickLabels(true);
-	ui->boxplotSize->yAxis->setTickLabelFont(QFont("Roboto",12,QFont::Light));
-	ui->boxplotSize->yAxis->setTickLabelColor(QColor(45,65,102,255));
-	ui->boxplotSize->yAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
-	ui->boxplotSize->yAxis->setLabelColor(QColor(45,65,102,255));
-	ui->boxplotSize->yAxis->setLabel("Size");
-	ui->boxplotSize->yAxis->setRange(0, 7);
-
-
-
-  ui->boxplotQuality->addPlottable(bestTrainFitness);
-  ui->boxplotQuality->addPlottable(bestTestFitness);
-  QBrush boxBrush3(purple1);
-  QBrush boxBrush4(red1);
-  QPen pen3(purple2);
-  QPen pen4(red2);
-  pen3.setWidth(2);
-  pen4.setWidth(2);
-  QCPScatterStyle box3Style;
-  QCPScatterStyle box4Style;
-  box3Style.setBrush(boxBrush3);
-  box3Style.setPen(Qt::NoPen);
-  box3Style.setShape(QCPScatterStyle::ssCircle);
-  box4Style.setBrush(boxBrush4);
-  box4Style.setPen(Qt::NoPen);
-  box4Style.setShape(QCPScatterStyle::ssCircle);
-
-  bestTrainFitness->setBrush(boxBrush3);
-  bestTrainFitness->setPen(pen3);
-  bestTrainFitness->setOutlierStyle(box3Style);
-  bestTrainFitness->setMedianPen(pen3);
-  bestTrainFitness->setWhiskerPen(pen3);
-  bestTrainFitness->setWhiskerBarPen(pen3);
-  bestTestFitness->setBrush(boxBrush4);
-  bestTestFitness->setPen(pen4);
-  bestTestFitness->setOutlierStyle(box4Style);
-  bestTestFitness->setMedianPen(pen4);
-  bestTestFitness->setWhiskerPen(pen4);
-  bestTestFitness->setWhiskerBarPen(pen4);
-  ui->boxplotQuality->axisRect()->setBackground(QColor(255, 255, 255, 255));
-
-  ui->boxplotQuality->xAxis->setSubTickCount(0);
-  ui->boxplotQuality->xAxis->setTickLength(0, 4);
-  ui->boxplotQuality->xAxis->setTickLabelRotation(20);
-  ui->boxplotQuality->xAxis->setAutoTicks(false);
-  ui->boxplotQuality->xAxis->setAutoTickLabels(false);
-  ui->boxplotQuality->xAxis->setTickVector(QVector<double>() << 1 << 2);
-  ui->boxplotQuality->xAxis->setTickVectorLabels(QVector<QString>() << "Training" << "Testing");
-  ui->boxplotQuality->xAxis->scaleRange(0.6, 0.5);
-  ui->boxplotQuality->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-  ui->boxplotQuality->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
-  ui->boxplotQuality->xAxis->setBasePen(QColor(255, 255, 255, 255));
-  ui->boxplotQuality->xAxis->setTicks(true);
-  ui->boxplotQuality->xAxis->setTickLabelFont(QFont("Roboto",10,QFont::Light));
-  ui->boxplotQuality->xAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
-  ui->boxplotQuality->xAxis->setTickLabelColor(QColor(45,65,102,255));
-  ui->boxplotQuality->xAxis->setLabelColor(QColor(45,65,102,255));
-
-	ui->boxplotQuality->yAxis->setBasePen(QColor(255, 255, 255, 255));
-	ui->boxplotQuality->yAxis->grid()->setPen(pen);
-	ui->boxplotQuality->yAxis->setTickLengthIn(0);
-	ui->boxplotQuality->yAxis->setSubTickLengthIn(0);
-	ui->boxplotQuality->yAxis->setTickLabels(true);
-	ui->boxplotQuality->yAxis->setTickLabelFont(QFont("Roboto",12,QFont::Light));
-	ui->boxplotQuality->yAxis->setTickLabelColor(QColor(45,65,102,255));
-	ui->boxplotQuality->yAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
-	ui->boxplotQuality->yAxis->setLabelColor(QColor(45,65,102,255));
-	ui->boxplotQuality->yAxis->setLabel("Fitness (RMSE)");
-	ui->boxplotQuality->yAxis->setRange(0, 7);
-}
 
 void MainWidget::receivedSingleTree(GP::treeStruct data)
 {
@@ -629,6 +416,7 @@ void MainWidget::receivedPopInfo(GP::popInfo info)
 	currPop.bestSize.push_back(info.bestSize);
 	currPop.bestNormalizedTestingFitness.push_back(info.bestNormalizedTestingFitness);
 	currPop.bestRealTestingFitness.push_back(info.bestRealTestingFitness);
+	currPop.avgSize.push_back(info.avgSize);
 
 	if(info.currentGen == workerAlgorithm->gp_parameters.m_number_of_generations)	
 	{
@@ -646,6 +434,7 @@ void MainWidget::receivedPopInfo(GP::popInfo info)
 		currPop.bestSize.clear();
 		currPop.bestNormalizedTestingFitness.clear();
 		currPop.bestRealTestingFitness.clear();
+		currPop.avgSize.clear();
 	}
 }
 

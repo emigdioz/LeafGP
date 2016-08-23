@@ -234,6 +234,7 @@ void GP::Evolve()
 	 thisPop.bestSize = currentInfo.bestSize;
 	 thisPop.bestNormalizedTestingFitness = 1.0/(1 + currentInfo.bestTestError);
 	 thisPop.bestRealTestingFitness = currentInfo.bestTestError;
+	 thisPop.avgSize = avgSize;
 	 thisPop.actualOutput = actQ;
 	 thisPop.expectedOutput = expQ;
 	 emit GP_send_pop_info(thisPop);
@@ -321,6 +322,7 @@ void GP::Evolve()
      thisPop.bestSize = currentInfo.bestSize;
      thisPop.bestNormalizedTestingFitness = 1.0/(1 + currentInfo.bestTestError);
      thisPop.bestRealTestingFitness = currentInfo.bestTestError;
+     thisPop.avgSize = avgSize;
      thisPop.actualOutput = actQ;
      thisPop.expectedOutput = expQ;
      emit GP_send_pop_info(thisPop);

@@ -66,7 +66,8 @@ SOURCES += source/main.cpp \
     source/matio/matvar_struct.c \
     source/matio/read_data.c \
     source/matio/snprintf.c \
-    source/gpexperiment.cpp
+    source/gpexperiment.cpp \
+    source/pageresults.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \

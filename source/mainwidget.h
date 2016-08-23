@@ -44,6 +44,7 @@ public:
 	KDE *featurePDF;
 	std::vector<std::vector<float> > input_data_matrix;
 	gpExperiment userExperiment;
+	int indexRun;
 
 public slots:
 	void receivedRunProgress(int value, int run);
@@ -87,6 +88,8 @@ private slots:
 	void on_lineEdit_5_textChanged(const QString &arg1);
 	void on_spinBox_6_valueChanged(int arg1);
 	void on_listWidgetResults_currentRowChanged(int currentRow);
+	void on_runSelectionView_clicked(const QModelIndex &index);
+	void individualMapSelected(int &ind, int &gen);
 
 private:
 	Ui::MainWidget *ui;
@@ -104,7 +107,10 @@ private:
 	void setupQualityPlot(void);
 	void setupSizePlot(void);
 	void setupBoxplots(void);
+	void setupQualityRunPlot(void);
+	void setupSizeRunPlot(void);
 	void populateTerminalList(void);
+	void populateRunsSelectionList(void);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
 	int tableSummarySelectionType;
@@ -133,6 +139,7 @@ private:
 	QCPStatisticalBox* bestTestFitness;
 	QCPStatisticalBox* avgSize;
 	QCPStatisticalBox* bestSize;
+	QStringListModel *modelRunsList;
 
 };
 

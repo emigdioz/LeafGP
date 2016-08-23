@@ -22,6 +22,8 @@
 #include <QPixmap>
 #include <QLinearGradient>
 #include "gpexperiment.h"
+#include <QVector>
+#include "qcustomplot.h"
 
 namespace Ui {
 class MainWidget;
@@ -98,8 +100,10 @@ private:
 	void drawRegressionPlot(int x);
 	void drawQQPlot(int x, int y);
 	void drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY);
+	void drawBoxplots(void);
 	void setupQualityPlot(void);
 	void setupSizePlot(void);
+	void setupBoxplots(void);
 	void populateTerminalList(void);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
@@ -125,6 +129,11 @@ private:
 	QPixmap drawGradient(int width, int height);
 	void resetDefaultGPParameters(void);	
 	gpExperiment::popData currPop;
+	QCPStatisticalBox* bestTrainFitness;
+	QCPStatisticalBox* bestTestFitness;
+	QCPStatisticalBox* avgSize;
+	QCPStatisticalBox* bestSize;
+
 };
 
 #endif // MAINWIDGET_H

@@ -20,6 +20,7 @@
 
 #include <QVector>
 #include <QString>
+#include "GP.h"
 #include "params.h"
 
 class gpExperiment
@@ -42,24 +43,10 @@ public:
   QVector<float>            averageTestingFitness;
   QVector<float>            medianTrainingFitness;
   QVector<float>            medianTestingFitness;
-  QVector<float>            bestSize;
-  QVector<float>            bestTrainingFitness;
-  QVector<float>            bestTestingFitness;
 
   typedef struct
   {
-    QVector<QString>        name;
-    QVector<int>            arity;
-    QVector<int>            subTreeSize;
-    QVector<float>          posX;
-    QVector<float>          posY;
-    QVector<int>            index;
-    QString                 syntaxPrefix;
-  } treeStruct;
-
-  typedef struct
-  {
-    QVector<QVector<treeStruct> > tree;
+    QVector<QVector<GP::treeStruct> > tree;
     QVector<QVector<int> > parents[2];
     QVector<QVector<int> > size;
     QVector<QVector<int> > operatorType;

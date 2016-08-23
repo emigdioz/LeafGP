@@ -73,6 +73,7 @@
 #include <QObject>
 #include <QVector>
 #include <QString>
+#include "math_stats.h"
 
 /*
 Definitions:
@@ -137,13 +138,17 @@ public:
 		float maxAvgSize;
 		int bestSize;
 		float avgSize;
-		float avgTrainError;		
+		float avgTrainError;
+		float avgTestError;
+		float medianTrainError;
+		float medianTestError;
 		QVector<double> expected;
 		QVector<double> actual;
 	} basicInfo;
 
   typedef struct
   {
+    std::vector<treeStruct> trees;
     std::vector<int> id;
     std::vector<float> normFitness;
     std::vector<float> realFitness;
@@ -152,6 +157,13 @@ public:
     std::vector<int> parents[2];
     int currentGen;
     int currentRun;
+    float bestNormalizedTrainingFitness;
+    float bestRealTrainingFitness;
+    float bestSize;
+    float bestNormalizedTestingFitness;
+    float bestRealTestingFitness;
+    QVector<double> expectedOutput;
+    QVector<double> actualOutput;
   } popInfo;
 
   void insertData(std::vector<std::vector<float> > data);

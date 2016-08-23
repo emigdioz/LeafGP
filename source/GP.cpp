@@ -74,11 +74,14 @@ void GP::Evolve()
 {
   treeStruct thisTree;
   QString bestIndividual;
+  QString anyIndividual;
   basicInfo currentInfo;
   std::vector<double> exp;
   std::vector<double> act;
   QVector<double> expQ;
   QVector<double> actQ;
+  QVector<double> partialValues;
+  math_stats mathTool;
 
   /*
 
@@ -160,17 +163,19 @@ void GP::Evolve()
     std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
     // ---------
     float avgSize;
-    float avgError;
 	 float maxError = sqrt(m_best_error/m_num_points);
 	 float testError;
 	 float maxAvgSize;
 	 float normalizedFitness;
 	 float realFitness;
+	 float avgFitnessTraining;
     // 3:
 	 avgSize = 0.0f;
-	 avgError = 0.0f;
+	 avgFitnessTraining = 0.0f;
+	 partialValues.clear();
 
 	 // Generation 1 population is always same
+	 thisPop.trees.clear();
 	 thisPop.id.clear();
 	 thisPop.normFitness.clear();
 	 thisPop.realFitness.clear();
@@ -178,7 +183,6 @@ void GP::Evolve()
 	 thisPop.parents[0].clear();
 	 thisPop.parents[1].clear();
 	 thisPop.size.clear();
-
 	 for(int ind = 0;ind < m_params->m_population_size;ind++)
 	 {
 			avgSize += ProgramSize(Program( cur_pop, ind ));
@@ -191,10 +195,15 @@ void GP::Evolve()
 			thisPop.size.push_back(ProgramSize(Program(cur_pop,ind)));
 			thisPop.parents[0].push_back(0);
 			thisPop.parents[1].push_back(0);
+			convertProgramToTreeStruct(thisTree,Program(cur_pop,ind));
+			convertProgramString(Program(cur_pop,ind),anyIndividual);
+			thisTree.syntaxPrefix = anyIndividual;
+			thisPop.trees.push_back(thisTree);
+			partialValues.push_back(realFitness);
+			avgFitnessTraining += realFitness;
 	 }
 	 thisPop.currentGen = 1;
 	 thisPop.currentRun = curr_run;
-	 lastPop = thisPop;
 
 	 avgSize /= m_params->m_population_size;
 	 maxAvgSize = avgSize;
@@ -213,12 +222,22 @@ void GP::Evolve()
 	 currentInfo.maxAvgSize = maxAvgSize;
 	 currentInfo.currentGeneration = 1;
 	 currentInfo.currentNodesExecutions = m_node_evaluations;
+	 currentInfo.avgTrainError = avgFitnessTraining/m_params->m_population_size;
+	 currentInfo.medianTrainError = mathTool.computeMedian(partialValues);
 	 expQ = QVector<double>::fromStdVector(exp);
 	 actQ = QVector<double>::fromStdVector(act);
 	 currentInfo.actual = actQ;
 	 currentInfo.expected = expQ;
 	 emit GP_send_basic_info(currentInfo);
+	 thisPop.bestNormalizedTrainingFitness = 1.0/(1 + currentInfo.bestTrainError);
+	 thisPop.bestRealTrainingFitness = currentInfo.bestTrainError;
+	 thisPop.bestSize = currentInfo.bestSize;
+	 thisPop.bestNormalizedTestingFitness = 1.0/(1 + currentInfo.bestTestError);
+	 thisPop.bestRealTestingFitness = currentInfo.bestTestError;
+	 thisPop.actualOutput = actQ;
+	 thisPop.expectedOutput = expQ;
 	 emit GP_send_pop_info(thisPop);
+	 lastPop = thisPop;
 
    for( unsigned gen = 2; gen <= m_params->m_number_of_generations; ++gen )
    {
@@ -240,8 +259,12 @@ void GP::Evolve()
      std::cout << " | ET(s): " << ( std::clock() - start ) / double(CLOCKS_PER_SEC) << std::endl;
      // ---------
      avgSize = 0.0f;
+     avgFitnessTraining = 0.0f;
+     partialValues.clear();
+
      for(int ind = 0;ind < m_params->m_population_size;ind++)
        avgSize += ProgramSize(Program( cur_pop, ind ));
+
      avgSize /= m_params->m_population_size;
      if(avgSize > maxAvgSize) maxAvgSize = avgSize;
      //************* temporal ***************************************************************************
@@ -266,11 +289,11 @@ void GP::Evolve()
      currentInfo.maxAvgSize = maxAvgSize;
      currentInfo.currentGeneration = gen;
      currentInfo.currentNodesExecutions = m_node_evaluations;
+
      expQ = QVector<double>::fromStdVector(exp);
      actQ = QVector<double>::fromStdVector(act);
      currentInfo.actual = actQ;
      currentInfo.expected = expQ;
-     emit GP_send_basic_info(currentInfo);
 
      for(int ind = 0;ind < m_params->m_population_size;ind++)
      {
@@ -280,9 +303,26 @@ void GP::Evolve()
        thisPop.normFitness[ind] = normalizedFitness;
        thisPop.realFitness[ind] = realFitness;
        thisPop.size[ind] = ProgramSize(Program(cur_pop,ind));
+       convertProgramToTreeStruct(thisTree,Program(cur_pop,ind));
+       convertProgramString(Program(cur_pop,ind),anyIndividual);
+       thisTree.syntaxPrefix = anyIndividual;
+       thisPop.trees[ind] = thisTree;
+       avgFitnessTraining += realFitness;
+       partialValues.push_back(realFitness);
      }
+     currentInfo.avgTrainError = avgFitnessTraining/m_params->m_population_size;
+     currentInfo.medianTrainError = mathTool.computeMedian(partialValues);
+     emit GP_send_basic_info(currentInfo);
+
      thisPop.currentGen = gen;
      thisPop.currentRun = curr_run;
+     thisPop.bestNormalizedTrainingFitness = 1.0/(1 + currentInfo.bestTrainError);
+     thisPop.bestRealTrainingFitness = currentInfo.bestTrainError;
+     thisPop.bestSize = currentInfo.bestSize;
+     thisPop.bestNormalizedTestingFitness = 1.0/(1 + currentInfo.bestTestError);
+     thisPop.bestRealTestingFitness = currentInfo.bestTestError;
+     thisPop.actualOutput = actQ;
+     thisPop.expectedOutput = expQ;
      emit GP_send_pop_info(thisPop);
      lastPop = thisPop;
 

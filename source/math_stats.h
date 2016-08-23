@@ -4,6 +4,7 @@
 #include <QVector>
 #include <algorithm>
 #include "dataanalysis.h"
+#include <vector>
 
 class math_stats
 {
@@ -22,6 +23,7 @@ public:
 	bool computeMultipleLinearRegression(QVector<QVector<double> > X, QVector<double> Y, QVector<double> &Coeff);
 	void processMultipleLinearRegression(QVector<double> variables, double &Y);
 	void computeQuantiles(QVector<double> input, QVector<double> &output, int divisions);
+	void computeQuartiles(std::vector<double> data, double &Q1, double &Q2, double &Q3, double &min, double &max, QVector<double> &outliers);
 
 private:
 	alglib::linearmodel model;

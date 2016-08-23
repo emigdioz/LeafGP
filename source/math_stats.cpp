@@ -259,3 +259,95 @@ double math_stats::quantile(std::vector<double> d, int size, double q)
   double i2 = *std::min_element(w.begin() + ind + 1, w.end());
   return i1 * (1.0 - delta) + i2 * delta;
 }
+
+void math_stats::computeQuartiles(std::vector<double> data, double &Q1, double &Q2, double &Q3, double &min, double &max, QVector<double> &outliers)
+{
+  typedef std::vector<double>::size_type vecSize;
+  vecSize N = data.size();
+  if (N == 0)
+      return; // No data!
+  else
+      sort(data.begin(), data.end()); // Sort vector
+  double IQR;
+
+  // declare new variables
+  vecSize NMod4 = (N % 4); // identification of 1 of the 4 known datum distribution profiles
+  std::string datumDistr = ""; // datum distribution profile
+  vecSize M, ML, MU; // core vector indices for quartile computation
+  double m, ml, mu; // quartile values are store here
+
+  // compute quartiles for the 4 known patterns
+  if (NMod4 == 0) {
+      // Q1-Q3 datum distribution: [0 0 0]
+      datumDistr = "[0 0 0]";
+      M = N / 2;
+      ML = M / 2;
+      MU = M + ML;
+
+      // grab quartile values
+      ml = (data[ML] + data[ML - 1]) / 2; // datum: 0
+      m = (data[M] + data[M - 1]) / 2; // datum: 0
+      mu = (data[MU] + data[MU - 1]) / 2; // datum: 0
+  }
+
+  else if (NMod4 == 1) {
+      // Q1-Q3 datum distribution: [0 1 0]
+      datumDistr = "[0 1 0]";
+      M = N / 2;
+      ML = M / 2;
+      MU = M + ML + 1;
+
+      // grab quartile values
+      datumDistr = "[0 0 0]";
+      ml = (data[ML] + data[ML - 1]) / 2; // datum: 0
+      m = data[M]; // datum: 1
+      mu = (data[MU] + data[MU - 1]) / 2; // datum: 0
+  }
+
+  else if (NMod4 == 2) {
+      // Q1-Q3 datum distribution: [1 0 1]
+      datumDistr = "[1 0 1]";
+      M = N / 2;
+      ML = M / 2;
+      MU = M + ML;
+
+      // grab quartile values
+      ml = data[ML]; // datum: 1
+      m = (data[M] + data[M - 1]) / 2; // datum: 0
+      mu = data[MU]; // datum: 1
+  }
+
+  else if (NMod4 == 3) {
+      // Q1-Q3 datum distribution: [1 1 1]
+      datumDistr = "[1 1 1]";
+      M = N / 2;
+      ML = M / 2;
+      MU = M + ML + 1;
+
+      // grab quartile values
+      ml = data[ML]; // datum: 1
+      m = data[M]; // datum: 0
+      mu = data[MU]; // datum: 1
+  }
+  Q1 = ml;
+  Q2 = m;
+  Q3 = mu;
+  IQR = Q3 - Q1;
+  int lcount = 0;
+  int ucount = N - 1;
+  unsigned int i;
+  for (i = 0; i < N; i++) {
+      if (data[i] < (Q1 - (1.5 * IQR))) {
+          outliers.push_back(data[i]); // lower data
+          lcount = i + 1;
+      }
+  }
+  for (i = N; i > 0; i--) {
+      if (data[i - 1] > (Q3 + (1.5 * IQR))) {
+          outliers.push_back(data[i - 1]); // upper data
+          ucount = i - 2;
+      }
+  }
+  min = data[lcount];
+  max = data[ucount];
+}

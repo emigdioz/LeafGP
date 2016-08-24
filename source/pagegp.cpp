@@ -101,8 +101,11 @@ void MainWidget::algorithmFinished()
   timerGP->stop();
   if(workerAlgorithm->gp_parameters.m_number_of_runs > 1)
     drawBoxplots();
-
   populateRunsSelectionList();
+  drawPerformancePlot();
+  QModelIndex Index= ui->runSelectionView->model()->index(0,0);
+  ui->runSelectionView->selectionModel()->select( Index, QItemSelectionModel::Select );
+  on_runSelectionView_clicked(Index);
 }
 
 void MainWidget::drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY)
@@ -454,6 +457,25 @@ QPixmap MainWidget::drawSmallCircle(QColor color,int size)
 QPixmap MainWidget::drawGradient(int width, int height)
 {
 	QLinearGradient linearGradient(0,0,width,0);
+	linearGradient.setColorAt(0, QColor::fromHslF(0,0.95,0.5));
+	linearGradient.setColorAt(0.125, QColor::fromHslF(0.1,0.95,0.5));
+	linearGradient.setColorAt(0.25, QColor::fromHslF(0.2,0.95,0.5));
+	linearGradient.setColorAt(0.375, QColor::fromHslF(0.3,0.95,0.5));
+	linearGradient.setColorAt(0.5, QColor::fromHslF(0.4,0.95,0.5));
+	linearGradient.setColorAt(0.625, QColor::fromHslF(0.5,0.95,0.5));
+	linearGradient.setColorAt(0.75, QColor::fromHslF(0.6,0.95,0.5));
+	linearGradient.setColorAt(0.875, QColor::fromHslF(0.7,0.95,0.5));
+	linearGradient.setColorAt(1, QColor::fromHslF(0.8,0.95,0.5));
+	QPixmap pixmap(width,height);
+	QPainter painter(&pixmap);
+	painter.fillRect(0,0,width,height,linearGradient);
+	painter.end();
+	return pixmap;
+}
+
+QPixmap MainWidget::drawGradient90(int width, int height)
+{
+	QLinearGradient linearGradient(0,0,0,height);
 	linearGradient.setColorAt(0, QColor::fromHslF(0,0.95,0.5));
 	linearGradient.setColorAt(0.125, QColor::fromHslF(0.1,0.95,0.5));
 	linearGradient.setColorAt(0.25, QColor::fromHslF(0.2,0.95,0.5));

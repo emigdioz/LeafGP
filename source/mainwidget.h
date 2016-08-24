@@ -104,11 +104,13 @@ private:
 	void drawQQPlot(int x, int y);
 	void drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY);
 	void drawBoxplots(void);
+	void drawPerformancePlot(void);
 	void setupQualityPlot(void);
 	void setupSizePlot(void);
 	void setupBoxplots(void);
 	void setupQualityRunPlot(void);
 	void setupSizeRunPlot(void);
+	void setupPerformancePlot(void);
 	void populateTerminalList(void);
 	void populateRunsSelectionList(void);
 	QVector <double> selectedFeature;
@@ -133,6 +135,7 @@ private:
 	int runObserver;
 	QPixmap drawSmallCircle(QColor color, int size);
 	QPixmap drawGradient(int width, int height);
+	QPixmap drawGradient90(int width, int height);
 	void resetDefaultGPParameters(void);	
 	gpExperiment::popData currPop;
 	QCPStatisticalBox* bestTrainFitness;
@@ -140,6 +143,7 @@ private:
 	QCPStatisticalBox* avgSize;
 	QCPStatisticalBox* bestSize;
 	QStringListModel *modelRunsList;
+	int performancePlotSlices = 20;
 
 };
 

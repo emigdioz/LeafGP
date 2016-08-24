@@ -4929,7 +4929,7 @@ QListWidget::item:hover
 }</string>
                    </property>
                    <property name="currentIndex">
-                    <number>1</number>
+                    <number>0</number>
                    </property>
                    <widget class="QWidget" name="pagePerformance">
                     <property name="styleSheet">
@@ -5750,14 +5750,158 @@ QListWidget::item:hover
                    <property name="currentIndex">
                     <number>1</number>
                    </property>
-                   <widget class="QWidget" name="pageSummary_2"/>
+                   <widget class="QWidget" name="pageSummary_2">
+                    <layout class="QGridLayout" name="gridLayout_109">
+                     <item row="0" column="0">
+                      <layout class="QVBoxLayout" name="verticalLayout_36">
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_19">
+                         <property name="title">
+                          <string>Information</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLabel" name="label_140">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>35</height>
+                          </size>
+                         </property>
+                         <property name="styleSheet">
+                          <string notr="true">QLabel {
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 14pt;
+	padding-left: 1px;
+}</string>
+                         </property>
+                         <property name="text">
+                          <string>Evolvability performance</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QFrame" name="frame_40">
+                         <property name="frameShape">
+                          <enum>QFrame::NoFrame</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_111">
+                          <property name="leftMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="topMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="rightMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="bottomMargin">
+                           <number>0</number>
+                          </property>
+                          <property name="spacing">
+                           <number>0</number>
+                          </property>
+                          <item row="0" column="0">
+                           <layout class="QHBoxLayout" name="horizontalLayout_10">
+                            <item>
+                             <widget class="QCustomPlot" name="performanceEPlot" native="true"/>
+                            </item>
+                            <item>
+                             <widget class="QGroupBox" name="groupBox_20">
+                              <property name="maximumSize">
+                               <size>
+                                <width>100</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: normal;
+	font-size: 9pt;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: rgb(45,65,102);
+}</string>
+                              </property>
+                              <property name="title">
+                               <string>Legend</string>
+                              </property>
+                              <layout class="QGridLayout" name="gridLayout_110">
+                               <item row="0" column="0">
+                                <layout class="QVBoxLayout" name="verticalLayout_37">
+                                 <item>
+                                  <widget class="QLabel" name="label_141">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>16777215</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="text">
+                                    <string>Relative best solution (small error)</string>
+                                   </property>
+                                   <property name="alignment">
+                                    <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+                                   </property>
+                                   <property name="wordWrap">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_142">
+                                   <property name="text">
+                                    <string/>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_143">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>16777215</width>
+                                     <height>16777215</height>
+                                    </size>
+                                   </property>
+                                   <property name="text">
+                                    <string>Relative worst solution (big error)</string>
+                                   </property>
+                                   <property name="alignment">
+                                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                                   </property>
+                                   <property name="wordWrap">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </item>
+                              </layout>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
                    <widget class="QWidget" name="pagePopulation_3">
                     <property name="styleSheet">
                      <string notr="true">QLabel {
 	font-family: Roboto;
 	font-weight: normal;
 	font-size: 9pt;
-	padding-left: 10px;
+
 	padding-right: 10px;
 	color: rgb(45,65,102);
 }</string>
@@ -5769,7 +5913,7 @@ QListWidget::item:hover
                         <widget class="QFrame" name="frame_37">
                          <property name="maximumSize">
                           <size>
-                           <width>150</width>
+                           <width>160</width>
                            <height>16777215</height>
                           </size>
                          </property>
@@ -5826,6 +5970,12 @@ QListWidget::item:hover
                             </item>
                             <item>
                              <widget class="QListView" name="runSelectionView">
+                              <property name="maximumSize">
+                               <size>
+                                <width>16777215</width>
+                                <height>200</height>
+                               </size>
+                              </property>
                               <property name="focusPolicy">
                                <enum>Qt::NoFocus</enum>
                               </property>
@@ -5865,6 +6015,97 @@ QListView::item:hover {
                               <property name="title">
                                <string>Information</string>
                               </property>
+                              <layout class="QGridLayout" name="gridLayout_113">
+                               <item row="0" column="0">
+                                <layout class="QGridLayout" name="gridLayout_112">
+                                 <item row="4" column="0">
+                                  <widget class="QLabel" name="label_150">
+                                   <property name="text">
+                                    <string>Average solutions size</string>
+                                   </property>
+                                   <property name="wordWrap">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="4" column="1">
+                                  <widget class="QLabel" name="label_151">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="3" column="0">
+                                  <widget class="QLabel" name="label_148">
+                                   <property name="text">
+                                    <string>Best solution size</string>
+                                   </property>
+                                   <property name="wordWrap">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="2" column="0">
+                                  <widget class="QLabel" name="label_146">
+                                   <property name="text">
+                                    <string>Average solutions error</string>
+                                   </property>
+                                   <property name="wordWrap">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="0" column="0">
+                                  <widget class="QLabel" name="label_144">
+                                   <property name="text">
+                                    <string>Best solution error (RMSE) - Training</string>
+                                   </property>
+                                   <property name="wordWrap">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="3" column="1">
+                                  <widget class="QLabel" name="label_149">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="2" column="1">
+                                  <widget class="QLabel" name="label_147">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="0" column="1">
+                                  <widget class="QLabel" name="label_145">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="1" column="0">
+                                  <widget class="QLabel" name="label_153">
+                                   <property name="text">
+                                    <string>Best solution error (RMSE) - Testing</string>
+                                   </property>
+                                   <property name="wordWrap">
+                                    <bool>true</bool>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                 <item row="1" column="1">
+                                  <widget class="QLabel" name="label_154">
+                                   <property name="text">
+                                    <string>TextLabel</string>
+                                   </property>
+                                  </widget>
+                                 </item>
+                                </layout>
+                               </item>
+                              </layout>
                              </widget>
                             </item>
                            </layout>
@@ -6078,7 +6319,7 @@ QListView::item:hover {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>295</width>
+                                      <width>285</width>
                                       <height>50</height>
                                      </rect>
                                     </property>
@@ -6092,6 +6333,27 @@ QListView::item:hover {
                                      </item>
                                     </layout>
                                    </widget>
+                                  </widget>
+                                 </item>
+                                 <item>
+                                  <widget class="QLabel" name="label_152">
+                                   <property name="maximumSize">
+                                    <size>
+                                     <width>16777215</width>
+                                     <height>25</height>
+                                    </size>
+                                   </property>
+                                   <property name="styleSheet">
+                                    <string notr="true">QLabel {
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 14pt;
+	padding-left: 1px;
+}</string>
+                                   </property>
+                                   <property name="text">
+                                    <string>Solution error (RMSE)</string>
+                                   </property>
                                   </widget>
                                  </item>
                                 </layout>

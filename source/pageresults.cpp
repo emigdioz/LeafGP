@@ -392,3 +392,107 @@ void MainWidget::individualMapSelected(int &ind, int &gen)
   ui->treePopRun->setNodeHoverColor(QColor(148,204,20,255));
   ui->label_139->setText(userExperiment.population[indexRun].tree.at(gen).at(ind).syntaxPrefix);
 }
+
+void MainWidget::setupPerformancePlot()
+{
+	for(int i = 0;i < performancePlotSlices;i++)
+		ui->performanceEPlot->addGraph();
+
+	QPen pen(QColor(232, 236, 242, 255));
+	QPen pen2(QColor(255,174,0,128),2);
+
+	ui->performanceEPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+	ui->performanceEPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+	ui->performanceEPlot->xAxis->setBasePen(pen);
+	ui->performanceEPlot->xAxis->setLabel("Generations");
+	ui->performanceEPlot->xAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
+	ui->performanceEPlot->xAxis->setLabelColor(QColor(45,65,102,255));
+	ui->performanceEPlot->xAxis->setSubTickPen(QColor(232, 236, 242, 255));
+	ui->performanceEPlot->xAxis->setTickPen(pen);
+	ui->performanceEPlot->xAxis->setTicks(true);
+	ui->performanceEPlot->xAxis->setTickLabels(true);
+	ui->performanceEPlot->xAxis->setTickLabelFont(QFont("Roboto",12,QFont::Light));
+	ui->performanceEPlot->xAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->performanceEPlot->xAxis->setTickPen(QColor(255, 255, 255, 255));
+
+	QPen pen3(QColor(232, 236, 242, 255));
+	pen3.setWidth(2);
+	ui->performanceEPlot->yAxis->grid()->setPen(pen3);
+	ui->performanceEPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+	ui->performanceEPlot->yAxis->setSubTickPen(QColor(255, 255, 255, 255));
+	ui->performanceEPlot->yAxis->setBasePen(pen);
+	ui->performanceEPlot->yAxis->setTickLengthIn(0);
+	ui->performanceEPlot->yAxis->setSubTickLengthIn(0);
+	ui->performanceEPlot->yAxis->setTickLabels(true);
+	ui->performanceEPlot->yAxis->setTickLabelFont(QFont("Roboto",12,QFont::Light));
+	ui->performanceEPlot->yAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->performanceEPlot->yAxis->setLabelFont(QFont("Roboto",10,QFont::Light));
+	ui->performanceEPlot->yAxis->setLabelColor(QColor(45,65,102,255));
+	ui->performanceEPlot->yAxis->setLabel("Size");
+
+	ui->performanceEPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+}
+
+void MainWidget::drawPerformancePlot()
+{
+	QColor sliceColor;
+	double X,Y;
+	float startSlice,endSlice;
+	int maxY = 0;
+	float maxFitness = 0;
+	float alphaValue = (128 * exp(-(float)workerAlgorithm->gp_parameters.m_number_of_runs/5));
+	QVector<QCPScatterStyle> qqScatter;
+	QCPScatterStyle shape;
+	for(int i = 0;i < performancePlotSlices;i++)
+		ui->performanceEPlot->graph(i)->clearData();
+	for(int i = 0;i < performancePlotSlices;i++)
+	{
+		sliceColor = QColor::fromHslF((float)i/performancePlotSlices, 0.95, 0.5);
+		sliceColor.setAlpha(alphaValue);
+		shape.setShape(QCPScatterStyle::ssCircle);
+		shape.setPen(Qt::NoPen);
+		shape.setBrush(sliceColor);
+		shape.setSize(6);
+		qqScatter.push_back(shape);
+		ui->performanceEPlot->graph(i)->setLineStyle(QCPGraph::lsNone);
+		ui->performanceEPlot->graph(i)->setScatterStyle(qqScatter[i]);
+	}
+	for(int iRun = 0;iRun < workerAlgorithm->gp_parameters.m_number_of_runs;iRun++)
+	{
+		for(int iGen = 0;iGen < workerAlgorithm->gp_parameters.m_number_of_generations;iGen++)
+		{
+			for(int iInd = 0;iInd < workerAlgorithm->gp_parameters.m_population_size;iInd++)
+			{
+				if(userExperiment.population[iRun].normalizedFitness.at(iGen).at(iInd) > maxFitness)
+					maxFitness = userExperiment.population[iRun].normalizedFitness.at(iGen).at(iInd);
+			}
+		}
+	}
+
+	for(int iRun = 0;iRun < workerAlgorithm->gp_parameters.m_number_of_runs;iRun++)
+	{
+		for(int iGen = 0;iGen < workerAlgorithm->gp_parameters.m_number_of_generations;iGen++)
+		{
+			for(int iInd = 0;iInd < workerAlgorithm->gp_parameters.m_population_size;iInd++)
+			{
+				for(int iSlice = 0;iSlice < performancePlotSlices;iSlice++)
+				{
+					startSlice = ((float)iSlice/performancePlotSlices)*maxFitness;
+					endSlice = ((float)(iSlice + 1)/performancePlotSlices)*maxFitness;
+					if(userExperiment.population[iRun].normalizedFitness.at(iGen).at(iInd) > startSlice &&
+						 userExperiment.population[iRun].normalizedFitness.at(iGen).at(iInd) <= endSlice)
+					{
+						X = iGen;
+						Y = userExperiment.population[iRun].size.at(iGen).at(iInd);
+						ui->performanceEPlot->graph(iSlice)->addData(X,Y);
+					}
+				}
+				if(userExperiment.population[iRun].size.at(iGen).at(iInd) > maxY)
+					maxY = userExperiment.population[iRun].size.at(iGen).at(iInd);
+			}
+		}
+	}
+	ui->performanceEPlot->xAxis->setRange(1,workerAlgorithm->gp_parameters.m_number_of_generations);
+	ui->performanceEPlot->yAxis->setRange(0,maxY + (0.1 * maxY));
+	ui->performanceEPlot->replot();
+}

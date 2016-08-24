@@ -113,6 +113,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	setupBoxplots();
 	setupQualityRunPlot();
 	setupSizeRunPlot();
+	setupPerformancePlot();
 	ui->label_115->setPixmap(drawSmallCircle(QColor(148,204,20,255),10));
 	ui->label_116->setPixmap(drawSmallCircle(QColor(75,143,185,255),10));
 	ui->label_117->setPixmap(drawSmallCircle(QColor(255,174,0,255),10));
@@ -120,6 +121,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->label_119->setPixmap(drawSmallCircle(QColor(188,95,211,255),10));
 	ui->label_123->setPixmap(drawGradient(100,20));
 	ui->label_129->setPixmap(drawGradient(100,20));
+	ui->label_142->setPixmap(drawGradient90(20,100));
 	ui->label_120->show();
 	ui->label_122->show();
 	ui->label_123->show();

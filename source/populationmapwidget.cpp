@@ -98,6 +98,7 @@ void populationMapWidget::addData(gpExperiment::popData input)
 		}
 		qSort(tempGen.begin(),tempGen.end(),[](const Individual& a, const Individual& b) { return a.Fitness > b.Fitness; });
 		Population.append(tempGen);
+		tempGen.clear();
 	}
 	totalGenerations = nGenerations;
 	adjustSize();
@@ -425,6 +426,7 @@ void populationMapWidget::mousePressEvent(QMouseEvent *event)
 		QPoint widgetPosition = mapFromGlobal(event->globalPos());
 		int posX = (widgetPosition.x()-leftMargin)/IndSize;
 		int posY = widgetPosition.y()/IndSize;
+		int id = Population.at(posY).at(posX).Id;
 		if(posX<totalIndividuals && posX >= 0 && posY<totalGenerations)
 		{
 			QPainter painter(&imageMap);
@@ -449,7 +451,7 @@ void populationMapWidget::mousePressEvent(QMouseEvent *event)
 			painter.drawLine(currentIndividual*IndSize+(IndSize/2)+leftMargin,currentGeneration*IndSize+1,currentIndividual*IndSize+(IndSize/2)+leftMargin,currentGeneration*IndSize+IndSize-1);
 			painter.drawLine(currentIndividual*IndSize+1+leftMargin,currentGeneration*IndSize+(IndSize/2),currentIndividual*IndSize+IndSize-1+leftMargin,currentGeneration*IndSize+(IndSize/2));
 			update();
-			emit individualIsSelected(posX,posY);
+			emit individualIsSelected(posX,posY,id);
 		}
 	}
 	if (event->button() == Qt::RightButton)

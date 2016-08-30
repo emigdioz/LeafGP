@@ -140,7 +140,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->label_127->hide();
 	ui->label_128->hide();
 	ui->label_129->hide();
-	connect(ui->populationMapRun, SIGNAL(individualIsSelected(int&,int&)), this, SLOT(individualMapSelected(int&,int&)));
+	connect(ui->populationMapRun, SIGNAL(individualIsSelected(int&,int&,int&)), this, SLOT(individualMapSelected(int&,int&,int&)));
 }
 
 MainWidget::~MainWidget()

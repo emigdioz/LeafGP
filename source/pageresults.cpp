@@ -372,11 +372,27 @@ void MainWidget::on_runSelectionView_clicked(const QModelIndex &index)
   ui->plotSizeRun->replot();
 
   ui->populationMapRun->addData(userExperiment.population[indexRun]);
+
+  ui->label_145->setText(QString::number(userExperiment.population[indexRun].bestNormalizedTrainingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations-1)));
+  ui->label_154->setText(QString::number(userExperiment.population[indexRun].bestNormalizedTestingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations-1)));
+  ui->label_147->setText(QString::number(userExperiment.averageTrainingFitness.at(indexRun)));
+  ui->label_149->setText(QString::number(userExperiment.population[indexRun].bestSize.at(workerAlgorithm->gp_parameters.m_number_of_generations-1)));
+  ui->label_151->setText(QString::number(userExperiment.averageSize.at(indexRun)));
 }
 
-void MainWidget::individualMapSelected(int &ind, int &gen)
+void MainWidget::individualMapSelected(int &ind, int &gen, int &id)
 {
-  selectedTree = userExperiment.population[indexRun].tree.at(gen).at(ind);
+  int unorderedIndex = ind;
+  for(int i = 0;i < workerAlgorithm->gp_parameters.m_population_size;i++)
+  {
+    if(userExperiment.population[indexRun].id.at(gen).at(i) == id)
+    {
+      unorderedIndex = i;
+      qDebug()<<"Found index "<<i;
+      break;
+    }
+  }
+  selectedTree = userExperiment.population[indexRun].tree.at(gen).at(unorderedIndex);
   int nLeaves = 0;
   for (int i = 0; i < selectedTree.name.size(); i++) {
       nLeaves = countLeaves(i, nLeaves);
@@ -390,7 +406,8 @@ void MainWidget::individualMapSelected(int &ind, int &gen)
   ui->treePopRun->setLinkColor(QColor(255,174,0,255));
   ui->treePopRun->setNodeColor(QColor(255,174,0,255));
   ui->treePopRun->setNodeHoverColor(QColor(148,204,20,255));
-  ui->label_139->setText(userExperiment.population[indexRun].tree.at(gen).at(ind).syntaxPrefix);
+  ui->label_139->setText(userExperiment.population[indexRun].tree.at(gen).at(unorderedIndex).syntaxPrefix);
+  ui->label_152->setText("Solution error (RMSE) = " + QString::number(userExperiment.population[indexRun].realFitness.at(gen).at(unorderedIndex)));
 }
 
 void MainWidget::setupPerformancePlot()

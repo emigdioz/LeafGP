@@ -74,6 +74,7 @@
 #include <QVector>
 #include <QString>
 #include "math_stats.h"
+#include <algorithm>
 
 /*
 Definitions:

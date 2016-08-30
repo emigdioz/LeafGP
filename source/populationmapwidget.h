@@ -35,7 +35,7 @@ public:
   void addSingleGeneration(GP::popInfo data);
 
 signals:
-  void individualIsSelected(int &ind, int &gen);
+  void individualIsSelected(int &ind, int &gen, int &id);
 
 protected:
 	void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;

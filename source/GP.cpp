@@ -40,6 +40,8 @@
 #include <QThread>
 #include <QVector>
 
+using namespace std;
+
 Params* GP::m_params = 0;
 
 // -----------------------------------------------------------------------------
@@ -1404,15 +1406,76 @@ float GP::evaluateInstance(const cl_uint *program, int iter)
 		index = INDEX(program[op]);
 		switch(index) {
 			case 0: PUSH_0(AS_FLOAT(NODE)) break;
+			case 1: PUSH_0(AS_INT( NODE )) break;
+			case 2: PUSH_3((int)ARG(0) ? ARG(1) : ARG(2)) break;
 			case 3: PUSH_2(ARG(0) + ARG(1)) break;
-			case 5: PUSH_2(ARG(0)/ARG(1)) break;
+			case 4: PUSH_2(ARG(0) && ARG(1)) break;
+			case 5: PUSH_2((ARG(1) == 0.0f ? 1.0f : ARG(0)/ARG(1))) break;
+			case 6: PUSH_2(ARG(0) == ARG(1)) break;
+			case 7: PUSH_2(fmod(ARG(0), ARG(1))) break;
+			case 8: PUSH_2(ARG(0) > ARG(1)) break;
+			case 9: PUSH_2(ARG(0) >= ARG(1)) break;
+			case 10: PUSH_2(ARG(0) < ARG(1)) break;
+			case 11: PUSH_2(ARG(0) <= ARG(1)) break;
+			case 12: PUSH_2(max(ARG(0), ARG(1))) break;
+			case 13: PUSH_2((ARG(0) + ARG(1))/2.0f) break;
+			case 14: PUSH_2(min(ARG(0), ARG(1))) break;
 			case 15: PUSH_2(ARG(0) - ARG(1)) break;
 			case 16: PUSH_2(ARG(0) * ARG(1)) break;
+			case 17: PUSH_2(ARG(0) != ARG(1)) break;
+			case 18: PUSH_2(ARG(0) || ARG(1)) break;
+			case 19: PUSH_2(pow(ARG(0), ARG(1))) break;
+			case 20: PUSH_2(((ARG(0) <= 0.0f && ARG(1) > 0.0f) || (ARG(0) > 0.0f && ARG(1) <= 0.0f))) break;
+			case 21: PUSH_1(fabs(ARG(0))) break;
+			case 22: PUSH_1(ceil(ARG(0))) break;
 			case 23: PUSH_1(cos(ARG(0))) break;
 			case 24: PUSH_1(exp(ARG(0))) break;
+			case 25: PUSH_1(exp10(ARG(0))) break;
+			case 26: PUSH_1(exp2(ARG(0))) break;
+			case 27: PUSH_1(floor(ARG(0))) break;
+			case 28: PUSH_1(ARG(0) * ARG(0)) break;
+			case 29: PUSH_1(ARG(0) * ARG(0) * ARG(0)) break;
+			case 30: PUSH_1(ARG(0) * ARG(0) * ARG(0) * ARG(0)) break;
+			case 31: PUSH_1((ARG(0) < 1.0f ? 1.0f : log(ARG(0)))) break;
+			case 32: PUSH_1((ARG(0) < 1.0f ? 1.0f : log10(ARG(0)))) break;
+			case 33: PUSH_1((ARG(0) < 1.0f ? 1.0f : log2(ARG(0)))) break;
+			case 34: PUSH_1(-ARG(0)) break;
+			case 35: PUSH_1(!(int)ARG(0)) break;
+			case 36: PUSH_1(round(ARG(0))) break;
 			case 37: PUSH_1(sin(ARG(0))) break;
-			case 38: PUSH_1(sqrt(ARG(0))) break;
+			case 38: PUSH_1((ARG(0) < 0.0f ? 1.0f : sqrt(ARG(0)))) break;
 			case 39: PUSH_1(tan(ARG(0))) break;
+			case 40: PUSH_1((ARG(0) >= 0.0f)) break;
+			case 41: PUSH_1((ARG(0) > 0.0f ? 1.0f : (ARG(0) < 0.0f ? -1.0f : 0.0f))) break;
+			case 42: PUSH_1((1.0f/(1.0f + exp(-ARG(0))))) break;
+			case 43: PUSH_1((ARG(0)*ARG(0)/(1.0f + ARG(0)*ARG(0)))) break;
+			case 44: PUSH_1(pow((ARG(0)/2.71828174591064f)*sqrt(ARG(0)*sinh(1/ARG(0))),ARG(0))*sqrt(2*3.14159274101257f/ARG(0))) break;
+			case 45: PUSH_1(exp(-ARG(0)*ARG(0))) break;
+			case 46: PUSH_0(-1.0f) break;
+			case 47: PUSH_0(-2.0f) break;
+			case 48: PUSH_0(-3.0f) break;
+			case 49: PUSH_0(0.0f) break;
+			case 50: PUSH_0(1.0f) break;
+			case 51: PUSH_0(0.31830987334251f) break;
+			case 52: PUSH_0(2.0f) break;
+			case 53: PUSH_0(0.63661974668503f) break;
+			case 54: PUSH_0(1.12837922573090f) break;
+			case 55: PUSH_0(3.0f) break;
+			case 56: PUSH_0(1.202056903159594f) break;
+			case 57: PUSH_0(0.915965594177219f) break;
+			case 58: PUSH_0(2.71828174591064f) break;
+			case 59: PUSH_0(0.5772156649015329f) break;
+			case 60: PUSH_0(1.618033988749895f) break;
+			case 61: PUSH_0(2.30258512496948f) break;
+			case 62: PUSH_0(0.69314718246460f) break;
+			case 63: PUSH_0(0.43429449200630f) break;
+			case 64: PUSH_0(1.44269502162933f) break;
+			case 65: PUSH_0(0.5671432904097839f) break;
+			case 66: PUSH_0(3.14159274101257f) break;
+			case 67: PUSH_0(1.57079637050629f) break;
+			case 68: PUSH_0(0.78539818525314f) break;
+			case 69: PUSH_0(0.70710676908493f) break;
+			case 70: PUSH_0(1.41421353816986f) break;
 			case 127: PUSH_0(input_data_matrix.at(iter).at(AS_INT(program[op]))) break;
 		}
 	}

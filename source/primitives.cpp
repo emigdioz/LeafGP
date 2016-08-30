@@ -43,7 +43,7 @@ Primitives::Primitives(): m_need_identity( false ),
       there is a philosophical question here: should a program encoding bad
       combinations (or allowing bad inputs) be considered a possibly good one?
     */
-#define UNPROTECTED_FUNCTIONS 1
+//#define UNPROTECTED_FUNCTIONS 1
 
    /* The first two primitives are special, they need to be the first ones. */
    Register( 0, "ephemeral",    "ephemeral",    "AS_FLOAT( NODE )" );
@@ -104,6 +104,7 @@ Primitives::Primitives(): m_need_identity( false ),
    Register( 1, "tan",          "tan",          "tan(ARG(0))", "native_tan(ARG(0))" );
 #else
    Register( 1, "sqrt",         "sqrt",         "(ARG(0) < 0.0f ? 1.0f : sqrt(ARG(0)))", "(ARG(0) < 0.0f ? 1.0f : native_sqrt(ARG(0)))"  );
+   Register( 1, "tan",          "tan",          "tan(ARG(0))", "native_tan(ARG(0))" );  // can produce undetermined results
 #endif
    Register( 1, "step",         "step",         "(ARG(0) >= 0.0f)" );
    Register( 1, "sign",         "sign",         "(ARG(0) > 0.0f ? 1.0f : (ARG(0) < 0.0f ? -1.0f : 0.0f))" );

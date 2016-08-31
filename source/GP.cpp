@@ -337,6 +337,13 @@ void GP::Evolve()
    PrintProgramPretty( m_best_program );
    std::cout << std::endl;
 
+// ************ Test code for CMA-ES LS approach *****************************************
+
+   executeLS(m_best_program);
+
+
+// ***************************************************************************************
+
    // Clean up
    for(int i = 0; i < (m_params->m_population_size * MaximumProgramSize());++i)
    {
@@ -1522,4 +1529,153 @@ void GP::compressOutputPairs(std::vector<float> actual, std::vector<float> expec
 	avg_exp = partial_exp / sliceLength;
 	actual_compressed.push_back(avg_act);
 	expected_compressed.push_back(avg_exp);
+}
+
+float GP::executeLS(const cl_uint *program)
+{
+	CMAES<double> evo;
+	double *arFunvals, *const*pop, *xfinal;
+	double fmean;
+	int programSize = ProgramSize(program);
+	// Initialize everything
+	const int dim = programSize;
+	double xstart[dim];
+	for(int i=0; i<dim; i++) xstart[i] = 1;
+	double stddev[dim];
+	for(int i=0; i<dim; i++) stddev[i] = 0.3;
+	Parameters<double> parameters;
+	parameters.lambda = 20;
+	parameters.stopMaxIter = 300;
+	parameters.init(dim, xstart, stddev);
+	arFunvals = evo.init(parameters);
+
+  while(!evo.testForTermination())
+  {
+    pop = evo.samplePopulation();
+    for (int i = 0; i < evo.get(CMAES<double>::Lambda); ++i)
+      arFunvals[i] = fitnessCMAES(pop[i],program,programSize);
+    evo.updateDistribution(arFunvals);
+  }
+  xfinal = evo.getNew(CMAES<double>::XMean);
+  fmean = fitnessCMAES(evo.getPtr(CMAES<double>::XMean),program,programSize);
+  qDebug()<<(int) evo.get(CMAES<double>::Generation)<<" generations";
+  qDebug()<<"CMA-ES best fitness = "<<evo.get(CMAES<double>::FBestEver);
+  qDebug()<<"CMA-ES xmean fitness = "<<fmean;
+}
+
+double GP::fitnessCMAES(const double *x, const cl_uint *program, int N)
+{
+	float expectedOutput;
+	float actualOutput;
+	float partial_error = 0.0f;
+//	for(int k = 0;k < N;k++)
+//		qDebug()<<"par["<<k<<"]="<<x[k];
+	for( uint iter = 0; iter < m_num_points; iter++ )
+	{
+		expectedOutput = input_data_matrix.at(iter).at(m_x_dim);
+		actualOutput = evaluateInstanceCMAES(program,iter,x);
+		partial_error += pow( expectedOutput - actualOutput, 2 );
+	}
+	return sqrt(partial_error/m_num_points);
+}
+
+float GP::evaluateInstanceCMAES(const cl_uint *program, int iter, const double *v)
+{
+  unsigned max_stack_size = std::max( 1U, static_cast<unsigned>( MaximumTreeSize() -
+                                          std::floor(MaximumTreeSize() /
+                                          (float) std::min( m_primitives.m_max_arity, MaximumTreeSize() ) ) ) );
+  int index;
+  #define X_DIM m_x_dim
+  #define POP       ( stack[stack_top--] )
+  //#define PUSH(arity, exp) stack[stack_top + 1 - arity] = (exp); stack_top += 1 - arity;
+  #define PUSH_0( value ) stack[++stack_top] = value;
+  #define PUSH_1( exp ) stack[stack_top] = exp;
+  #define PUSH_2( exp ) stack[stack_top - 1] = exp; --stack_top;
+  #define PUSH_3( exp ) stack[stack_top - 2] = exp; stack_top -= 2;
+  #define ARG(n) (stack[stack_top - n])
+  #define STACK_SIZE max_stack_size
+  #define CREATE_STACK float stack[STACK_SIZE]; int stack_top = -1;
+  #define NODE program[op]
+
+	CREATE_STACK
+	float error = 0.0f;
+	for(int op = ProgramSize(program); op > 0; op--)
+	{
+		index = INDEX(program[op]);
+		switch(index) {
+			case 0: PUSH_0(v[op]*AS_FLOAT(NODE)) break;
+			case 1: PUSH_0(AS_INT( NODE )) break;
+			case 2: PUSH_3((int)ARG(0) ? ARG(1) : ARG(2)) break;
+			case 3: PUSH_2(v[op]*(ARG(0) + ARG(1))) break;
+			case 4: PUSH_2(ARG(0) && ARG(1)) break;
+			case 5: PUSH_2((ARG(1) == 0.0f ? v[op]*1.0f : v[op]*(ARG(0)/ARG(1)))) break;
+			case 6: PUSH_2(ARG(0) == ARG(1)) break;
+			case 7: PUSH_2(fmod(ARG(0), ARG(1))) break;
+			case 8: PUSH_2(ARG(0) > ARG(1)) break;
+			case 9: PUSH_2(ARG(0) >= ARG(1)) break;
+			case 10: PUSH_2(ARG(0) < ARG(1)) break;
+			case 11: PUSH_2(ARG(0) <= ARG(1)) break;
+			case 12: PUSH_2(max(ARG(0), ARG(1))) break;
+			case 13: PUSH_2((ARG(0) + ARG(1))/2.0f) break;
+			case 14: PUSH_2(min(ARG(0), ARG(1))) break;
+			case 15: PUSH_2(v[op]*(ARG(0) - ARG(1))) break;
+			case 16: PUSH_2(v[op]*(ARG(0) * ARG(1))) break;
+			case 17: PUSH_2(ARG(0) != ARG(1)) break;
+			case 18: PUSH_2(ARG(0) || ARG(1)) break;
+			case 19: PUSH_2(pow(ARG(0), ARG(1))) break;
+			case 20: PUSH_2(((ARG(0) <= 0.0f && ARG(1) > 0.0f) || (ARG(0) > 0.0f && ARG(1) <= 0.0f))) break;
+			case 21: PUSH_1(fabs(ARG(0))) break;
+			case 22: PUSH_1(ceil(ARG(0))) break;
+			case 23: PUSH_1(v[op]*cos(ARG(0))) break;
+			case 24: PUSH_1(v[op]*exp(ARG(0))) break;
+			case 25: PUSH_1(exp10(ARG(0))) break;
+			case 26: PUSH_1(exp2(ARG(0))) break;
+			case 27: PUSH_1(floor(ARG(0))) break;
+			case 28: PUSH_1(ARG(0) * ARG(0)) break;
+			case 29: PUSH_1(ARG(0) * ARG(0) * ARG(0)) break;
+			case 30: PUSH_1(ARG(0) * ARG(0) * ARG(0) * ARG(0)) break;
+			case 31: PUSH_1((ARG(0) < 1.0f ? 1.0f : log(ARG(0)))) break;
+			case 32: PUSH_1((ARG(0) < 1.0f ? 1.0f : log10(ARG(0)))) break;
+			case 33: PUSH_1((ARG(0) < 1.0f ? 1.0f : log2(ARG(0)))) break;
+			case 34: PUSH_1(-ARG(0)) break;
+			case 35: PUSH_1(!(int)ARG(0)) break;
+			case 36: PUSH_1(round(ARG(0))) break;
+			case 37: PUSH_1(v[op]*sin(ARG(0))) break;
+			case 38: PUSH_1((ARG(0) < 0.0f ? v[op]*1.0f : v[op]*sqrt(ARG(0)))) break;
+			case 39: PUSH_1(v[op]*tan(ARG(0))) break;
+			case 40: PUSH_1((ARG(0) >= 0.0f)) break;
+			case 41: PUSH_1((ARG(0) > 0.0f ? 1.0f : (ARG(0) < 0.0f ? -1.0f : 0.0f))) break;
+			case 42: PUSH_1((1.0f/(1.0f + exp(-ARG(0))))) break;
+			case 43: PUSH_1((ARG(0)*ARG(0)/(1.0f + ARG(0)*ARG(0)))) break;
+			case 44: PUSH_1(pow((ARG(0)/2.71828174591064f)*sqrt(ARG(0)*sinh(1/ARG(0))),ARG(0))*sqrt(2*3.14159274101257f/ARG(0))) break;
+			case 45: PUSH_1(exp(-ARG(0)*ARG(0))) break;
+			case 46: PUSH_0(-1.0f) break;
+			case 47: PUSH_0(-2.0f) break;
+			case 48: PUSH_0(-3.0f) break;
+			case 49: PUSH_0(0.0f) break;
+			case 50: PUSH_0(1.0f) break;
+			case 51: PUSH_0(0.31830987334251f) break;
+			case 52: PUSH_0(2.0f) break;
+			case 53: PUSH_0(0.63661974668503f) break;
+			case 54: PUSH_0(1.12837922573090f) break;
+			case 55: PUSH_0(3.0f) break;
+			case 56: PUSH_0(1.202056903159594f) break;
+			case 57: PUSH_0(0.915965594177219f) break;
+			case 58: PUSH_0(2.71828174591064f) break;
+			case 59: PUSH_0(0.5772156649015329f) break;
+			case 60: PUSH_0(1.618033988749895f) break;
+			case 61: PUSH_0(2.30258512496948f) break;
+			case 62: PUSH_0(0.69314718246460f) break;
+			case 63: PUSH_0(0.43429449200630f) break;
+			case 64: PUSH_0(1.44269502162933f) break;
+			case 65: PUSH_0(0.5671432904097839f) break;
+			case 66: PUSH_0(3.14159274101257f) break;
+			case 67: PUSH_0(1.57079637050629f) break;
+			case 68: PUSH_0(0.78539818525314f) break;
+			case 69: PUSH_0(0.70710676908493f) break;
+			case 70: PUSH_0(1.41421353816986f) break;
+			case 127: PUSH_0(input_data_matrix.at(iter).at(AS_INT(program[op]))) break;
+		}
+	}
+	return POP;
 }

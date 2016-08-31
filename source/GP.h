@@ -75,6 +75,7 @@
 #include <QString>
 #include "math_stats.h"
 #include <algorithm>
+#include "cmaes.h"
 
 /*
 Definitions:
@@ -176,6 +177,9 @@ public:
   float evaluateInstance(const cl_uint* program, int iter);
   void compressOutputPairs(std::vector<float> actual, std::vector<float> expected, std::vector<double> &actual_compressed, std::vector<double> &expected_compressed);
   void randomlySplitData(std::vector<std::vector<float> > original, int ratio);
+  float executeLS(const cl_uint *program);
+  double fitnessCMAES(double const *x, const cl_uint *program, int N);
+  float evaluateInstanceCMAES(const cl_uint* program, int iter, const double *v);
 
   int dataPartitionType;  
   std::vector<std::vector<float> > input_data_matrix;

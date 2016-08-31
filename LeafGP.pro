@@ -16,7 +16,8 @@ LIBS += -lOpenCL
 INCLUDEPATH += ./source \
              ./source/alglib \
              ./source/CL \
-             ./source/matio
+             ./source/matio \
+             ./source/cmaes
 
 SOURCES += source/main.cpp \
     source/mainwidget.cpp \
@@ -121,7 +122,12 @@ HEADERS  += source/mainwidget.h \
     source/matio/matio_private.h \
     source/matio/matio_pubconf.h \
     source/matio/matioConfig.h \
-    source/gpexperiment.h
+    source/gpexperiment.h \
+    source/cmaes/cmaes.h \
+    source/cmaes/parameters.h \
+    source/cmaes/timings.h \
+    source/cmaes/utils.h \
+    source/cmaes/randomCMAES.h
 
 FORMS    += source/mainwidget.ui
 

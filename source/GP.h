@@ -76,6 +76,7 @@
 #include "math_stats.h"
 #include <algorithm>
 #include "cmaes.h"
+#include "optimization.h"
 
 /*
 Definitions:
@@ -177,12 +178,18 @@ public:
   float evaluateInstance(const cl_uint* program, int iter);
   void compressOutputPairs(std::vector<float> actual, std::vector<float> expected, std::vector<double> &actual_compressed, std::vector<double> &expected_compressed);
   void randomlySplitData(std::vector<std::vector<float> > original, int ratio);
-  float executeLS(const cl_uint *program);
+  float executeLS_CMAES(const cl_uint *program);
+  float executeLS_LM(const cl_uint *program);
   double fitnessCMAES(double const *x, const cl_uint *program, int N);
+  static void fitnessLM(const alglib::real_1d_array &x, alglib::real_1d_array &fi, void *ptr);
   float evaluateInstanceCMAES(const cl_uint* program, int iter, const double *v);
+  static float evaluateInstanceLM(const cl_uint* program, int iter, const double *v);
+  static const cl_uint *program_GLOBAL;
+  static int programSize_GLOBAL;
 
   int dataPartitionType;  
   std::vector<std::vector<float> > input_data_matrix;
+  static std::vector<std::vector<float> > input_data_matrix_GLOBAL;
   std::vector<std::vector<float> > training_data;
   std::vector<std::vector<float> > testing_data;
   std::vector<std::vector<float> > original_input_data_matrix;
@@ -394,8 +401,10 @@ protected:
    void LoadKernel( const char* file );
 public:
    unsigned m_num_points; /**< Total number of data (training) points. */
-	unsigned m_num_points_testing; /**< Total number of data (testing) points. */
+   static unsigned m_num_points_GLOBAL; /**< Total number of data (training) points. */
+   unsigned m_num_points_testing; /**< Total number of data (testing) points. */
    unsigned m_x_dim; /**< Number of input variables. */
+   static unsigned m_x_dim_GLOBAL; /**< Number of input variables. */
    unsigned m_y_dim; /**< Number of output variables. Currently, always = 1. */
 
    std::vector<cl_float> m_Y;   

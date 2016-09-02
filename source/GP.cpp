@@ -339,7 +339,8 @@ void GP::Evolve()
 
 // ************ Test code for CMA-ES LS approach *****************************************
 
-   executeLS(m_best_program);
+   //executeLS_CMAES(m_best_program);
+   executeLS_LM(m_best_program);
 
 
 // ***************************************************************************************
@@ -1531,7 +1532,7 @@ void GP::compressOutputPairs(std::vector<float> actual, std::vector<float> expec
 	expected_compressed.push_back(avg_exp);
 }
 
-float GP::executeLS(const cl_uint *program)
+float GP::executeLS_CMAES(const cl_uint *program)
 {
 	CMAES<double> evo;
 	double *arFunvals, *const*pop, *xfinal;
@@ -1678,4 +1679,33 @@ float GP::evaluateInstanceCMAES(const cl_uint *program, int iter, const double *
 		}
 	}
 	return POP;
+}
+
+float GP::executeLS_LM(const cl_uint *program)
+{
+	int nNodes = ProgramSize(program);
+	alglib::real_1d_array x = "[0,0]";
+	double epsg = 0.0000000001;
+	double epsf = 0;
+	double epsx = 0;
+	alglib::ae_int_t maxits = 0;
+	alglib::minlmstate state;
+	alglib::minlmreport rep;
+
+	x.setlength(nNodes);
+	for(int i = 0;i < nNodes;i++)
+		x[i] = 1; // Initial states
+//	program_GLOBAL = program;
+//	m_num_points_GLOBAL = m_num_points;
+//	input_data_matrix_GLOBAL = input_data_matrix;
+//	m_x_dim_GLOBAL = m_x_dim;
+//	programSize_GLOBAL = nNodes;
+
+	alglib::minlmcreatev(nNodes, x, 0.0001, state);
+	alglib::minlmsetcond(state, epsg, epsf, epsx, maxits);
+	//alglib::minlmoptimize(state, fitnessLM);
+	alglib::minlmresults(state, x, rep);
+
+	qDebug()<<int(rep.terminationtype);
+	qDebug()<<x.tostring(2).c_str();
 }

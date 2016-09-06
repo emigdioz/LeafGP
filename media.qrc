@@ -55,5 +55,6 @@
         <file>resources/images/checkbox_checkeddisabled.png</file>
         <file>resources/images/icon_app</file>
         <file>resources/images/icon_app_big</file>
+        <file>resources/images/leafgplogo.png</file>
     </qresource>
 </RCC>

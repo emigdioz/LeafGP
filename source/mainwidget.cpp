@@ -577,3 +577,4 @@ void MainWidget::resetDefaultGPParameters()
   ui->populationMap->setTotalGenerations(100);
 
 }
+

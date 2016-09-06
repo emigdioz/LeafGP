@@ -24,6 +24,7 @@
 #include "gpexperiment.h"
 #include <QVector>
 #include "qcustomplot.h"
+#include <QPrinter>
 
 namespace Ui {
 class MainWidget;
@@ -90,6 +91,8 @@ private slots:
 	void on_listWidgetResults_currentRowChanged(int currentRow);
 	void on_runSelectionView_clicked(const QModelIndex &index);
 	void individualMapSelected(int &ind, int &gen, int &id);
+
+	void on_pushButton_9_clicked();
 
 private:
 	Ui::MainWidget *ui;

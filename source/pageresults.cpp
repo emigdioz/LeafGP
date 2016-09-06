@@ -513,3 +513,32 @@ void MainWidget::drawPerformancePlot()
 	ui->performanceEPlot->yAxis->setRange(0,maxY + (0.1 * maxY));
 	ui->performanceEPlot->replot();
 }
+
+void MainWidget::on_pushButton_9_clicked()
+{
+  QPrinter printer(QPrinter::HighResolution); //create your QPrinter (don't need to be high resolution, anyway)
+  printer.setPageSize(QPrinter::Letter);
+  printer.setOrientation(QPrinter::Portrait);
+  printer.setPageMargins (15,15,15,15,QPrinter::Millimeter);
+  printer.setFullPage(false);
+  printer.setOutputFileName("output.pdf");
+  printer.setOutputFormat(QPrinter::PdfFormat); //you can use native format of system usin QPrinter::NativeFormat
+
+  int width = printer.pageRect().width();
+  int height = printer.pageRect().height();
+  QImage image(":/icons/resources/images/leafgplogo.png");
+  int logoWidth = image.width();
+  int logoHeight = image.height();
+  float ratioLogo = (float)logoHeight/logoWidth;
+  QRectF source(image.rect());
+  QRectF target(width/20,200,width/5,(width/5)*ratioLogo);
+
+  QPainter painter(&printer); // create a painter which will paint 'on printer'.
+  painter.fillRect(0,0,width,height/10,QBrush(QColor(45,65,102,255)));
+  painter.drawImage(target,image,source);
+  painter.setFont(QFont("Roboto",18,QFont::Light));
+  painter.setPen(QPen(Qt::white));
+  painter.drawText(width/2,1000,"Report");
+  painter.end();
+  qDebug()<<width<<" x "<<height;
+}

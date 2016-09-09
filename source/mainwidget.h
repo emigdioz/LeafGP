@@ -25,6 +25,7 @@
 #include <QVector>
 #include "qcustomplot.h"
 #include <QPrinter>
+#include "filecontainer.h"
 
 namespace Ui {
 class MainWidget;
@@ -46,6 +47,7 @@ public:
 	std::vector<std::vector<float> > input_data_matrix;
 	gpExperiment userExperiment;
 	int indexRun;
+	fileContainer projectFile;
 
 public slots:
 	void receivedRunProgress(int value, int run);
@@ -116,6 +118,7 @@ private:
 	void setupPerformancePlot(void);
 	void populateTerminalList(void);
 	void populateRunsSelectionList(void);
+	void populateDataForContainer(void);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
 	int tableSummarySelectionType;

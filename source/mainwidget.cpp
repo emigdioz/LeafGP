@@ -18,6 +18,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	qRegisterMetaType<GP::treeStruct>();
 	qRegisterMetaType<GP::basicInfo>();
 	qRegisterMetaType<GP::popInfo>();
+	//qRegisterMetaType<gpExperiment>();
 
 	ui->tableViewDataSummary->setContextMenuPolicy(Qt::CustomContextMenu);
 	ui->listFunctionsTarget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -141,6 +142,23 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->label_128->hide();
 	ui->label_129->hide();
 	connect(ui->populationMapRun, SIGNAL(individualIsSelected(int&,int&,int&)), this, SLOT(individualMapSelected(int&,int&,int&)));
+
+	// ***** Temporal
+
+//	projectFile.insertHeader(0xA0B0C0D0);
+//	projectFile.insertVersion(123);
+
+//	section Population;
+//	Population.name = "Example";
+//	projectFile.insertSection(Population);
+
+
+//	projectFile.write("test.bin");
+
+	projectFile.read("test.bin");
+	QList<section> posSections;
+	projectFile.extractSections(posSections);
+
 }
 
 MainWidget::~MainWidget()

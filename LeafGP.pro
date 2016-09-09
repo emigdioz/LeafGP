@@ -68,7 +68,8 @@ SOURCES += source/main.cpp \
     source/matio/read_data.c \
     source/matio/snprintf.c \
     source/gpexperiment.cpp \
-    source/pageresults.cpp
+    source/pageresults.cpp \
+    source/filecontainer.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -127,7 +128,8 @@ HEADERS  += source/mainwidget.h \
     source/cmaes/parameters.h \
     source/cmaes/timings.h \
     source/cmaes/utils.h \
-    source/cmaes/randomCMAES.h
+    source/cmaes/randomCMAES.h \
+    source/filecontainer.h
 
 FORMS    += source/mainwidget.ui
 

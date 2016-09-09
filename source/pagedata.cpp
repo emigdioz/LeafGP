@@ -44,6 +44,7 @@ void MainWidget::on_loadButton_pressed()
 			updateOtherPlots(0,0);
 			populateTerminalList();
 			populateDataForGP();
+			populateDataForContainer();
 		}
 }
 
@@ -95,6 +96,7 @@ void MainWidget::on_comboBox_activated(int index)
 		updateOtherPlots(0,0);
 		populateTerminalList();
 		populateDataForGP();
+		populateDataForContainer();
 	}
 }
 
@@ -119,6 +121,25 @@ void MainWidget::populateDataForGP()
 		userExperiment.dataX.push_back(line_data2);
 		userExperiment.dataY.push_back(inputData.model->item(j,nCols)->text().toFloat());
 	}
+}
+
+void MainWidget::populateDataForContainer()
+{
+	QVector<QVector<float> > buffer;
+	int nRows = inputData.getSamples();
+	int nCols = inputData.getFeatures() + 1;
+	for(int j = 0;j < nRows; j++)
+	{
+		QVector<float> line_data;
+		for(int i = 0;i < nCols; i++)
+			line_data.push_back(inputData.model->item(j,i)->text().toFloat());
+		buffer.push_back(line_data);
+	}
+	projectFile.insertDataset(buffer);
+	projectFile.insertHeader(0xA0B0C0D0);
+	projectFile.insertVersion(123);
+
+	projectFile.write("test.bin");
 }
 
 void MainWidget::populateTerminalList()

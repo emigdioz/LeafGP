@@ -106,6 +106,9 @@ void MainWidget::algorithmFinished()
   QModelIndex Index= ui->runSelectionView->model()->index(0,0);
   ui->runSelectionView->selectionModel()->select( Index, QItemSelectionModel::Select );
   on_runSelectionView_clicked(Index);
+
+  validDataProject = true;
+
 }
 
 void MainWidget::drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY)

@@ -48,6 +48,8 @@ public:
 	gpExperiment userExperiment;
 	int indexRun;
 	fileContainer projectFile;
+	bool validDataProject;
+	QString projectFilename;
 
 public slots:
 	void receivedRunProgress(int value, int run);
@@ -95,6 +97,10 @@ private slots:
 	void individualMapSelected(int &ind, int &gen, int &id);
 
 	void on_pushButton_9_clicked();
+
+	void on_pushButton_12_clicked();
+
+	void on_pushButton_13_clicked();
 
 private:
 	Ui::MainWidget *ui;

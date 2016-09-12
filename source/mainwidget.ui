@@ -717,7 +717,7 @@ QSlider::sub-page:horizontal {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -4529,8 +4529,8 @@ QListWidget::item:hover
                           <rect>
                            <x>0</x>
                            <y>0</y>
-                           <width>754</width>
-                           <height>50</height>
+                           <width>29</width>
+                           <height>36</height>
                           </rect>
                          </property>
                          <layout class="QGridLayout" name="gridLayout_73">
@@ -5471,7 +5471,7 @@ QListWidget::item:hover
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="pageResultsSimple">
            <layout class="QGridLayout" name="gridLayout_15">
@@ -6332,8 +6332,8 @@ QListView::item:hover {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>33</width>
-                                      <height>30</height>
+                                      <width>285</width>
+                                      <height>50</height>
                                      </rect>
                                     </property>
                                     <layout class="QGridLayout" name="gridLayout_108">
@@ -6401,8 +6401,8 @@ QListView::item:hover {
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>26</width>
-                                 <height>26</height>
+                                 <width>178</width>
+                                 <height>266</height>
                                 </rect>
                                </property>
                                <layout class="QGridLayout" name="gridLayout_107">
@@ -6510,7 +6510,127 @@ QListView::item:hover {
                      </item>
                     </layout>
                    </widget>
-                   <widget class="QWidget" name="pageSaving"/>
+                   <widget class="QWidget" name="pageSaving">
+                    <layout class="QGridLayout" name="gridLayout_123">
+                     <item row="0" column="0">
+                      <layout class="QVBoxLayout" name="verticalLayout_39">
+                       <item>
+                        <widget class="QFrame" name="frame_42">
+                         <property name="maximumSize">
+                          <size>
+                           <width>16777215</width>
+                           <height>80</height>
+                          </size>
+                         </property>
+                         <property name="frameShape">
+                          <enum>QFrame::NoFrame</enum>
+                         </property>
+                         <property name="frameShadow">
+                          <enum>QFrame::Raised</enum>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_119">
+                          <item row="0" column="0">
+                           <layout class="QGridLayout" name="gridLayout_120">
+                            <item row="0" column="1">
+                             <widget class="QLineEdit" name="lineEdit_9">
+                              <property name="minimumSize">
+                               <size>
+                                <width>0</width>
+                                <height>24</height>
+                               </size>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>16777215</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="0" column="0">
+                             <widget class="QLabel" name="label_160">
+                              <property name="text">
+                               <string>Filename</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="0" column="2">
+                             <widget class="QPushButton" name="pushButton_12">
+                              <property name="text">
+                               <string>Browse...</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QGroupBox" name="groupBox_22">
+                         <property name="title">
+                          <string>Select elements</string>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_121">
+                          <item row="0" column="0">
+                           <layout class="QGridLayout" name="gridLayout_122">
+                            <item row="4" column="0">
+                             <spacer name="verticalSpacer_16">
+                              <property name="orientation">
+                               <enum>Qt::Vertical</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                               <size>
+                                <width>20</width>
+                                <height>40</height>
+                               </size>
+                              </property>
+                             </spacer>
+                            </item>
+                            <item row="0" column="0">
+                             <widget class="QCheckBox" name="checkBox_12">
+                              <property name="text">
+                               <string>Dataset</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="1" column="0">
+                             <widget class="QCheckBox" name="checkBox_13">
+                              <property name="text">
+                               <string>GP settings</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="2" column="0">
+                             <widget class="QCheckBox" name="checkBox_11">
+                              <property name="text">
+                               <string>Population (warning! file size can increase considerably)</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item row="3" column="0">
+                             <widget class="QCheckBox" name="checkBox_14">
+                              <property name="text">
+                               <string>Summary</string>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QPushButton" name="pushButton_13">
+                       <property name="text">
+                        <string>Save</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
                   </widget>
                  </item>
                 </layout>

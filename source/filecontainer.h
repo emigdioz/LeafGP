@@ -24,10 +24,12 @@
 #include <QList>
 #include <QVector>
 #include "gpexperiment.h"
+#include "GP.h"
 
 #define SECTION_DATASET    0
 #define SECTION_SETTINGS   1
-#define SECTION_EXPERIMENT 2
+#define SECTION_POPULATION 2
+#define SECTION_SUMMARY    3
 
 class section
 {
@@ -54,7 +56,9 @@ public:
   void insertHeader(quint32 value);
   void insertVersion(qint32 value);
   void insertDataset(QVector<QVector<float> > data);
-  void insertExperiment(gpExperiment data);
+  void insertSettings(gpExperiment data);
+  void insertPopulation(gpExperiment data);
+  void insertSummary(gpExperiment data);
   void write(QString filename);
   void read(QString filename);
   quint32 extractHeader(void);

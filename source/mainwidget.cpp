@@ -143,6 +143,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	ui->label_129->hide();
 	connect(ui->populationMapRun, SIGNAL(individualIsSelected(int&,int&,int&)), this, SLOT(individualMapSelected(int&,int&,int&)));
 
+	validDataProject = false;
 	// ***** Temporal
 
 //	projectFile.insertHeader(0xA0B0C0D0);
@@ -155,9 +156,9 @@ MainWidget::MainWidget(QWidget *parent) :
 
 //	projectFile.write("test.bin");
 
-	projectFile.read("test.bin");
-	QList<section> posSections;
-	projectFile.extractSections(posSections);
+//	projectFile.read("test.bin");
+//	QList<section> posSections;
+//	projectFile.extractSections(posSections);
 
 }
 
@@ -596,3 +597,45 @@ void MainWidget::resetDefaultGPParameters()
 
 }
 
+
+void MainWidget::on_pushButton_13_clicked()
+{
+  QMessageBox msgBox;
+  //validDataProject = true;
+  if(validDataProject)
+  {
+    if(!projectFilename.isEmpty())
+    {
+      if(ui->checkBox_11->isChecked() || ui->checkBox_12->isChecked() || ui->checkBox_13->isChecked() || ui->checkBox_14->isChecked())
+      {
+        projectFile.listSections.clear();
+        projectFile.insertHeader(0xA0B0C0D0);
+        projectFile.insertVersion(501);
+        if(ui->checkBox_11->isChecked())
+          projectFile.insertPopulation(userExperiment);
+        if(ui->checkBox_12->isChecked())
+          populateDataForContainer();
+        if(ui->checkBox_13->isChecked())
+          projectFile.insertSettings(userExperiment);
+        if(ui->checkBox_14->isChecked())
+          projectFile.insertSummary(userExperiment);
+        projectFile.write(projectFilename);
+      }
+      else
+      {
+        msgBox.setText("At least one element has to be selected.");
+        msgBox.exec();
+      }
+    }
+    else
+    {
+      msgBox.setText("Please input a file name.");
+      msgBox.exec();
+    }
+  }
+  else
+  {
+    msgBox.setText("No data has been processed.");
+    msgBox.exec();
+  }
+}

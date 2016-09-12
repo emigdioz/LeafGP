@@ -44,7 +44,7 @@ void MainWidget::on_loadButton_pressed()
 			updateOtherPlots(0,0);
 			populateTerminalList();
 			populateDataForGP();
-			populateDataForContainer();
+			//populateDataForContainer();
 		}
 }
 
@@ -96,7 +96,7 @@ void MainWidget::on_comboBox_activated(int index)
 		updateOtherPlots(0,0);
 		populateTerminalList();
 		populateDataForGP();
-		populateDataForContainer();
+		//populateDataForContainer();
 	}
 }
 
@@ -136,10 +136,6 @@ void MainWidget::populateDataForContainer()
 		buffer.push_back(line_data);
 	}
 	projectFile.insertDataset(buffer);
-	projectFile.insertHeader(0xA0B0C0D0);
-	projectFile.insertVersion(123);
-
-	projectFile.write("test.bin");
 }
 
 void MainWidget::populateTerminalList()

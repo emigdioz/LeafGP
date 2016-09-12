@@ -542,3 +542,61 @@ void MainWidget::on_pushButton_9_clicked()
   painter.end();
   qDebug()<<width<<" x "<<height;
 }
+
+void MainWidget::on_pushButton_12_clicked()
+{
+  QFileDialog fileDialog;
+  fileDialog.setDefaultSuffix("lgp");
+  projectFilename = fileDialog.getSaveFileName(this,tr("Browse..."), "", tr("LeafGP project files (*.lgp)"));
+  if(!projectFilename.isEmpty())
+  {
+    QFileInfo info(projectFilename);
+    if(info.completeSuffix().isEmpty())
+      projectFilename = projectFilename + ".lgp";
+    if(info.completeSuffix().compare("lgp") != 0)
+      projectFilename = info.path() + "/" + info.baseName() + ".lgp";
+    ui->lineEdit_9->setText(projectFilename);
+  }
+}
+
+void MainWidget::on_pushButton_13_clicked()
+{
+  QMessageBox msgBox;
+  //validDataProject = true;
+  if(validDataProject)
+  {
+    if(!projectFilename.isEmpty())
+    {
+      if(ui->checkBox_11->isChecked() || ui->checkBox_12->isChecked() || ui->checkBox_13->isChecked() || ui->checkBox_14->isChecked())
+      {
+        projectFile.listSections.clear();
+        projectFile.insertHeader(0xA0B0C0D0);
+        projectFile.insertVersion(501);
+        if(ui->checkBox_11->isChecked())
+          projectFile.insertPopulation(userExperiment);
+        if(ui->checkBox_12->isChecked())
+          populateDataForContainer();
+        if(ui->checkBox_13->isChecked())
+          projectFile.insertSettings(userExperiment);
+        if(ui->checkBox_14->isChecked())
+          projectFile.insertSummary(userExperiment);
+        projectFile.write(projectFilename);
+      }
+      else
+      {
+        msgBox.setText("At least one element has to be selected.");
+        msgBox.exec();
+      }
+    }
+    else
+    {
+      msgBox.setText("Please input a file name.");
+      msgBox.exec();
+    }
+  }
+  else
+  {
+    msgBox.setText("No data has been processed.");
+    msgBox.exec();
+  }
+}

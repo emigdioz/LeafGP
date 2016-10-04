@@ -38,6 +38,11 @@ public:
   QVector<long>             nodeEvaluations;
   QVector<long>             objectiveEvaluations;
   QString                   filename;
+  qlonglong                 filesize;
+  QString                   fileformat;
+  int                       benchmarkIndex;
+  int                       nFeatures;
+  int                       nSamples;
   QVector<float>            averageSize;
   QVector<float>            averageTrainingFitness;
   QVector<float>            averageTestingFitness;

@@ -187,6 +187,16 @@ int Dataset::getSamples()
 	return nRows;
 }
 
+void Dataset::setFeatures(int value)
+{
+	nCols = value;
+}
+
+void Dataset::setSamples(int value)
+{
+	nRows = value;
+}
+
 bool Dataset::readBenchmark(int choice)
 {
 	model = new QStandardItemModel();

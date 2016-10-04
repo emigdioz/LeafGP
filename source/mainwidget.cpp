@@ -159,7 +159,6 @@ MainWidget::MainWidget(QWidget *parent) :
 //	projectFile.read("test.bin");
 //	QList<section> posSections;
 //	projectFile.extractSections(posSections);
-
 }
 
 MainWidget::~MainWidget()
@@ -596,3 +595,5 @@ void MainWidget::resetDefaultGPParameters()
   ui->populationMap->setTotalGenerations(100);
 
 }
+
+

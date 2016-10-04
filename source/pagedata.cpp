@@ -24,6 +24,12 @@ void MainWidget::on_loadButton_pressed()
 			ui->label_25->setText(QString::number(nFeatures));
 			ui->label_26->setText("Number of samples:");
 			ui->label_27->setText(QString::number(nSamples));
+			userExperiment.filename = fileName.section("/",-1,-1);
+			userExperiment.filesize = infoFile.size();
+			userExperiment.fileformat = "CSV";
+			userExperiment.benchmarkIndex = -1;
+			userExperiment.nFeatures = nFeatures;
+			userExperiment.nSamples = nSamples;
 			ui->InfoBox->show();
 			populatePreviewPlot(nSamples);
 			ui->label_31->hide();
@@ -44,7 +50,6 @@ void MainWidget::on_loadButton_pressed()
 			updateOtherPlots(0,0);
 			populateTerminalList();
 			populateDataForGP();
-			//populateDataForContainer();
 		}
 }
 
@@ -55,7 +60,7 @@ void MainWidget::on_comboBox_activated(int index)
 		int nSamples,nFeatures;
 		nSamples = inputData.getSamples();
 		nFeatures = inputData.getFeatures();
-		ui->label_20->setText("Short name:");
+		//ui->label_20->setText("Short name:");
 		ui->label_21->setText(inputData.getBenchmarkName(index));
 		ui->label_22->setText("Objective function:");
 		ui->label_28->setText("Features data range:");
@@ -64,7 +69,12 @@ void MainWidget::on_comboBox_activated(int index)
 		ui->label_25->setText(QString::number(nFeatures));
 		ui->label_26->setText("Number of samples:");
 		ui->label_27->setText(QString::number(nSamples));
-
+		userExperiment.filename = inputData.getBenchmarkName(index);
+		userExperiment.filesize = 0;
+		userExperiment.fileformat = "benchmark";
+		userExperiment.benchmarkIndex = index;
+		userExperiment.nFeatures = nFeatures;
+		userExperiment.nSamples = nSamples;
 		QPixmap pix(130,40);
 		pix.fill(QColor(246,248,250,255));
 		QPainter painter;
@@ -96,7 +106,6 @@ void MainWidget::on_comboBox_activated(int index)
 		updateOtherPlots(0,0);
 		populateTerminalList();
 		populateDataForGP();
-		//populateDataForContainer();
 	}
 }
 
@@ -1002,5 +1011,177 @@ void MainWidget::drawQQPlot(int x, int y)
 		ui->qqPlot->yAxis->setTicks(false);
 		ui->qqPlot->yAxis->setTickLabels(false);
 		ui->qqPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+	}
+}
+
+void MainWidget::on_pushButton_2_clicked()
+{
+	ui->loadButton->setEnabled(true);
+	ui->comboBox->setEnabled(true);
+	ui->InfoBox->hide();
+	ui->label_30->hide();
+	ui->previewPlot->hide();
+}
+
+void MainWidget::on_pushButton_3_clicked()
+{
+	QMessageBox msgBox;
+	QString fileName = QFileDialog::getOpenFileName (this, "Open project file",
+																	 QDir::currentPath(), "LeafGP project (*.lgp)");
+
+	QFileInfo fileInfo(fileName);
+	if(projectFile.read(fileName))
+	{
+		QList<section> posSections;
+		projectFile.extractSections(posSections);
+		ui->loadButton->setEnabled(false);
+		ui->comboBox->setEnabled(false);
+		ui->InfoBox->show();
+		ui->label_164->setText(fileInfo.baseName());
+		for(int i = 0;i < posSections.length();i++)
+		{
+			switch(posSections.at(i).type)
+			{
+				case SECTION_DATASET:
+					{
+					int nCols = posSections.at(i).dataset.at(0).length();
+					int nRows = posSections.at(i).dataset.length();
+					inputData.model = new QStandardItemModel();
+					inputData.setFeatures(nCols);
+					inputData.setSamples(nRows);
+					inputData.X.clear();
+					inputData.Y.clear();
+					inputData.minimum.clear();
+					inputData.maximum.clear();
+					for(int j = 0;j < nRows;j++)
+					{
+						inputData.X.push_back(j+1);
+						inputData.Y.push_back(posSections.at(i).dataset.at(j).at(nCols-1));
+						if(j == 0) inputData.Ymin = inputData.Ymax = inputData.Y.at(0);
+						else {
+							if(inputData.Y.at(j) < inputData.Ymin) inputData.Ymin = inputData.Y.at(j);
+							if(inputData.Y.at(j) > inputData.Ymax) inputData.Ymax = inputData.Y.at(j);
+						}
+
+						QList<QStandardItem*> rowitems;
+						for(int k = 0;k < nCols;k++)
+						{
+							if(j == 0)
+							{
+								inputData.minimum.push_back(posSections.at(i).dataset.at(j).at(k));
+								inputData.maximum.push_back(posSections.at(i).dataset.at(j).at(k));
+							}
+							else
+							{
+								if(posSections.at(i).dataset.at(j).at(k) < inputData.minimum.at(k))
+									inputData.minimum[k] = posSections.at(i).dataset.at(j).at(k);
+								if(posSections.at(i).dataset.at(j).at(k) > inputData.maximum.at(k))
+									inputData.maximum[k] = posSections.at(i).dataset.at(j).at(k);
+							}
+							QStandardItem *item = new QStandardItem(QString::number(posSections.at(i).dataset.at(j).at(k)));
+							rowitems.append(item);
+						}
+						inputData.model->appendRow(rowitems);
+						rowitems.clear();
+					}
+					setTableDataItemsAligment(Qt::AlignCenter);
+					setTableHeaderLabels();
+					ui->tableViewDataSummary->setModel(inputData.model);
+					ui->tableViewDataSummary->show();
+					populatePreviewPlot(nRows);
+					ui->selectorWidget->setNumberVariables(nCols-1);
+					ui->selectorWidget->setInitialSelection(0,0);
+					ui->label_51->show();
+					ui->label_52->show();
+					ui->label_53->show();
+					ui->label_54->show();
+					ui->selectorWidget->show();
+					ui->correlationPlot->show();
+					ui->regressionPlot->show();
+					ui->qqPlot->show();
+					updateOtherPlots(0,0);
+					populateTerminalList();
+					populateDataForGP();
+					break;
+					}
+				case SECTION_SETTINGS:
+					{
+						userExperiment.gpParams.m_primitives = posSections.at(i).experiment.gpParams.m_primitives;
+						//workerAlgorithm->gp_parameters.m_primitives = posSections.at(i).experiment.gpParams.m_primitives;
+						userExperiment.gpParams.m_population_size = posSections.at(i).experiment.gpParams.m_population_size;
+						//workerAlgorithm->gp_parameters.m_population_size = posSections.at(i).experiment.gpParams.m_population_size;
+						userExperiment.gpParams.m_number_of_generations = posSections.at(i).experiment.gpParams.m_number_of_generations;
+						//workerAlgorithm->gp_parameters.m_number_of_generations = posSections.at(i).experiment.gpParams.m_number_of_generations;
+						userExperiment.gpParams.m_seed = posSections.at(i).experiment.gpParams.m_seed;
+						//workerAlgorithm->gp_parameters.m_seed = posSections.at(i).experiment.gpParams.m_seed;
+						userExperiment.gpParams.m_tournament_size = posSections.at(i).experiment.gpParams.m_tournament_size;
+						userExperiment.gpParams.m_elitism_size = posSections.at(i).experiment.gpParams.m_elitism_size;
+						userExperiment.gpParams.m_maximum_tree_size = posSections.at(i).experiment.gpParams.m_maximum_tree_size;
+						userExperiment.gpParams.m_minimum_tree_size = posSections.at(i).experiment.gpParams.m_minimum_tree_size;
+						userExperiment.gpParams.m_crossover_probability = posSections.at(i).experiment.gpParams.m_crossover_probability;
+						userExperiment.gpParams.m_mutation_probability = posSections.at(i).experiment.gpParams.m_mutation_probability;
+						userExperiment.gpParams.m_clone_probability = posSections.at(i).experiment.gpParams.m_clone_probability;
+						userExperiment.gpParams.m_number_of_runs = posSections.at(i).experiment.gpParams.m_number_of_runs;
+						userExperiment.gpParams.m_trainingRatio = posSections.at(i).experiment.gpParams.m_trainingRatio;
+						workerAlgorithm->gp_parameters = userExperiment.gpParams;
+					break;
+					}
+				case SECTION_POPULATION:
+					{
+						// ********* MISSING ***********
+					break;
+					}
+				case SECTION_SUMMARY:
+					{
+					ui->label_21->setText(posSections.at(i).experiment.filename);
+					ui->label_25->setText(QString::number(posSections.at(i).experiment.nFeatures));
+					ui->label_27->setText(QString::number(posSections.at(i).experiment.nSamples));
+					if(QString::compare(posSections.at(i).experiment.fileformat,"benchmark",Qt::CaseInsensitive) == 0)
+					{
+						ui->label_28->hide();
+						ui->label_29->hide();
+						ui->label_22->setText("Objective function:");
+						QPixmap pix(130,40);
+						pix.fill(QColor(246,248,250,255));
+						QPainter painter;
+						functionText.useSTIX();
+						functionText.set_fontSize(12);
+						functionText.parse(inputData.getBenchmarkFunctionLatex(posSections.at(i).experiment.benchmarkIndex));
+						painter.begin(&pix);
+						functionText.set_fontColor(QColor(45,65,102,255));
+						functionText.draw(painter, Qt::AlignVCenter, QRectF(0,0,pix.width(), pix.height()), false);
+						painter.end();
+						ui->label_23->setPixmap(pix);
+					}
+					else
+					{
+						ui->label_23->setText(QString::number(posSections.at(i).experiment.filesize));
+						ui->label_29->setText(posSections.at(i).experiment.fileformat);
+					}
+					userExperiment.dataX = posSections.at(i).experiment.dataX;
+					userExperiment.dataY = posSections.at(i).experiment.dataY;
+					userExperiment.trainingPartitionSize = posSections.at(i).experiment.trainingPartitionSize;
+					userExperiment.testingPartitionSize = posSections.at(i).experiment.testingPartitionSize;
+					userExperiment.filename = posSections.at(i).experiment.filename;
+					userExperiment.filesize = posSections.at(i).experiment.filesize;
+					userExperiment.fileformat = posSections.at(i).experiment.fileformat;
+					userExperiment.benchmarkIndex = posSections.at(i).experiment.benchmarkIndex;
+					userExperiment.nFeatures = posSections.at(i).experiment.nFeatures;
+					userExperiment.nSamples = posSections.at(i).experiment.nSamples;
+					userExperiment.averageSize = posSections.at(i).experiment.averageSize;
+					userExperiment.averageTrainingFitness = posSections.at(i).experiment.averageTrainingFitness;
+					userExperiment.averageTestingFitness = posSections.at(i).experiment.averageTestingFitness;
+					userExperiment.medianTrainingFitness = posSections.at(i).experiment.medianTrainingFitness;
+					userExperiment.medianTestingFitness = posSections.at(i).experiment.medianTestingFitness;
+					break;
+					}
+			}
+		}
+		qDebug()<<"Done";
+	}
+	else
+	{
+		msgBox.setText("Not a valid LeafGP project file.");
+		msgBox.exec();
 	}
 }

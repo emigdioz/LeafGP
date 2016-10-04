@@ -10,8 +10,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = LeafGP
 TEMPLATE = app
+DEFINES += USE_OPENCL
 
+contains(DEFINES, USE_OPENCL) {
 LIBS += -lOpenCL
+}
 
 INCLUDEPATH += ./source \
              ./source/alglib \
@@ -69,7 +72,8 @@ SOURCES += source/main.cpp \
     source/matio/snprintf.c \
     source/gpexperiment.cpp \
     source/pageresults.cpp \
-    source/filecontainer.cpp
+    source/filecontainer.cpp \
+    source/singlecpu.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -129,7 +133,8 @@ HEADERS  += source/mainwidget.h \
     source/cmaes/timings.h \
     source/cmaes/utils.h \
     source/cmaes/randomCMAES.h \
-    source/filecontainer.h
+    source/filecontainer.h \
+    source/singlecpu.h
 
 FORMS    += source/mainwidget.ui
 

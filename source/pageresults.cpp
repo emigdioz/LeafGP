@@ -569,8 +569,9 @@ void MainWidget::on_pushButton_13_clicked()
     {
       if(ui->checkBox_11->isChecked() || ui->checkBox_12->isChecked() || ui->checkBox_13->isChecked() || ui->checkBox_14->isChecked())
       {
+        ui->pushButton_13->setText("Saving...");
         projectFile.listSections.clear();
-        projectFile.insertHeader(0xA0B0C0D0);
+        projectFile.insertHeader(0x4DAE4A52);
         projectFile.insertVersion(501);
         if(ui->checkBox_11->isChecked())
           projectFile.insertPopulation(userExperiment);
@@ -581,6 +582,7 @@ void MainWidget::on_pushButton_13_clicked()
         if(ui->checkBox_14->isChecked())
           projectFile.insertSummary(userExperiment);
         projectFile.write(projectFilename);
+        ui->pushButton_13->setText("Saved!");
       }
       else
       {

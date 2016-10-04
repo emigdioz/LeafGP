@@ -60,7 +60,7 @@ public:
   void insertPopulation(gpExperiment data);
   void insertSummary(gpExperiment data);
   void write(QString filename);
-  void read(QString filename);
+  bool read(QString filename);
   quint32 extractHeader(void);
   qint32 extractVersion(void);
 

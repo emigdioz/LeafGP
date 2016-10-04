@@ -44,6 +44,7 @@ using namespace std;
 
 Params* GP::m_params = 0;
 
+#ifdef USE_OPENCL
 // -----------------------------------------------------------------------------
 GP::GP(Params& p, cl_device_type device_type ): m_device_type( device_type ),
                                                  m_X( 0 ),
@@ -59,6 +60,15 @@ GP::GP(Params& p, cl_device_type device_type ): m_device_type( device_type ),
                                                  m_node_evaluations( 0 ),
 #endif
                                                  m_best_error( std::numeric_limits<cl_float>::max() )
+#else
+GP::GP(Params& p):                               m_X( 0 ),
+                                                 m_E( 0 ),
+                                                 m_num_points( 0 ),
+                                                 m_y_dim( 1 ),
+                                                 m_x_dim( 0 ),
+                                                 m_best_error( std::numeric_limits<cl_float>::max() )
+#endif
+
 {
    m_params = &p;
 
@@ -125,21 +135,23 @@ void GP::Evolve()
     LoadPoints();
     m_primitives.m_primitives.clear();
     m_primitives.Load( m_x_dim, m_params->m_maximum_tree_size, m_params->m_primitives );
-    OpenCLInit();
-    CalculateNDRanges();
-  #ifndef NDEBUG
-    std::cout << "NDRanges: [local: " << m_local_size << ", global: " << m_global_size << ", work-groups: " << m_global_size/m_local_size << "]\n";
-  #endif
-    CreateBuffers();
-    BuildKernel();
-    SetKernelArgs();
-  #ifndef NDEBUG
-    std::cout << "Total local memory/CU (bytes): " << m_device.getInfo<CL_DEVICE_LOCAL_MEM_SIZE>()
-              << ", used by the kernel: " << m_kernel.getWorkGroupInfo<CL_KERNEL_LOCAL_MEM_SIZE>( m_device )
-             // [OCL 1.1 only] << ", private memory used by each work-item: " << m_kernel.getWorkGroupInfo<CL_KERNEL_PRIVATE_MEM_SIZE>( m_device )
-              << ", actual work-group size: " << m_kernel.getWorkGroupInfo<CL_KERNEL_WORK_GROUP_SIZE>( m_device )
-              << std::endl;
-  #endif
+    if(engineType != 2) {
+        OpenCLInit();
+        CalculateNDRanges();
+      #ifndef NDEBUG
+        std::cout << "NDRanges: [local: " << m_local_size << ", global: " << m_global_size << ", work-groups: " << m_global_size/m_local_size << "]\n";
+      #endif
+        CreateBuffers();
+        BuildKernel();
+        SetKernelArgs();
+      #ifndef NDEBUG
+        std::cout << "Total local memory/CU (bytes): " << m_device.getInfo<CL_DEVICE_LOCAL_MEM_SIZE>()
+                  << ", used by the kernel: " << m_kernel.getWorkGroupInfo<CL_KERNEL_LOCAL_MEM_SIZE>( m_device )
+                 // [OCL 1.1 only] << ", private memory used by each work-item: " << m_kernel.getWorkGroupInfo<CL_KERNEL_PRIVATE_MEM_SIZE>( m_device )
+                  << ", actual work-group size: " << m_kernel.getWorkGroupInfo<CL_KERNEL_WORK_GROUP_SIZE>( m_device )
+                  << std::endl;
+      #endif
+    }
 
     m_E = new cl_float[ m_params->m_population_size ];
     cl_uint* pop_a = new cl_uint[ m_params->m_population_size * MaximumProgramSize() ];
@@ -210,7 +222,7 @@ void GP::Evolve()
 	 avgSize /= m_params->m_population_size;
 	 maxAvgSize = avgSize;
 
-	 locallyEvaluateTraining(m_best_program,act,exp);
+	 locallyEvaluateTrainingCompressed(m_best_program,act,exp);
 	 input_data_matrix = testing_data;
 	 testError = locallyEvaluateTesting(m_best_program);
 	 input_data_matrix = training_data;
@@ -278,7 +290,7 @@ void GP::Evolve()
 
      progress_run = ((float)gen/m_params->m_number_of_generations) * 1000;
      emit GP_send_run_progress(progress_run,curr_run);
-     locallyEvaluateTraining(m_best_program,act,exp);
+     locallyEvaluateTrainingCompressed(m_best_program,act,exp);
      input_data_matrix = testing_data;
      testError = locallyEvaluateTesting(m_best_program);
      input_data_matrix = training_data;
@@ -340,7 +352,7 @@ void GP::Evolve()
 // ************ Test code for CMA-ES LS approach *****************************************
 
    //executeLS_CMAES(m_best_program);
-   executeLS_LM(m_best_program);
+   //executeLS_LM(m_best_program);
 
 
 // ***************************************************************************************
@@ -724,14 +736,14 @@ void GP::Clone( const cl_uint* program_orig, cl_uint* program_dest ) const
 ///bool GP::EvaluatePopulation( cl_uint* pop, cl_float* errors )
 bool GP::EvaluatePopulation( const cl_uint* pop )
 {
-   KernelLaunch( pop );
-
-   CalculateErrors( pop );
+  if(engineType != 2) {
+    KernelLaunch( pop );
+    CalculateErrors( pop );
+  }
 
    // We should stop the evolution if an error below the specified tolerance is found
    return (m_best_error <= m_params->m_error_tolerance);
 }
-
 
 
 // -----------------------------------------------------------------------------
@@ -1348,7 +1360,7 @@ void GP::randomlySplitData(std::vector<std::vector<float> > original, int ratio)
 
 // -----------------------------------------------------------------------------
 
-float GP::locallyEvaluateTraining(const cl_uint *program, std::vector<double> &act_compress, std::vector<double> &exp_compress)
+float GP::locallyEvaluateTrainingCompressed(const cl_uint *program, std::vector<double> &act_compress, std::vector<double> &exp_compress)
 {
 	float partial_error = 0.0f;
 	float partial_semantic;
@@ -1366,6 +1378,26 @@ float GP::locallyEvaluateTraining(const cl_uint *program, std::vector<double> &a
 	rmse = sqrt(partial_error/m_num_points);
 	//qDebug()<<"RMSE: "<<rmse;
 	compressOutputPairs(actual,expected,act_compress,exp_compress);
+	return rmse;
+
+}
+
+float GP::locallyEvaluateTraining(const cl_uint *program)
+{
+	float partial_error = 0.0f;
+	float partial_semantic;
+	float rmse;
+	std::vector<float> actual;
+	std::vector<float> expected;
+
+	for( uint iter = 0; iter < m_num_points; iter++ )
+	{
+		partial_semantic = evaluateInstance(program,iter);
+		partial_error += pow( input_data_matrix.at(iter).at(m_x_dim) - partial_semantic, 2 );
+		actual.push_back(partial_semantic);
+		expected.push_back(input_data_matrix.at(iter).at(m_x_dim));
+	}
+	rmse = sqrt(partial_error/m_num_points);
 	return rmse;
 
 }

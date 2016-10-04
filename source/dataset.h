@@ -18,6 +18,8 @@ public:
 	bool readBenchmark(int choice);
 	int getFeatures(void);
 	int getSamples(void);
+	void setFeatures(int value);
+	void setSamples(int value);
 	QString getBenchmarkName(int choice);
 	QString getBenchmarkFunctionLatex(int choice);
 	QString getBenchmarkRange(int choice);

@@ -45,16 +45,19 @@ void fileContainer::write(QString filename)
   file.close();
 }
 
-void fileContainer::read(QString filename)
+bool fileContainer::read(QString filename)
 {
   file.setFileName(filename);
   file.open(QIODevice::ReadOnly);
   //outBuffer.device()->reset();
   outBuffer.setDevice(&file);
   outBuffer >> header;
+  if(header != 0x4DAE4A52) // magic number
+    return false;
   outBuffer >> version;
   outBuffer >> listSections;
   file.close();
+  return true;
 }
 
 quint32 fileContainer::extractHeader()
@@ -194,6 +197,11 @@ QDataStream &operator<<(QDataStream &stream, const section &data) {
         stream << data.experiment.testingPartitionSize;
         // missing node evaluations and objective evaluations
         stream << data.experiment.filename;
+        stream << data.experiment.filesize;
+        stream << data.experiment.fileformat;
+        stream << data.experiment.benchmarkIndex;
+        stream << data.experiment.nFeatures;
+        stream << data.experiment.nSamples;
         stream << data.experiment.averageSize;
         stream << data.experiment.averageTrainingFitness;
         stream << data.experiment.averageTestingFitness;
@@ -346,6 +354,11 @@ QDataStream &operator>>(QDataStream &stream, section &data) {
         stream >> data.experiment.trainingPartitionSize;
         stream >> data.experiment.testingPartitionSize;
         stream >> data.experiment.filename;
+        stream >> data.experiment.filesize;
+        stream >> data.experiment.fileformat;
+        stream >> data.experiment.benchmarkIndex;
+        stream >> data.experiment.nFeatures;
+        stream >> data.experiment.nSamples;
         stream >> data.experiment.averageSize;
         stream >> data.experiment.averageTrainingFitness;
         stream >> data.experiment.averageTestingFitness;

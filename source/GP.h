@@ -110,7 +110,11 @@ public:
 
 public:
    // Get platform, context, devices and create queue
+#ifdef USE_OPENCL
    explicit GP(Params& p, cl_device_type);
+#else
+   explicit GP(Params& p);
+#endif
    virtual ~GP() 
    { 
       delete[] m_X;
@@ -169,11 +173,13 @@ public:
     QVector<double> expectedOutput;
     QVector<double> actualOutput;
   } popInfo;
+  int engineType;
 
   void insertData(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
   void convertProgramString(const cl_uint* program, QString &output, int start = -1, int end = -1 );
-  float locallyEvaluateTraining(const cl_uint* program, std::vector<double> &act_compress, std::vector<double> &exp_compress);
+  float locallyEvaluateTrainingCompressed(const cl_uint* program, std::vector<double> &act_compress, std::vector<double> &exp_compress);
+  float locallyEvaluateTraining(const cl_uint* program);
   float locallyEvaluateTesting(const cl_uint* program);
   float evaluateInstance(const cl_uint* program, int iter);
   void compressOutputPairs(std::vector<float> actual, std::vector<float> expected, std::vector<double> &actual_compressed, std::vector<double> &expected_compressed);

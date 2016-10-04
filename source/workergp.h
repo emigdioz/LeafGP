@@ -10,6 +10,7 @@
 #include "GP.h"
 #include "CPU.h"
 #include "GPU.h"
+#include "singlecpu.h"
 #include "params.h"
 
 class workerGP : public QObject

@@ -740,7 +740,14 @@ bool GP::EvaluatePopulation( const cl_uint* pop )
     KernelLaunch( pop );
     CalculateErrors( pop );
   }
-
+  else
+  {
+    for( unsigned p = 0; p < m_params->m_population_size; ++p )
+    {
+      m_E[p] = locallyEvaluateTraining(Program(pop,p));
+      UpdateBestProgram( Program( pop, p ), m_E[p] );
+    }
+  }
    // We should stop the evolution if an error below the specified tolerance is found
    return (m_best_error <= m_params->m_error_tolerance);
 }
@@ -1399,7 +1406,6 @@ float GP::locallyEvaluateTraining(const cl_uint *program)
 	}
 	rmse = sqrt(partial_error/m_num_points);
 	return rmse;
-
 }
 
 float GP::locallyEvaluateTesting(const cl_uint *program)

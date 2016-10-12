@@ -26,6 +26,7 @@
 #include "qcustomplot.h"
 #include <QPrinter>
 #include "filecontainer.h"
+#include "reportgp.h"
 
 namespace Ui {
 class MainWidget;
@@ -50,6 +51,7 @@ public:
 	fileContainer projectFile;
 	bool validDataProject;
 	QString projectFilename;
+	reportGP userReport;
 
 public slots:
 	void receivedRunProgress(int value, int run);
@@ -105,6 +107,10 @@ private slots:
 	void on_pushButton_3_clicked();
 
 	void on_pushButton_2_clicked();
+
+	void on_pushButton_11_clicked();
+
+	void on_pushButton_10_clicked();
 
 private:
 	Ui::MainWidget *ui;

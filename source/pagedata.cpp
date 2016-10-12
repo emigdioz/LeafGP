@@ -1021,6 +1021,7 @@ void MainWidget::on_pushButton_2_clicked()
 	ui->InfoBox->hide();
 	ui->label_30->hide();
 	ui->previewPlot->hide();
+	ui->label_164->setText("Unnamed (please save once algorithm is executed)");
 }
 
 void MainWidget::on_pushButton_3_clicked()

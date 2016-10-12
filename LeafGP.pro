@@ -73,7 +73,7 @@ SOURCES += source/main.cpp \
     source/gpexperiment.cpp \
     source/pageresults.cpp \
     source/filecontainer.cpp \
-    source/singlecpu.cpp
+    source/reportgp.cpp
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -134,7 +134,7 @@ HEADERS  += source/mainwidget.h \
     source/cmaes/utils.h \
     source/cmaes/randomCMAES.h \
     source/filecontainer.h \
-    source/singlecpu.h
+    source/reportgp.h
 
 FORMS    += source/mainwidget.ui
 

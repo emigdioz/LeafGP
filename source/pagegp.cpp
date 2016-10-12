@@ -398,6 +398,8 @@ void MainWidget::receivedBasicInfo(GP::basicInfo info)
 		userExperiment.averageSize.push_back(info.avgSize);
 		userExperiment.averageTrainingFitness.push_back(info.avgTrainError);
 		userExperiment.medianTrainingFitness.push_back(info.medianTrainError);
+
+		userReport.performancePlot = ui->qualityPlot->toPixmap(1000,400,1.0);
 	}
 }
 

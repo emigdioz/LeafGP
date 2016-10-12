@@ -339,7 +339,11 @@ void MainWidget::parallelDevicesChecked(bool t)
 
 void MainWidget::on_checkBox_toggled(bool checked)
 {
-		ui->groupBox_7->setEnabled(checked);
+		ui->groupBox_7->setEnabled(checked);		
+		if(!ui->checkBox->isChecked())
+			workerAlgorithm->engineType = 2;
+		else
+			parallelDevicesChecked(true);
 }
 
 void MainWidget::on_listWidgetDataAdvanced_currentRowChanged(int currentRow)
@@ -595,5 +599,4 @@ void MainWidget::resetDefaultGPParameters()
   ui->populationMap->setTotalGenerations(100);
 
 }
-
 

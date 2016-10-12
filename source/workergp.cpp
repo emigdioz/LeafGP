@@ -60,9 +60,8 @@ void workerGP::doWork()
       qDebug() << "Aborting worker process in Thread " << thread()->currentThreadId();
   }
 
-  if(engineType == 0) gp_engine = new GPonCPU(gp_parameters);
+  if(engineType == 0 || engineType == 2) gp_engine = new GPonCPU(gp_parameters);
   if(engineType == 1) gp_engine = new FPI(gp_parameters);
-  if(engineType == 2) gp_engine = new singleCPU(gp_parameters);
 
   connect(gp_engine, SIGNAL(GP_send_run_progress(const int,const int)), this, SLOT(GP_received_run_progress(const int,const int)));
   connect(gp_engine, SIGNAL(GP_send_single_tree(GP::treeStruct)), this, SLOT(GP_received_single_tree(GP::treeStruct)));

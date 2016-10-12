@@ -516,31 +516,8 @@ void MainWidget::drawPerformancePlot()
 
 void MainWidget::on_pushButton_9_clicked()
 {
-  QPrinter printer(QPrinter::HighResolution); //create your QPrinter (don't need to be high resolution, anyway)
-  printer.setPageSize(QPrinter::Letter);
-  printer.setOrientation(QPrinter::Portrait);
-  printer.setPageMargins (15,15,15,15,QPrinter::Millimeter);
-  printer.setFullPage(false);
-  printer.setOutputFileName("output.pdf");
-  printer.setOutputFormat(QPrinter::PdfFormat); //you can use native format of system usin QPrinter::NativeFormat
-
-  int width = printer.pageRect().width();
-  int height = printer.pageRect().height();
-  QImage image(":/icons/resources/images/leafgplogo.png");
-  int logoWidth = image.width();
-  int logoHeight = image.height();
-  float ratioLogo = (float)logoHeight/logoWidth;
-  QRectF source(image.rect());
-  QRectF target(width/20,200,width/5,(width/5)*ratioLogo);
-
-  QPainter painter(&printer); // create a painter which will paint 'on printer'.
-  painter.fillRect(0,0,width,height/10,QBrush(QColor(45,65,102,255)));
-  painter.drawImage(target,image,source);
-  painter.setFont(QFont("Roboto",18,QFont::Light));
-  painter.setPen(QPen(Qt::white));
-  painter.drawText(width/2,1000,"Report");
-  painter.end();
-  qDebug()<<width<<" x "<<height;
+	userReport.setFilename(ui->lineEdit_7->text());
+	userReport.generate();
 }
 
 void MainWidget::on_pushButton_12_clicked()
@@ -600,5 +577,57 @@ void MainWidget::on_pushButton_13_clicked()
   {
     msgBox.setText("No data has been processed.");
     msgBox.exec();
+  }
+}
+
+void MainWidget::on_pushButton_11_clicked()
+{
+  QString filename;
+  QPixmap previewImage;
+  int widthLabel, heightLabel, widthImage, heightImage;
+  float sizeRatio;
+  QFileDialog fileDialog;
+  fileDialog.setDefaultSuffix("png");
+  filename = fileDialog.getOpenFileName(this, tr("Open image..."),QDir::currentPath(), tr("Images (*.png *.jpg)"));
+
+  if(!filename.isEmpty())
+  {
+    QFileInfo info(filename);
+    QImageReader reader(filename);
+    reader.setAutoTransform(true);
+    const QImage newImage = reader.read();
+    widthImage = newImage.width();
+    heightImage = newImage.height();
+    sizeRatio = widthImage/heightImage;
+    widthLabel = ui->label_159->width();
+    heightLabel = ui->label_159->height();
+    if(widthImage > widthLabel || heightImage > heightLabel)
+    {
+      if(widthLabel >= heightLabel)
+        previewImage = QPixmap::fromImage(newImage.scaled(heightLabel*sizeRatio,heightLabel));
+      else
+        previewImage = QPixmap::fromImage(newImage.scaled(widthLabel,widthLabel/sizeRatio));
+    }
+    else
+      previewImage = QPixmap::fromImage(newImage);
+    ui->label_159->setPixmap(previewImage);
+    userReport.setLogo(newImage);
+  }
+}
+
+void MainWidget::on_pushButton_10_clicked()
+{
+  QString filename;
+  QFileDialog fileDialog;
+  fileDialog.setDefaultSuffix("pdf");
+  filename = fileDialog.getSaveFileName(this,tr("Browse..."), "", tr("PDF (*.pdf)"));
+  if(!filename.isEmpty())
+  {
+    QFileInfo info(filename);
+    if(info.completeSuffix().isEmpty())
+      filename = filename + ".pdf";
+    if(info.completeSuffix().compare("pdf") != 0)
+      filename = info.path() + "/" + info.baseName() + ".pdf";
+    ui->lineEdit_7->setText(filename);
   }
 }

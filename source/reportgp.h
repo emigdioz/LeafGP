@@ -1,7 +1,7 @@
 /*****************************************************************************
- * singlecpu.h
+ * reportgp.h
  *
- * Created: 10/3/2016 2016 by emigdio
+ * Created: 10/11/2016 2016 by emigdio
  *
  * Copyright 2016 emigdio. All rights reserved.
  *
@@ -15,20 +15,42 @@
  * contact the author of this file, or the owner of the project in which
  * this file belongs to.
  *****************************************************************************/
-#ifndef SINGLECPU_H
-#define SINGLECPU_H
+#ifndef REPORTGP_H
+#define REPORTGP_H
 
-#include "GP.h"
+#include <QPrinter>
+#include <QPainter>
+#include <QImage>
+#include <QPixmap>
+#include "qcustomplot.h"
 
-class singleCPU: public GP
+class reportGP
 {
 public:
-  singleCPU(Params& );
-  virtual ~singleCPU() {}
-  void LoadPoints();
-  void CalculateNDRanges() {}
-  void PrintStrategy() const { std::cout << "Single core CPU"; }
-  unsigned DeviceFission() {};
+  reportGP();
+
+  void setFilename(QString value);
+  void setLogo(QImage value);
+  void generate(void);
+  QPixmap performancePlot;
+  int remainingSpace;
+
+private:
+  void drawHeader(void);
+  void drawCopyright(void);
+  void drawDateTime(QString value);
+  void drawPerformancePlot(void);
+  QString filename;
+  QImage logo;
+  int pageWidth;
+  int pageHeight;
+  float logoMargin;
+  float logoSize;
+  float headerHeight;
+  float copyrightBottom;
+  float datetimeBottom;
+  float moduleStart;
+  QPainter painter;
 };
 
-#endif // SINGLECPU_H
+#endif // REPORTGP_H

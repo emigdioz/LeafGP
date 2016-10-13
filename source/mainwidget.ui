@@ -5779,7 +5779,7 @@ QListWidget::item:hover
                  <item row="0" column="0">
                   <widget class="QStackedWidget" name="stackedWidgetResultsAdvanced">
                    <property name="currentIndex">
-                    <number>3</number>
+                    <number>1</number>
                    </property>
                    <widget class="QWidget" name="pageSummary_2">
                     <layout class="QGridLayout" name="gridLayout_109">
@@ -6363,8 +6363,8 @@ QListView::item:hover {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>33</width>
-                                      <height>30</height>
+                                      <width>285</width>
+                                      <height>50</height>
                                      </rect>
                                     </property>
                                     <layout class="QGridLayout" name="gridLayout_108">
@@ -6432,8 +6432,8 @@ QListView::item:hover {
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>26</width>
-                                 <height>26</height>
+                                 <width>178</width>
+                                 <height>266</height>
                                 </rect>
                                </property>
                                <layout class="QGridLayout" name="gridLayout_107">
@@ -6847,14 +6847,7 @@ padding-left: 1px;
                           </property>
                          </widget>
                         </item>
-                        <item row="6" column="0">
-                         <widget class="QCheckBox" name="checkBox_6">
-                          <property name="text">
-                           <string>Run statistics</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="7" column="0">
+                        <item row="8" column="0">
                          <spacer name="verticalSpacer_15">
                           <property name="orientation">
                            <enum>Qt::Vertical</enum>
@@ -6867,14 +6860,14 @@ padding-left: 1px;
                           </property>
                          </spacer>
                         </item>
-                        <item row="5" column="0">
+                        <item row="6" column="0">
                          <widget class="QCheckBox" name="checkBox_5">
                           <property name="text">
                            <string>Population information</string>
                           </property>
                          </widget>
                         </item>
-                        <item row="5" column="2">
+                        <item row="6" column="2">
                          <widget class="QComboBox" name="comboBox_9">
                           <property name="minimumSize">
                            <size>
@@ -6888,13 +6881,6 @@ padding-left: 1px;
                          <widget class="QLabel" name="label_157">
                           <property name="text">
                            <string>Custom time and date</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="2" column="0">
-                         <widget class="QCheckBox" name="checkBox_4">
-                          <property name="text">
-                           <string>Best solution per run</string>
                           </property>
                          </widget>
                         </item>
@@ -6913,6 +6899,9 @@ padding-left: 1px;
                           <property name="text">
                            <string>Include logo</string>
                           </property>
+                          <property name="checked">
+                           <bool>true</bool>
+                          </property>
                          </widget>
                         </item>
                         <item row="1" column="0">
@@ -6920,9 +6909,12 @@ padding-left: 1px;
                           <property name="text">
                            <string>Time and date</string>
                           </property>
+                          <property name="checked">
+                           <bool>true</bool>
+                          </property>
                          </widget>
                         </item>
-                        <item row="5" column="1">
+                        <item row="6" column="1">
                          <widget class="QLabel" name="label_158">
                           <property name="text">
                            <string>Select run</string>
@@ -6933,6 +6925,9 @@ padding-left: 1px;
                          <widget class="QCheckBox" name="checkBox_7">
                           <property name="text">
                            <string>Best solution from all runs</string>
+                          </property>
+                          <property name="checked">
+                           <bool>true</bool>
                           </property>
                          </widget>
                         </item>
@@ -6949,10 +6944,30 @@ padding-left: 1px;
                           </property>
                          </widget>
                         </item>
-                        <item row="4" column="0">
+                        <item row="5" column="0">
                          <widget class="QCheckBox" name="checkBox_8">
                           <property name="text">
                            <string>Best solution output plot</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="4" column="0">
+                         <widget class="QCheckBox" name="checkBox_4">
+                          <property name="text">
+                           <string>Best solution performance</string>
+                          </property>
+                          <property name="checked">
+                           <bool>true</bool>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="0">
+                         <widget class="QCheckBox" name="checkBox_6">
+                          <property name="text">
+                           <string>Run statistics</string>
+                          </property>
+                          <property name="checked">
+                           <bool>false</bool>
                           </property>
                          </widget>
                         </item>

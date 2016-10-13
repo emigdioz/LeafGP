@@ -373,8 +373,8 @@ void MainWidget::on_runSelectionView_clicked(const QModelIndex &index)
 
   ui->populationMapRun->addData(userExperiment.population[indexRun]);
 
-  ui->label_145->setText(QString::number(userExperiment.population[indexRun].bestNormalizedTrainingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations-1)));
-  ui->label_154->setText(QString::number(userExperiment.population[indexRun].bestNormalizedTestingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations-1)));
+  ui->label_145->setText(QString::number(userExperiment.population[indexRun].bestRealTrainingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations-1)));
+  ui->label_154->setText(QString::number(userExperiment.population[indexRun].bestRealTestingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations-1)));
   ui->label_147->setText(QString::number(userExperiment.averageTrainingFitness.at(indexRun)));
   ui->label_149->setText(QString::number(userExperiment.population[indexRun].bestSize.at(workerAlgorithm->gp_parameters.m_number_of_generations-1)));
   ui->label_151->setText(QString::number(userExperiment.averageSize.at(indexRun)));
@@ -517,6 +517,13 @@ void MainWidget::drawPerformancePlot()
 void MainWidget::on_pushButton_9_clicked()
 {
 	userReport.setFilename(ui->lineEdit_7->text());
+	userReport.includeLogo = ui->checkBox_2->isChecked();
+	userReport.includeDateTime = ui->checkBox_3->isChecked();
+	userReport.includeStatistics = ui->checkBox_6->isChecked();
+	userReport.includeBestSymbolic = ui->checkBox_7->isChecked();
+	userReport.includeQualityBestPlot = ui->checkBox_4->isChecked();
+	userReport.includeBestOutputPlot = ui->checkBox_8->isChecked();
+	userReport.includePopulationInfo = ui->checkBox_5->isChecked();
 	userReport.generate();
 }
 

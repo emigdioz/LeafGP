@@ -52,6 +52,7 @@ public:
 	bool validDataProject;
 	QString projectFilename;
 	reportGP userReport;
+	float bestOverallFitness;
 
 public slots:
 	void receivedRunProgress(int value, int run);
@@ -111,6 +112,20 @@ private slots:
 	void on_pushButton_11_clicked();
 
 	void on_pushButton_10_clicked();
+
+	void on_checkBox_2_toggled(bool checked);
+
+	void on_checkBox_3_toggled(bool checked);
+
+	void on_checkBox_6_toggled(bool checked);
+
+	void on_checkBox_7_toggled(bool checked);
+
+	void on_checkBox_4_toggled(bool checked);
+
+	void on_checkBox_8_toggled(bool checked);
+
+	void on_checkBox_5_toggled(bool checked);
 
 private:
 	Ui::MainWidget *ui;

@@ -600,3 +600,59 @@ void MainWidget::resetDefaultGPParameters()
 
 }
 
+
+void MainWidget::on_checkBox_2_toggled(bool checked)
+{
+   if(checked)
+     userReport.includeLogo = true;
+   else
+     userReport.includeLogo = false;
+}
+
+void MainWidget::on_checkBox_3_toggled(bool checked)
+{
+    if(checked)
+      userReport.includeDateTime = true;
+    else
+      userReport.includeDateTime = false;
+}
+
+void MainWidget::on_checkBox_6_toggled(bool checked)
+{
+  if(checked)
+    userReport.includeStatistics = true;
+  else
+    userReport.includeStatistics = false;
+}
+
+void MainWidget::on_checkBox_7_toggled(bool checked)
+{
+    if(checked)
+      userReport.includeBestSymbolic = true;
+    else
+      userReport.includeBestSymbolic = false;
+}
+
+void MainWidget::on_checkBox_4_toggled(bool checked)
+{
+    if(checked)
+      userReport.includeQualityBestPlot = true;
+    else
+      userReport.includeQualityBestPlot = false;
+}
+
+void MainWidget::on_checkBox_8_toggled(bool checked)
+{
+    if(checked)
+      userReport.includeBestOutputPlot = true;
+    else
+      userReport.includeBestOutputPlot = false;
+}
+
+void MainWidget::on_checkBox_5_toggled(bool checked)
+{
+    if(checked)
+      userReport.includePopulationInfo = true;
+    else
+      userReport.includePopulationInfo = false;
+}

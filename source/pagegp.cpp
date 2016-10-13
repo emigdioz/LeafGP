@@ -106,9 +106,8 @@ void MainWidget::algorithmFinished()
   QModelIndex Index= ui->runSelectionView->model()->index(0,0);
   ui->runSelectionView->selectionModel()->select( Index, QItemSelectionModel::Select );
   on_runSelectionView_clicked(Index);
-
   validDataProject = true;
-
+  userReport.outputExperiment = userExperiment;
 }
 
 void MainWidget::drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY)
@@ -399,7 +398,7 @@ void MainWidget::receivedBasicInfo(GP::basicInfo info)
 		userExperiment.averageTrainingFitness.push_back(info.avgTrainError);
 		userExperiment.medianTrainingFitness.push_back(info.medianTrainError);
 
-		userReport.performancePlot = ui->qualityPlot->toPixmap(1000,400,1.0);
+		//userReport.performancePlot = ui->qualityPlot->toPixmap(1000,400,1.0);
 	}
 }
 
@@ -443,6 +442,21 @@ void MainWidget::receivedPopInfo(GP::popInfo info)
 		currPop.bestNormalizedTestingFitness.clear();
 		currPop.bestRealTestingFitness.clear();
 		currPop.avgSize.clear();
+		if(info.currentRun == 0)
+		{
+			bestOverallFitness = userExperiment.population.at(0).bestRealTrainingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations - 1);
+			userReport.indexRunBest = 0;
+			userReport.qualityBestPlot = ui->qualityPlot->toPixmap(1000,400,3.0);
+		}
+		else
+		{
+			if(userExperiment.population.at(info.currentRun).bestRealTrainingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations - 1) < bestOverallFitness)
+			{
+				bestOverallFitness = userExperiment.population.at(info.currentRun).bestRealTrainingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations - 1);
+				userReport.indexRunBest = info.currentRun;
+				userReport.qualityBestPlot = ui->qualityPlot->toPixmap(1000,400,3.0);
+			}
+		}
 	}
 }
 

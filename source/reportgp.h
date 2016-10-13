@@ -23,6 +23,7 @@
 #include <QImage>
 #include <QPixmap>
 #include "qcustomplot.h"
+#include "gpexperiment.h"
 
 class reportGP
 {
@@ -32,14 +33,29 @@ public:
   void setFilename(QString value);
   void setLogo(QImage value);
   void generate(void);
-  QPixmap performancePlot;
+  QPixmap qualityBestPlot;
   int remainingSpace;
+  gpExperiment outputExperiment;
+  int indexRunBest;
+  bool includeLogo;
+  bool includeDateTime;
+  bool includeQualityBestPlot;
+  bool includeBestSymbolic;
+  bool includeStatistics;
+  bool includePopulationInfo;
+  bool includeBestOutputPlot;
+  int indexPopulationInfo;
 
 private:
   void drawHeader(void);
   void drawCopyright(void);
   void drawDateTime(QString value);
   void drawPerformancePlot(void);
+  void drawSizeOverallPlot(void);
+
+  bool drawQualityBestPlot(int &starty, int &availableSpace);
+  bool drawSolutionBest(int &starty, int &availableSpace);
+
   QString filename;
   QImage logo;
   int pageWidth;

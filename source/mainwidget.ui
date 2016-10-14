@@ -717,7 +717,7 @@ QSlider::sub-page:horizontal {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -5502,7 +5502,7 @@ QListWidget::item:hover
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="pageResultsSimple">
            <layout class="QGridLayout" name="gridLayout_15">
@@ -5779,7 +5779,7 @@ QListWidget::item:hover
                  <item row="0" column="0">
                   <widget class="QStackedWidget" name="stackedWidgetResultsAdvanced">
                    <property name="currentIndex">
-                    <number>1</number>
+                    <number>0</number>
                    </property>
                    <widget class="QWidget" name="pageSummary_2">
                     <layout class="QGridLayout" name="gridLayout_109">

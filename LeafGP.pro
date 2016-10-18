@@ -141,5 +141,4 @@ FORMS    += source/mainwidget.ui
 RESOURCES += \
     media.qrc
 
-DISTFILES += \
-    source/matio/matioConfig.h.in
+DISTFILES +=

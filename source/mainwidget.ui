@@ -717,7 +717,7 @@ QSlider::sub-page:horizontal {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -2206,7 +2206,7 @@ QListWidget::item:hover
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="pageSetupSimple">
            <layout class="QGridLayout" name="gridLayout_7">
@@ -5505,6 +5505,17 @@ QListWidget::item:hover
            <number>0</number>
           </property>
           <widget class="QWidget" name="pageResultsSimple">
+           <property name="styleSheet">
+            <string notr="true">QLabel
+{
+	font-family: Roboto;
+	font-weight: 200;
+	font-size: 9pt;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: rgb(45,65,102);
+}</string>
+           </property>
            <layout class="QGridLayout" name="gridLayout_15">
             <item row="0" column="0">
              <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -5532,11 +5543,172 @@ QListWidget::item:hover
               <item>
                <widget class="QFrame" name="frame_14">
                 <property name="frameShape">
-                 <enum>QFrame::StyledPanel</enum>
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="frameShadow">
                  <enum>QFrame::Raised</enum>
                 </property>
+                <layout class="QGridLayout" name="gridLayout_124">
+                 <item row="0" column="0">
+                  <layout class="QVBoxLayout" name="verticalLayout_40">
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_23">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>200</height>
+                      </size>
+                     </property>
+                     <property name="title">
+                      <string>Historically best solution</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_126">
+                      <item row="0" column="0">
+                       <layout class="QVBoxLayout" name="verticalLayout_41">
+                        <item>
+                         <widget class="QScrollArea" name="scrollArea_5">
+                          <property name="maximumSize">
+                           <size>
+                            <width>16777215</width>
+                            <height>60</height>
+                           </size>
+                          </property>
+                          <property name="frameShape">
+                           <enum>QFrame::NoFrame</enum>
+                          </property>
+                          <property name="verticalScrollBarPolicy">
+                           <enum>Qt::ScrollBarAlwaysOff</enum>
+                          </property>
+                          <property name="widgetResizable">
+                           <bool>true</bool>
+                          </property>
+                          <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                           <property name="geometry">
+                            <rect>
+                             <x>0</x>
+                             <y>0</y>
+                             <width>752</width>
+                             <height>60</height>
+                            </rect>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>16777215</width>
+                             <height>16777215</height>
+                            </size>
+                           </property>
+                           <layout class="QGridLayout" name="gridLayout_125">
+                            <item row="0" column="0">
+                             <widget class="QLabel" name="label_130">
+                              <property name="minimumSize">
+                               <size>
+                                <width>0</width>
+                                <height>40</height>
+                               </size>
+                              </property>
+                              <property name="maximumSize">
+                               <size>
+                                <width>16777215</width>
+                                <height>16777215</height>
+                               </size>
+                              </property>
+                              <property name="text">
+                               <string/>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </widget>
+                        </item>
+                        <item>
+                         <layout class="QGridLayout" name="gridLayout_127">
+                          <item row="1" column="0">
+                           <widget class="QLabel" name="label_167">
+                            <property name="maximumSize">
+                             <size>
+                              <width>16777215</width>
+                              <height>40</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string>Error (RMSE) in testing data</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_165">
+                            <property name="maximumSize">
+                             <size>
+                              <width>16777215</width>
+                              <height>40</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string>Error (RMSE) in training data</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="1" column="1">
+                           <widget class="QLabel" name="label_168">
+                            <property name="text">
+                             <string/>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QLabel" name="label_166">
+                            <property name="text">
+                             <string/>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="groupBox_24">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>270</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QGroupBox {
+	background-color: rgb(255,255,255);
+}</string>
+                     </property>
+                     <property name="title">
+                      <string>Correlation</string>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_128">
+                      <item row="0" column="0">
+                       <widget class="QCustomPlot" name="expressCorrelationPlot" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>200</height>
+                         </size>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -5729,24 +5901,6 @@ QListWidget::item:hover
                      </property>
                     </widget>
                    </item>
-                   <item>
-                    <widget class="QLabel" name="label_130">
-                     <property name="styleSheet">
-                      <string notr="true">QLabel
-{
-	font-family: Roboto;
-	font-weight: normal;
-	font-size: 9pt;
-	padding-left: 10px;
-	padding-right: 10px;
-	color: rgb(45,65,102);
-}</string>
-                     </property>
-                     <property name="text">
-                      <string>Statistics are available only if multiple runs are executed</string>
-                     </property>
-                    </widget>
-                   </item>
                   </layout>
                  </item>
                 </layout>
@@ -5779,7 +5933,7 @@ QListWidget::item:hover
                  <item row="0" column="0">
                   <widget class="QStackedWidget" name="stackedWidgetResultsAdvanced">
                    <property name="currentIndex">
-                    <number>0</number>
+                    <number>2</number>
                    </property>
                    <widget class="QWidget" name="pageSummary_2">
                     <layout class="QGridLayout" name="gridLayout_109">
@@ -6363,8 +6517,8 @@ QListView::item:hover {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>285</width>
-                                      <height>50</height>
+                                      <width>33</width>
+                                      <height>30</height>
                                      </rect>
                                     </property>
                                     <layout class="QGridLayout" name="gridLayout_108">
@@ -6432,8 +6586,8 @@ QListView::item:hover {
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>178</width>
-                                 <height>266</height>
+                                 <width>26</width>
+                                 <height>26</height>
                                 </rect>
                                </property>
                                <layout class="QGridLayout" name="gridLayout_107">

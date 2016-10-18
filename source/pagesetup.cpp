@@ -125,14 +125,12 @@ void MainWidget::on_spinBox_5_valueChanged(int arg1)
     ui->circularProgress->setDoubleProgress(false);
     ui->label_105->hide();
     ui->lineEdit_6->hide();
-    ui->label_130->show();
   }
   else
   {
     ui->circularProgress->setDoubleProgress(true);
     ui->label_105->show();
     ui->lineEdit_6->show();
-    ui->label_130->hide();
   }
 }
 

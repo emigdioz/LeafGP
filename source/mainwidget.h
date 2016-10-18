@@ -150,6 +150,8 @@ private:
 	void populateTerminalList(void);
 	void populateRunsSelectionList(void);
 	void populateDataForContainer(void);
+	void showResultsExpressInfo(void);
+	void drawExpressCorrelationPlot(QVector<double> actualY, QVector<double> expectedY);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
 	int tableSummarySelectionType;

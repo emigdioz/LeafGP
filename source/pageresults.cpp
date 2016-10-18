@@ -638,3 +638,112 @@ void MainWidget::on_pushButton_10_clicked()
     ui->lineEdit_7->setText(filename);
   }
 }
+
+void MainWidget::showResultsExpressInfo()
+{
+  int nGens = userExperiment.gpParams.m_number_of_generations;
+  QString fullText = userExperiment.population.at(userReport.indexRunBest).tree.at(nGens - 1).at(0).syntaxPrefix;
+  float trainError = userExperiment.population.at(userReport.indexRunBest).bestRealTrainingFitness.at(nGens - 1);
+  float testError = userExperiment.population.at(userReport.indexRunBest).bestRealTestingFitness.at(nGens - 1);
+  ui->label_130->setText(fullText);
+  ui->label_166->setText(QString::number(trainError));
+  ui->label_168->setText(QString::number(testError));
+  drawExpressCorrelationPlot(userExperiment.population.at(userReport.indexRunBest).actualOutput,userExperiment.population.at(userReport.indexRunBest).expectedOutput);
+}
+
+void MainWidget::drawExpressCorrelationPlot(QVector<double> actualY, QVector<double> expectedY)
+{
+	ui->expressCorrelationPlot->show();
+	QVector<double> xReg,yReg;
+	double a,b,coeffReg,pearson,minX,maxX,minY,maxY;
+	QVector<double> YTickVector;
+	QVector<QString> YTickLabels;
+	QVector<double> XTickVector;
+	QVector<QString> XTickLabels;
+
+	QCPScatterStyle correlationScatter;
+	correlationScatter.setShape(QCPScatterStyle::ssCircle);
+	correlationScatter.setPen(Qt::NoPen);
+	correlationScatter.setBrush(QColor(255,174,0,128));
+	correlationScatter.setSize(6);
+	xReg.clear();
+	yReg.clear();
+	minX = maxX = expectedY.at(0);
+	minY = maxY = actualY.at(0);
+	for(int i = 0;i < actualY.size();i++)
+	{
+		if(expectedY.at(i) < minX) minX = expectedY.at(i);
+		if(expectedY.at(i) > maxX) maxX = expectedY.at(i);
+		if(actualY.at(i) < minY) minY = actualY.at(i);
+		if(actualY.at(i) > maxY) maxY = actualY.at(i);
+	}
+	double marginX = (maxX - minX) * 0.1;
+	double marginY = (maxY - minY) * 0.1;
+
+	xReg.push_back(minX);
+	xReg.push_back(maxX);
+	yReg.push_back(minY);
+	yReg.push_back(maxY);
+	XTickVector.push_back(minX);
+	XTickVector.push_back(maxX);
+	XTickLabels.push_back(QString::number(minX,'f',2));
+	XTickLabels.push_back(QString::number(maxX,'f',2));
+	YTickVector.push_back(minY);
+	YTickVector.push_back(maxY);
+	YTickLabels.push_back(QString::number(minY,'f',2));
+	YTickLabels.push_back(QString::number(maxY,'f',2));
+
+	// compute Pearson coefficient
+	pearson = basicStats.computePearson(actualY,expectedY);
+	ui->groupBox_24->setTitle("Correlation (ρ = " + QString::number(pearson,'f',4) + ")");
+
+	QPen pen(QColor(Qt::white),2);
+	QPen pen2(QColor(188,95,211,255),1);
+
+	ui->expressCorrelationPlot->clearPlottables();
+	ui->expressCorrelationPlot->addGraph();
+	ui->expressCorrelationPlot->addGraph();
+	ui->expressCorrelationPlot->xAxis->setRange(minX - marginX,maxX + marginX);
+	ui->expressCorrelationPlot->yAxis->setRange(minY - marginY,maxY + marginY);
+	ui->expressCorrelationPlot->graph(0)->setLineStyle(QCPGraph::lsNone);
+	ui->expressCorrelationPlot->graph(0)->setScatterStyle(correlationScatter);
+	ui->expressCorrelationPlot->graph(1)->setPen(pen2);
+
+	ui->expressCorrelationPlot->xAxis->grid()->setPen(QColor(255, 255, 255, 255));
+	ui->expressCorrelationPlot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
+	ui->expressCorrelationPlot->xAxis->setBasePen(pen);
+	ui->expressCorrelationPlot->xAxis->setLabel("Expected");
+	ui->expressCorrelationPlot->xAxis->setLabelFont(QFont("Roboto",11,QFont::Light));
+	ui->expressCorrelationPlot->xAxis->setLabelColor(QColor(45,65,102,255));
+	ui->expressCorrelationPlot->xAxis->setAutoTicks(false);
+	ui->expressCorrelationPlot->xAxis->setAutoTickLabels(false);
+	ui->expressCorrelationPlot->xAxis->setTicks(true);
+	ui->expressCorrelationPlot->xAxis->setTickLabels(true);
+	ui->expressCorrelationPlot->xAxis->setTickLabelFont(QFont("Roboto",9,QFont::Light));
+	ui->expressCorrelationPlot->xAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->expressCorrelationPlot->xAxis->setTickVector(XTickVector);
+	ui->expressCorrelationPlot->xAxis->setTickVectorLabels(XTickLabels);
+	ui->expressCorrelationPlot->xAxis->setTickPen(QColor(255, 255, 255, 255));
+
+	ui->expressCorrelationPlot->yAxis->grid()->setPen(QColor(255, 255, 255, 255));
+	ui->expressCorrelationPlot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
+	ui->expressCorrelationPlot->yAxis->setBasePen(pen);
+	ui->expressCorrelationPlot->yAxis->setLabel("Actual");
+	ui->expressCorrelationPlot->yAxis->setLabelFont(QFont("Roboto",11,QFont::Light));
+	ui->expressCorrelationPlot->yAxis->setLabelColor(QColor(45,65,102,255));
+	ui->expressCorrelationPlot->yAxis->setAutoTicks(false);
+	ui->expressCorrelationPlot->yAxis->setAutoTickLabels(false);
+	ui->expressCorrelationPlot->yAxis->setTicks(true);
+	ui->expressCorrelationPlot->yAxis->setTickLabels(true);
+	ui->expressCorrelationPlot->yAxis->setTickLabelFont(QFont("Roboto",9,QFont::Light));
+	ui->expressCorrelationPlot->yAxis->setTickLabelColor(QColor(45,65,102,255));
+	ui->expressCorrelationPlot->yAxis->setTickVector(YTickVector);
+	ui->expressCorrelationPlot->yAxis->setTickVectorLabels(YTickLabels);
+	ui->expressCorrelationPlot->yAxis->setTickPen(QColor(255, 255, 255, 255));
+
+	ui->expressCorrelationPlot->graph(0)->clearData();
+	ui->expressCorrelationPlot->graph(0)->setData(expectedY,actualY);
+	ui->expressCorrelationPlot->graph(1)->clearData();
+	ui->expressCorrelationPlot->graph(1)->setData(xReg,yReg);
+	ui->expressCorrelationPlot->replot();
+}

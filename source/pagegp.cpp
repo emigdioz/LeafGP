@@ -108,6 +108,7 @@ void MainWidget::algorithmFinished()
   on_runSelectionView_clicked(Index);
   validDataProject = true;
   userReport.outputExperiment = userExperiment;
+  showResultsExpressInfo();
 }
 
 void MainWidget::drawCorrelationPlotGP(QVector<double> actualY, QVector<double> expectedY)
@@ -428,6 +429,8 @@ void MainWidget::receivedPopInfo(GP::popInfo info)
 	if(info.currentGen == workerAlgorithm->gp_parameters.m_number_of_generations)	
 	{
 		userExperiment.population[info.currentRun] = currPop;
+		userExperiment.population[info.currentRun].expectedOutput = info.expectedOutput;
+		userExperiment.population[info.currentRun].actualOutput = info.actualOutput;
 		currPop.id.clear();
 		currPop.operatorType.clear();
 		currPop.parents[0].clear();
@@ -442,6 +445,8 @@ void MainWidget::receivedPopInfo(GP::popInfo info)
 		currPop.bestNormalizedTestingFitness.clear();
 		currPop.bestRealTestingFitness.clear();
 		currPop.avgSize.clear();
+		currPop.expectedOutput.clear();
+		currPop.actualOutput.clear();
 		if(info.currentRun == 0)
 		{
 			bestOverallFitness = userExperiment.population.at(0).bestRealTrainingFitness.at(workerAlgorithm->gp_parameters.m_number_of_generations - 1);

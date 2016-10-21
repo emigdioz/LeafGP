@@ -127,6 +127,10 @@ private slots:
 
 	void on_checkBox_5_toggled(bool checked);
 
+	void on_pauseButton_toggled(bool checked);
+
+	void on_pauseButton_clicked();
+
 private:
 	Ui::MainWidget *ui;
 	void setTableDataItemsAligment(Qt::AlignmentFlag aligment);
@@ -184,6 +188,9 @@ private:
 	QStringListModel *modelRunsList;
 	int performancePlotSlices = 20;
 
+signals:
+	void requestPauseGP(bool value);
+	void requestStopGP(bool value);
 };
 
 #endif // MAINWIDGET_H

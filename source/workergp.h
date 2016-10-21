@@ -37,10 +37,14 @@ signals:
   void sendSingleTree(GP::treeStruct data);
   void sendBasicInfo(GP::basicInfo info);
   void sendPopInfo(GP::popInfo info);
+  void GP_pause_requested(bool value);
+  void GP_stop_requested(bool value);
 
 public slots:
   void doWork();
   void resumeRequested();
+  void requestedPause(bool value);
+  void requestedStop(bool value);
 
 private:
   bool _abort;

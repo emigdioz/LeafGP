@@ -98,6 +98,8 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(workerAlgorithm, SIGNAL(sendSingleTree(GP::treeStruct)), this, SLOT(receivedSingleTree(GP::treeStruct)));
 	connect(workerAlgorithm, SIGNAL(sendBasicInfo(GP::basicInfo)), this, SLOT(receivedBasicInfo(GP::basicInfo)));
 	connect(workerAlgorithm, SIGNAL(sendPopInfo(GP::popInfo)), this, SLOT(receivedPopInfo(GP::popInfo)));
+	connect(this, SIGNAL(requestPauseGP(bool)), workerAlgorithm, SLOT(requestedPause(bool)));
+	connect(this, SIGNAL(requestStopGP(bool)), workerAlgorithm, SLOT(requestedStop(bool)));
 	timerGP = new QTimer();
 	connect(timerGP, SIGNAL(timeout()), this, SLOT(showElapsedTime()));
 	connect(workerAlgorithm, SIGNAL(finished()), this, SLOT(algorithmFinished()));
@@ -655,4 +657,13 @@ void MainWidget::on_checkBox_5_toggled(bool checked)
       userReport.includePopulationInfo = true;
     else
       userReport.includePopulationInfo = false;
+}
+
+void MainWidget::on_pauseButton_toggled(bool checked)
+{
+}
+
+void MainWidget::on_pauseButton_clicked()
+{
+    emit requestPauseGP(true);
 }

@@ -94,7 +94,7 @@ void GP::Evolve()
   QVector<double> actQ;
   QVector<double> partialValues;
   math_stats mathTool;
-
+  engineRunning = true;
   /*
 
       Pseudo-code for Evolve:
@@ -1746,4 +1746,18 @@ float GP::executeLS_LM(const cl_uint *program)
 
 	qDebug()<<int(rep.terminationtype);
 	qDebug()<<x.tostring(2).c_str();
+}
+
+void GP::pauseRequested(bool value)
+{
+	if(value)
+		engineRunning = false;
+	else
+		engineRunning = true;
+}
+
+void GP::stopRequested(bool value)
+{
+	if(value)
+		engineRunning = false;
 }

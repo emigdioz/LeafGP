@@ -174,6 +174,7 @@ public:
     QVector<double> actualOutput;
   } popInfo;
   int engineType;
+  bool engineRunning;
 
   void insertData(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);
@@ -424,6 +425,9 @@ signals:
 	void GP_send_basic_info(GP::basicInfo info);
 	void GP_send_pop_info(GP::popInfo info);
 
+public slots:
+  void pauseRequested(bool value);
+  void stopRequested(bool value);
 private:
    QString bufferString;
 

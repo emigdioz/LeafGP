@@ -717,7 +717,7 @@ QSlider::sub-page:horizontal {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -4212,6 +4212,15 @@ QListWidget::item:hover
                             <height>24</height>
                            </size>
                           </property>
+                          <property name="styleSheet">
+                           <string notr="true">QPushButton:hover {
+	background-color: rgb(217,245,155);
+}
+
+QPushButton:pressed {
+	background-color: rgb(148,204,20);
+}</string>
+                          </property>
                           <property name="text">
                            <string>Start execution</string>
                           </property>
@@ -4225,13 +4234,37 @@ QListWidget::item:hover
                             <height>24</height>
                            </size>
                           </property>
+                          <property name="styleSheet">
+                           <string notr="true">QPushButton:hover {
+	background-color: rgb(255,220,145);
+}
+
+QPushButton:pressed {
+	background-color: rgb(255,174,0);
+}</string>
+                          </property>
                           <property name="text">
                            <string>Pause</string>
+                          </property>
+                          <property name="checkable">
+                           <bool>true</bool>
+                          </property>
+                          <property name="checked">
+                           <bool>false</bool>
                           </property>
                          </widget>
                         </item>
                         <item>
                          <widget class="QPushButton" name="stopButton">
+                          <property name="styleSheet">
+                           <string notr="true">QPushButton:hover {
+	background-color: rgb(255,195,195);
+}
+
+QPushButton:pressed {
+	background-color: rgb(255,85,85);
+}</string>
+                          </property>
                           <property name="text">
                            <string>Stop</string>
                           </property>

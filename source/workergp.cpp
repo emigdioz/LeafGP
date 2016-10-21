@@ -67,6 +67,8 @@ void workerGP::doWork()
   connect(gp_engine, SIGNAL(GP_send_single_tree(GP::treeStruct)), this, SLOT(GP_received_single_tree(GP::treeStruct)));
   connect(gp_engine, SIGNAL(GP_send_basic_info(GP::basicInfo)), this, SLOT(GP_received_basic_info(GP::basicInfo)));
   connect(gp_engine, SIGNAL(GP_send_pop_info(GP::popInfo)), this, SLOT(GP_received_pop_info(GP::popInfo)));
+  connect(this, SIGNAL(GP_pause_requested(bool)), gp_engine, SLOT(pauseRequested(bool)));
+  connect(this, SIGNAL(GP_stop_requested(bool)), gp_engine, SLOT(stopRequested(bool)));
   // insert data to GP object
   gp_engine->engineType = engineType;
   gp_engine->insertData(data_matrix);
@@ -114,4 +116,15 @@ void workerGP::GP_received_basic_info(GP::basicInfo info)
 void workerGP::GP_received_pop_info(GP::popInfo info)
 {
 	emit sendPopInfo(info);
+}
+
+void workerGP::requestedPause(bool value)
+{
+	emit GP_pause_requested(value);
+	qDebug()<<"pause requested";
+}
+
+void workerGP::requestedStop(bool value)
+{
+	emit GP_stop_requested(value);
 }

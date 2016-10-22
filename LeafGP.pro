@@ -16,6 +16,8 @@ contains(DEFINES, USE_OPENCL) {
 LIBS += -lOpenCL
 }
 
+linux-g++: LIBS += -lopenblas
+
 INCLUDEPATH += ./source \
              ./source/alglib \
              ./source/CL \
@@ -73,7 +75,21 @@ SOURCES += source/main.cpp \
     source/gpexperiment.cpp \
     source/pageresults.cpp \
     source/filecontainer.cpp \
-    source/reportgp.cpp
+    source/reportgp.cpp \
+    source/levmar/Axb.c \
+    source/levmar/Axb_core.c \
+    source/levmar/lm.c \
+    source/levmar/lm_core.c \
+    source/levmar/lmbc.c \
+    source/levmar/lmbc_core.c \
+    source/levmar/lmblec.c \
+    source/levmar/lmblec_core.c \
+    source/levmar/lmbleic.c \
+    source/levmar/lmbleic_core.c \
+    source/levmar/lmlec.c \
+    source/levmar/lmlec_core.c \
+    source/levmar/misc.c \
+    source/levmar/misc_core.c
 
 HEADERS  += source/mainwidget.h \
     source/dataset.h \
@@ -134,7 +150,11 @@ HEADERS  += source/mainwidget.h \
     source/cmaes/utils.h \
     source/cmaes/randomCMAES.h \
     source/filecontainer.h \
-    source/reportgp.h
+    source/reportgp.h \
+    source/levmar/compiler.h \
+    source/levmar/levmar.h \
+    source/levmar/lm.h \
+    source/levmar/misc.h
 
 FORMS    += source/mainwidget.ui
 

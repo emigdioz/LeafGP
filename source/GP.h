@@ -175,6 +175,8 @@ public:
   } popInfo;
   int engineType;
   bool engineRunning;
+  bool pausePressed;
+  bool stopPressed;
 
   void insertData(std::vector<std::vector<float> > data);
   void convertProgramToTreeStruct(treeStruct &tree, const cl_uint* program);

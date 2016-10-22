@@ -129,7 +129,6 @@ private slots:
 
 	void on_pauseButton_toggled(bool checked);
 
-	void on_pauseButton_clicked();
 
 private:
 	Ui::MainWidget *ui;

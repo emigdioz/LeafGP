@@ -717,7 +717,7 @@ QSlider::sub-page:horizontal {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pageData">
        <property name="styleSheet">
@@ -799,7 +799,7 @@ QSlider::sub-page:horizontal {
 }</string>
                </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Input data can be analyzed and preprocessed before the algorithm is executed.&lt;/p&gt;&lt;p&gt;Express. Data is used as it is and no further changes are applied.&lt;/p&gt;&lt;p&gt;Advanced. Data can be tweaked.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Input data can be analyzed and preprocessed before the algorithm is executed.&lt;/p&gt;&lt;p&gt;Express. Basic information from data is displayed.&lt;/p&gt;&lt;p&gt;Advanced. Data can be analyzed and explored.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -882,6 +882,12 @@ QListWidget::item:hover
              <layout class="QVBoxLayout" name="verticalLayout_2">
               <item>
                <widget class="QLabel" name="label_3">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
                   <width>16777215</width>
@@ -894,6 +900,9 @@ QListWidget::item:hover
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
+	color: rgb(45,65,102);
+	padding-left: 10px;
+	padding-right: 10px;
 }</string>
                 </property>
                 <property name="text">
@@ -913,160 +922,177 @@ QListWidget::item:hover
                  <item row="0" column="0">
                   <layout class="QVBoxLayout" name="verticalLayout_15">
                    <item>
-                    <widget class="QLabel" name="label_161">
-                     <property name="styleSheet">
-                      <string notr="true">QLabel {
+                    <widget class="QFrame" name="frame_43">
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>120</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::NoFrame</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QGridLayout" name="gridLayout_130">
+                      <item row="0" column="0">
+                       <layout class="QVBoxLayout" name="verticalLayout_43">
+                        <item>
+                         <widget class="QLabel" name="label_161">
+                          <property name="styleSheet">
+                           <string notr="true">QLabel {
 	font-family: Lato;
 	font-weight: 200;
 	font-size: 14pt;
 padding-left: 1px;
 }</string>
-                     </property>
-                     <property name="text">
-                      <string>Project</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="frame_21">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>40</height>
-                      </size>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::NoFrame</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QGridLayout" name="gridLayout_28">
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <item row="0" column="0">
-                       <layout class="QHBoxLayout" name="horizontalLayout_3">
+                          </property>
+                          <property name="text">
+                           <string>Project</string>
+                          </property>
+                         </widget>
+                        </item>
                         <item>
-                         <widget class="QPushButton" name="pushButton_2">
+                         <widget class="QFrame" name="frame_21">
                           <property name="minimumSize">
                            <size>
                             <width>0</width>
-                            <height>24</height>
+                            <height>0</height>
                            </size>
                           </property>
-                          <property name="text">
-                           <string>New project</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QPushButton" name="pushButton_3">
-                          <property name="text">
-                           <string>Open project...</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer_3">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
+                          <property name="maximumSize">
                            <size>
-                            <width>40</width>
-                            <height>20</height>
+                            <width>16777215</width>
+                            <height>40</height>
                            </size>
                           </property>
-                         </spacer>
-                        </item>
-                       </layout>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="frame_19">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>40</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::NoFrame</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QGridLayout" name="gridLayout_21">
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <item row="0" column="0">
-                       <layout class="QHBoxLayout" name="horizontalLayout">
-                        <item>
-                         <widget class="QPushButton" name="loadButton">
-                          <property name="enabled">
-                           <bool>false</bool>
+                          <property name="frameShape">
+                           <enum>QFrame::NoFrame</enum>
                           </property>
+                          <property name="frameShadow">
+                           <enum>QFrame::Raised</enum>
+                          </property>
+                          <layout class="QGridLayout" name="gridLayout_28">
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="spacing">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="0">
+                            <layout class="QHBoxLayout" name="horizontalLayout_3">
+                             <item>
+                              <widget class="QPushButton" name="pushButton_2">
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>24</height>
+                                </size>
+                               </property>
+                               <property name="text">
+                                <string>New project</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QPushButton" name="pushButton_3">
+                               <property name="text">
+                                <string>Open project...</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <spacer name="horizontalSpacer_3">
+                               <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>40</width>
+                                 <height>20</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                            </layout>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QFrame" name="frame_19">
                           <property name="minimumSize">
                            <size>
                             <width>0</width>
-                            <height>28</height>
+                            <height>40</height>
                            </size>
                           </property>
-                          <property name="text">
-                           <string>Import data...</string>
+                          <property name="maximumSize">
+                           <size>
+                            <width>16777215</width>
+                            <height>16777215</height>
+                           </size>
                           </property>
-                          <property name="flat">
-                           <bool>false</bool>
+                          <property name="frameShape">
+                           <enum>QFrame::NoFrame</enum>
                           </property>
-                         </widget>
-                        </item>
-                        <item>
-                         <widget class="QLabel" name="label_19">
-                          <property name="enabled">
-                           <bool>true</bool>
+                          <property name="frameShadow">
+                           <enum>QFrame::Raised</enum>
                           </property>
-                          <property name="styleSheet">
-                           <string notr="true">QLabel
+                          <layout class="QGridLayout" name="gridLayout_21">
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="spacing">
+                            <number>0</number>
+                           </property>
+                           <item row="0" column="0">
+                            <layout class="QHBoxLayout" name="horizontalLayout">
+                             <item>
+                              <widget class="QPushButton" name="loadButton">
+                               <property name="enabled">
+                                <bool>false</bool>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>0</width>
+                                 <height>28</height>
+                                </size>
+                               </property>
+                               <property name="text">
+                                <string>Import data...</string>
+                               </property>
+                               <property name="flat">
+                                <bool>false</bool>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_19">
+                               <property name="enabled">
+                                <bool>true</bool>
+                               </property>
+                               <property name="styleSheet">
+                                <string notr="true">QLabel
 {
 	font-family: Roboto;
 	font-weight: normal;
@@ -1075,110 +1101,133 @@ padding-left: 1px;
 	padding-right: 10px;
 	color: rgb(45,65,102);
 }</string>
-                          </property>
-                          <property name="text">
-                           <string>or use a benchmark problem</string>
-                          </property>
+                               </property>
+                               <property name="text">
+                                <string>or use a benchmark problem</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QComboBox" name="comboBox">
+                               <property name="enabled">
+                                <bool>false</bool>
+                               </property>
+                               <property name="minimumSize">
+                                <size>
+                                 <width>150</width>
+                                 <height>24</height>
+                                </size>
+                               </property>
+                               <property name="currentIndex">
+                                <number>-1</number>
+                               </property>
+                               <property name="maxVisibleItems">
+                                <number>8</number>
+                               </property>
+                               <property name="frame">
+                                <bool>true</bool>
+                               </property>
+                               <item>
+                                <property name="text">
+                                 <string>Koza-1</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Koza-2</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Koza-3</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-1</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-3</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-4</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-5</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-6</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-7</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-8</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-9</string>
+                                </property>
+                               </item>
+                               <item>
+                                <property name="text">
+                                 <string>Nguyen-10</string>
+                                </property>
+                               </item>
+                              </widget>
+                             </item>
+                             <item>
+                              <spacer name="horizontalSpacer">
+                               <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                               </property>
+                               <property name="sizeHint" stdset="0">
+                                <size>
+                                 <width>40</width>
+                                 <height>20</height>
+                                </size>
+                               </property>
+                              </spacer>
+                             </item>
+                            </layout>
+                           </item>
+                          </layout>
                          </widget>
-                        </item>
-                        <item>
-                         <widget class="QComboBox" name="comboBox">
-                          <property name="enabled">
-                           <bool>false</bool>
-                          </property>
-                          <property name="minimumSize">
-                           <size>
-                            <width>150</width>
-                            <height>24</height>
-                           </size>
-                          </property>
-                          <property name="currentIndex">
-                           <number>-1</number>
-                          </property>
-                          <property name="maxVisibleItems">
-                           <number>8</number>
-                          </property>
-                          <property name="frame">
-                           <bool>true</bool>
-                          </property>
-                          <item>
-                           <property name="text">
-                            <string>Koza-1</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Koza-2</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Koza-3</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-1</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-3</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-4</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-5</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-6</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-7</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-8</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-9</string>
-                           </property>
-                          </item>
-                          <item>
-                           <property name="text">
-                            <string>Nguyen-10</string>
-                           </property>
-                          </item>
-                         </widget>
-                        </item>
-                        <item>
-                         <spacer name="horizontalSpacer">
-                          <property name="orientation">
-                           <enum>Qt::Horizontal</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>40</width>
-                            <height>20</height>
-                           </size>
-                          </property>
-                         </spacer>
                         </item>
                        </layout>
                       </item>
                      </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_31">
+                     <property name="styleSheet">
+                      <string notr="true">QLabel
+{
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 18pt;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: rgb(45,65,102);
+}</string>
+                     </property>
+                     <property name="text">
+                      <string>Create a new project or open a previously created project</string>
+                     </property>
                     </widget>
                    </item>
                    <item>
@@ -1282,19 +1331,6 @@ padding-left: 1px;
                            <size>
                             <width>40</width>
                             <height>20</height>
-                           </size>
-                          </property>
-                         </spacer>
-                        </item>
-                        <item row="6" column="0">
-                         <spacer name="verticalSpacer">
-                          <property name="orientation">
-                           <enum>Qt::Vertical</enum>
-                          </property>
-                          <property name="sizeHint" stdset="0">
-                           <size>
-                            <width>20</width>
-                            <height>40</height>
                            </size>
                           </property>
                          </spacer>
@@ -1708,7 +1744,7 @@ QListWidget::item:hover
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
-                       <height>0</height>
+                       <height>30</height>
                       </size>
                      </property>
                      <property name="maximumSize">
@@ -1723,29 +1759,13 @@ QListWidget::item:hover
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
-	padding: 5px;
+	color: rgb(45,65,102);
+	padding-left: 10px;
+	padding-right: 10px;
 }</string>
                      </property>
                      <property name="text">
                       <string>Advanced</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="label_31">
-                     <property name="styleSheet">
-                      <string notr="true">QLabel
-{
-	font-family: Roboto;
-	font-weight: normal;
-	font-size: 9pt;
-	padding-left: 10px;
-	padding-right: 10px;
-	color: rgb(45,65,102);
-}</string>
-                     </property>
-                     <property name="text">
-                      <string>No data has been loaded yet, please use Express section to load data.</string>
                      </property>
                     </widget>
                    </item>
@@ -2043,7 +2063,32 @@ QWidget#pageProcessing {
                      </item>
                     </layout>
                    </widget>
-                   <widget class="QWidget" name="pageProcessing"/>
+                   <widget class="QWidget" name="pageProcessing">
+                    <layout class="QGridLayout" name="gridLayout_129">
+                     <item row="0" column="0">
+                      <layout class="QVBoxLayout" name="verticalLayout_42">
+                       <item>
+                        <widget class="QLabel" name="label_169">
+                         <property name="styleSheet">
+                          <string notr="true">QLabel
+{
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 18pt;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: rgb(45,65,102);
+}</string>
+                         </property>
+                         <property name="text">
+                          <string>Feature currently in development</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
                   </widget>
                  </item>
                 </layout>
@@ -2134,7 +2179,7 @@ QWidget#pageProcessing {
 }</string>
                </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parameters heavily influence on performance and solutions quality. These can be changed to better fit solution expectations.&lt;/p&gt;&lt;p&gt;Express. Recommended settings are used based on data.&lt;/p&gt;&lt;p&gt;Advanced. Recommended for expert users. Many Genetic Programming settings can be changed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Parameters heavily influence on performance and solutions quality. These can be tweaked to better fit algorithm expectations.&lt;/p&gt;&lt;p&gt;Express. Recommended settings are used based on data.&lt;/p&gt;&lt;p&gt;Advanced. Recommended for expert users. Several Genetic Programming settings can be changed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -2206,7 +2251,7 @@ QListWidget::item:hover
            <string notr="true"/>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="pageSetupSimple">
            <layout class="QGridLayout" name="gridLayout_7">
@@ -2214,6 +2259,12 @@ QListWidget::item:hover
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
                <widget class="QLabel" name="label_6">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
                   <width>16777215</width>
@@ -2226,6 +2277,9 @@ QListWidget::item:hover
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
+	color: rgb(45,65,102);
+	padding-left: 10px;
+	padding-right: 10px;
 }</string>
                 </property>
                 <property name="text">
@@ -2273,7 +2327,7 @@ QListWidget::item:hover
                         <item row="0" column="1">
                          <widget class="QPushButton" name="pushButton_8">
                           <property name="text">
-                           <string>Autofind parameters</string>
+                           <string>Find optimal parameters</string>
                           </property>
                          </widget>
                         </item>
@@ -2476,6 +2530,12 @@ QListWidget::item:hover
              <layout class="QVBoxLayout" name="verticalLayout_6">
               <item>
                <widget class="QLabel" name="label_7">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
                   <width>16777215</width>
@@ -2488,7 +2548,9 @@ QListWidget::item:hover
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
-	padding: 5px;
+	color: rgb(45,65,102);
+	padding-left: 10px;
+	padding-right: 10px;
 }</string>
                 </property>
                 <property name="text">
@@ -3908,7 +3970,32 @@ QListWidget::item:hover {
                      </item>
                     </layout>
                    </widget>
-                   <widget class="QWidget" name="pageFitness"/>
+                   <widget class="QWidget" name="pageFitness">
+                    <layout class="QGridLayout" name="gridLayout_131">
+                     <item row="0" column="0">
+                      <layout class="QVBoxLayout" name="verticalLayout_44">
+                       <item>
+                        <widget class="QLabel" name="label_170">
+                         <property name="styleSheet">
+                          <string notr="true">QLabel
+{
+	font-family: Lato;
+	font-weight: 200;
+	font-size: 18pt;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: rgb(45,65,102);
+}</string>
+                         </property>
+                         <property name="text">
+                          <string>Feature currently in development</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
                    <widget class="QWidget" name="pageOthers">
                     <layout class="QGridLayout" name="gridLayout_70">
                      <item row="0" column="0">
@@ -4056,7 +4143,7 @@ QListWidget::item:hover {
 }</string>
                </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Genetic Programming launcher based on predefined settings.&lt;/p&gt;&lt;p&gt;Express. Minimal information is shown.&lt;/p&gt;&lt;p&gt;Advanced. Several metrics can be analyzed in real time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Genetic Programming launcher based on predefined settings.&lt;/p&gt;&lt;p&gt;Express. Minimal information is shown.&lt;/p&gt;&lt;p&gt;Advanced. Several metrics can be reviewed in real time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -4142,6 +4229,12 @@ QListWidget::item:hover
              <layout class="QVBoxLayout" name="verticalLayout_8">
               <item>
                <widget class="QLabel" name="label_10">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
                   <width>16777215</width>
@@ -4154,6 +4247,9 @@ QListWidget::item:hover
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
+	color: rgb(45,65,102);
+	padding-left: 10px;
+	padding-right: 10px;
 }</string>
                 </property>
                 <property name="text">
@@ -4240,6 +4336,10 @@ QPushButton:pressed {
 }
 
 QPushButton:pressed {
+	background-color: rgb(255,174,0);
+}
+
+QPushButton:checked {
 	background-color: rgb(255,174,0);
 }</string>
                           </property>
@@ -4935,6 +5035,12 @@ QListWidget::item:hover
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
                <widget class="QLabel" name="label_11">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
                   <width>16777215</width>
@@ -4947,7 +5053,9 @@ QListWidget::item:hover
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
-	padding: 5px;
+	color: rgb(45,65,102);
+	padding-left: 10px;
+	padding-right: 10px;
 }</string>
                 </property>
                 <property name="text">
@@ -5067,8 +5175,8 @@ QGroupBox::title {
                            <rect>
                             <x>0</x>
                             <y>0</y>
-                            <width>62</width>
-                            <height>26</height>
+                            <width>637</width>
+                            <height>374</height>
                            </rect>
                           </property>
                           <layout class="QGridLayout" name="gridLayout_84">
@@ -5452,7 +5560,7 @@ QGroupBox::title {
 }</string>
                </property>
                <property name="text">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Solutions obtained can be explored and analyzed.&lt;/p&gt;&lt;p&gt;Express. Minimal information is shown.&lt;/p&gt;&lt;p&gt;Advanced. Full solution disclosure is provided.&lt;/p&gt;&lt;p&gt;Report. Generate a report with the resuts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Evolved solutions can be explored and analyzed.&lt;/p&gt;&lt;p&gt;Express. Minimal information is shown.&lt;/p&gt;&lt;p&gt;Advanced. Full solution and evolution disclosure is provided.&lt;/p&gt;&lt;p&gt;Report. Generate a report with the resuts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -5554,6 +5662,12 @@ QListWidget::item:hover
              <layout class="QVBoxLayout" name="verticalLayout_11">
               <item>
                <widget class="QLabel" name="label_14">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>30</height>
+                 </size>
+                </property>
                 <property name="maximumSize">
                  <size>
                   <width>16777215</width>
@@ -5566,6 +5680,9 @@ QListWidget::item:hover
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
+	color: rgb(45,65,102);
+	padding-left: 10px;
+	padding-right: 10px;
 }</string>
                 </property>
                 <property name="text">
@@ -5914,6 +6031,12 @@ QListWidget::item:hover
                   <layout class="QHBoxLayout" name="horizontalLayout_8">
                    <item>
                     <widget class="QLabel" name="label_15">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>30</height>
+                      </size>
+                     </property>
                      <property name="maximumSize">
                       <size>
                        <width>16777215</width>
@@ -5926,7 +6049,9 @@ QListWidget::item:hover
 	font-family: Lato;
 	font-weight: normal;
 	font-size: 14pt;
-	padding: 5px;
+	color: rgb(45,65,102);
+	padding-left: 10px;
+	padding-right: 10px;
 }</string>
                      </property>
                      <property name="text">
@@ -5966,7 +6091,7 @@ QListWidget::item:hover
                  <item row="0" column="0">
                   <widget class="QStackedWidget" name="stackedWidgetResultsAdvanced">
                    <property name="currentIndex">
-                    <number>2</number>
+                    <number>0</number>
                    </property>
                    <widget class="QWidget" name="pageSummary_2">
                     <layout class="QGridLayout" name="gridLayout_109">
@@ -6550,8 +6675,8 @@ QListView::item:hover {
                                      <rect>
                                       <x>0</x>
                                       <y>0</y>
-                                      <width>33</width>
-                                      <height>30</height>
+                                      <width>285</width>
+                                      <height>50</height>
                                      </rect>
                                     </property>
                                     <layout class="QGridLayout" name="gridLayout_108">
@@ -6619,8 +6744,8 @@ QListView::item:hover {
                                 <rect>
                                  <x>0</x>
                                  <y>0</y>
-                                 <width>26</width>
-                                 <height>26</height>
+                                 <width>178</width>
+                                 <height>266</height>
                                 </rect>
                                </property>
                                <layout class="QGridLayout" name="gridLayout_107">

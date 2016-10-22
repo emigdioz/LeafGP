@@ -32,7 +32,6 @@ void MainWidget::on_loadButton_pressed()
 			userExperiment.nSamples = nSamples;
 			ui->InfoBox->show();
 			populatePreviewPlot(nSamples);
-			ui->label_31->hide();
 			setTableDataItemsAligment(Qt::AlignCenter);
 			setTableHeaderLabels();
 			ui->tableViewDataSummary->setModel(inputData.model);
@@ -88,7 +87,6 @@ void MainWidget::on_comboBox_activated(int index)
 		ui->label_23->setPixmap(pix);
 		ui->InfoBox->show();
 		populatePreviewPlot(nSamples);
-		ui->label_31->hide();
 		setTableDataItemsAligment(Qt::AlignCenter);
 		setTableHeaderLabels();
 		ui->tableViewDataSummary->setModel(inputData.model);
@@ -1022,6 +1020,7 @@ void MainWidget::on_pushButton_2_clicked()
 	ui->label_30->hide();
 	ui->previewPlot->hide();
 	ui->label_164->setText("Unnamed (please save once algorithm is executed)");
+	ui->label_31->hide();
 }
 
 void MainWidget::on_pushButton_3_clicked()
@@ -1178,7 +1177,7 @@ void MainWidget::on_pushButton_3_clicked()
 					}
 			}
 		}
-		qDebug()<<"Done";
+		ui->label_31->hide();
 	}
 	else
 	{

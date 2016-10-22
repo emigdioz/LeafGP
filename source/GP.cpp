@@ -95,6 +95,8 @@ void GP::Evolve()
   QVector<double> partialValues;
   math_stats mathTool;
   engineRunning = true;
+  pausePressed = false;
+  stopPressed = false;
   /*
 
       Pseudo-code for Evolve:
@@ -341,6 +343,9 @@ void GP::Evolve()
      thisPop.expectedOutput = expQ;
      emit GP_send_pop_info(thisPop);
      lastPop = thisPop;
+
+     // *********** Pause checking
+     while(pausePressed);
 
    } // 19
    // 20:
@@ -1750,14 +1755,15 @@ float GP::executeLS_LM(const cl_uint *program)
 
 void GP::pauseRequested(bool value)
 {
+	//qDebug()<<"Pause requested (GP level)";
 	if(value)
-		engineRunning = false;
+		pausePressed = true;
 	else
-		engineRunning = true;
+		pausePressed = false;
 }
 
 void GP::stopRequested(bool value)
 {
 	if(value)
-		engineRunning = false;
+		stopPressed = true;
 }

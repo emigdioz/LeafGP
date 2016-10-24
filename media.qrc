@@ -56,5 +56,6 @@
         <file>resources/images/icon_app</file>
         <file>resources/images/icon_app_big</file>
         <file>resources/images/leafgplogo.png</file>
+        <file>resources/images/splash.png</file>
     </qresource>
 </RCC>

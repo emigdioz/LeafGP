@@ -2,6 +2,7 @@
 #define BENCHMARK_H
 
 #include <QStandardItem>
+#include "math.h"
 
 class benchmark
 {

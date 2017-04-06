@@ -95,6 +95,73 @@ void MainWidget::showDeleteMenu(const QPoint &pos)
 		myMenu.exec(mapToGlobal(globalPos));
 }
 
+void MainWidget::on_pushButton_4_clicked()
+{
+  QString nameItem;
+  QString listFunctions;
+  if(ui->listFunctionsTarget->count() != 0)
+  {
+    int nItems = ui->listFunctionsTarget->count();
+    if(nItems == 1)
+      listFunctions = ui->listFunctionsTarget->item(0)->text();
+    else
+    {
+      for(int i = 0;i < nItems-1;i++)
+      {
+        nameItem = ui->listFunctionsTarget->item(i)->text();
+        listFunctions = listFunctions + convertFunctionName(nameItem) + ",";
+      }
+      nameItem = ui->listFunctionsTarget->item(nItems-1)->text();
+      listFunctions = listFunctions + convertFunctionName(nameItem) + ",ephemeral";
+      qDebug()<<listFunctions;
+     }
+     userExperiment.gpParams.m_primitives = listFunctions.toStdString();
+  }
+}
+
+QString MainWidget::convertFunctionName(QString name)
+{
+  QString convertedName = "";
+  if(name.compare("Addition") == 0) convertedName = "+";
+  if(name.compare("Division") == 0) convertedName = "/";
+  if(name.compare("Modulo") == 0) convertedName = "%";
+  if(name.compare("Multiplication") == 0) convertedName = "*";
+  if(name.compare("Subtraction") == 0) convertedName = "-";
+  if(name.compare("If Then Else") == 0) convertedName = "ite";
+  if(name.compare("And") == 0) convertedName = "&&";
+  if(name.compare("Maximum") == 0) convertedName = "max";
+  if(name.compare("Minimum") == 0) convertedName = "min";
+  if(name.compare("Negation") == 0) convertedName = "neg";
+  if(name.compare("Or") == 0) convertedName = "||";
+  if(name.compare("Xor") == 0) convertedName = "xor";
+  if(name.compare("Absolute") == 0) convertedName = "abs";
+  if(name.compare("Ceil") == 0) convertedName = "ceil";
+  if(name.compare("Cube") == 0) convertedName = "^3";
+  if(name.compare("Exponential base-10") == 0) convertedName = "exp10";
+  if(name.compare("Exponential base-2") == 0) convertedName = "exp2";
+  if(name.compare("Floor") == 0) convertedName = "floor";
+  if(name.compare("Logarithm base-10") == 0) convertedName = "log10";
+  if(name.compare("Logarithm base-2") == 0) convertedName = "log2";
+  if(name.compare("Mean") == 0) convertedName = "mean";
+  if(name.compare("Natural logarithm") == 0) convertedName = "log";
+  if(name.compare("Power") == 0) convertedName = "^";
+  if(name.compare("Power exponent 4") == 0) convertedName = "^4";
+  if(name.compare("Root square") == 0) convertedName = "sqrt";
+  if(name.compare("Round") == 0) convertedName = "round";
+  if(name.compare("Sign") == 0) convertedName = "sign";
+  if(name.compare("Square") == 0) convertedName = "^2";
+  if(name.compare("Equal") == 0) convertedName = "=";
+  if(name.compare("Greater") == 0) convertedName = ">";
+  if(name.compare("Greater or equal") == 0) convertedName = ">=";
+  if(name.compare("Less") == 0) convertedName = "<";
+  if(name.compare("Less or equal") == 0) convertedName = "<=";
+  if(name.compare("Not equal") == 0) convertedName = "!=";
+  if(name.compare("Cosine") == 0) convertedName = "cos";
+  if(name.compare("Sine") == 0) convertedName = "sin";
+  if(name.compare("Tangent") == 0) convertedName = "tan";
+  return convertedName;
+}
+
 void MainWidget::on_actionRemove_triggered()
 {
 	qDeleteAll(ui->listFunctionsTarget->selectedItems());

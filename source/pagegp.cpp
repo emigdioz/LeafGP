@@ -23,7 +23,7 @@ void MainWidget::on_startButton_clicked()
 	userExperiment.medianTrainingFitness.clear();
 	userExperiment.population.clear();
 	gpExperiment::popData emptyPop;
-
+	workerAlgorithm->gp_parameters.m_primitives = userExperiment.gpParams.m_primitives;
 	for(int i = 0;i < workerAlgorithm->gp_parameters.m_number_of_runs;i++)
 		userExperiment.population.push_back(emptyPop);
 

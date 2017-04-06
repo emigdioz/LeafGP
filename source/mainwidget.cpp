@@ -663,3 +663,5 @@ void MainWidget::on_pauseButton_toggled(bool checked)
 {
     emit requestPauseGP(checked);
 }
+
+

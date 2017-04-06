@@ -129,6 +129,7 @@ private slots:
 
 	void on_pauseButton_toggled(bool checked);
 
+	void on_pushButton_4_clicked();
 
 private:
 	Ui::MainWidget *ui;
@@ -155,6 +156,7 @@ private:
 	void populateDataForContainer(void);
 	void showResultsExpressInfo(void);
 	void drawExpressCorrelationPlot(QVector<double> actualY, QVector<double> expectedY);
+	QString convertFunctionName(QString name);
 	QVector <double> selectedFeature;
 	QVector <double> selectedSample;
 	int tableSummarySelectionType;

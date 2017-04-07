@@ -34,6 +34,7 @@ MainWidget::MainWidget(QWidget *parent) :
 	connect(ui->listFunctionsTarget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showDeleteMenu(const QPoint&)));
 	connect(ui->selectorWidget, SIGNAL(sendSelectedCoordinates(int,int)), this, SLOT(updateOtherPlots(int,int)));
 	connect(ui->listWidgetResultsAdvanced, SIGNAL(currentRowChanged(int)), ui->stackedWidgetResultsAdvanced, SLOT(setCurrentIndex(int)));
+	connect(ui->listFunctionsTarget, SIGNAL(dropEventActivated()), this, SLOT(ListWidgetDropActivated()));
 
 	QSizePolicy sp_retain = ui->InfoBox->sizePolicy();
 	sp_retain.setRetainSizeWhenHidden(true);
@@ -663,5 +664,3 @@ void MainWidget::on_pauseButton_toggled(bool checked)
 {
     emit requestPauseGP(checked);
 }
-
-

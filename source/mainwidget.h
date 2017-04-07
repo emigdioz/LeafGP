@@ -129,7 +129,7 @@ private slots:
 
 	void on_pauseButton_toggled(bool checked);
 
-	void on_pushButton_4_clicked();
+	void ListWidgetDropActivated();
 
 private:
 	Ui::MainWidget *ui;

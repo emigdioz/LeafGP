@@ -90,12 +90,32 @@ void MainWidget::showDeleteMenu(const QPoint &pos)
 {
 	QPoint globalPos = ui->listFunctionsTarget->mapToGlobal(pos);
 	QMenu myMenu;
+	QString nameItem;
+	QString listFunctions;
 	myMenu.addAction(ui->actionRemove);
 	if(ui->listFunctionsTarget->count() != 0)
+	{
 		myMenu.exec(mapToGlobal(globalPos));
+		int nItems = ui->listFunctionsTarget->count();
+		if(nItems == 1)
+			listFunctions = ui->listFunctionsTarget->item(0)->text();
+		else
+		{
+			for(int i = 0;i < nItems-1;i++)
+			{
+				nameItem = ui->listFunctionsTarget->item(i)->text();
+				listFunctions = listFunctions + convertFunctionName(nameItem) + ",";
+			}
+			nameItem = ui->listFunctionsTarget->item(nItems-1)->text();
+			listFunctions = listFunctions + convertFunctionName(nameItem) + ",ephemeral";
+			qDebug()<<listFunctions;
+		 }
+		 userExperiment.gpParams.m_primitives = listFunctions.toStdString();
+	}
+
 }
 
-void MainWidget::on_pushButton_4_clicked()
+void MainWidget::ListWidgetDropActivated()
 {
   QString nameItem;
   QString listFunctions;

@@ -103,7 +103,7 @@ Params::Initialize()
 {
   m_verbose = true;
   m_print_primitives = false;
-  m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
+  //m_primitives = "sin,cos,tan,sqrt,exp,+,-,*,/,ephemeral";
   m_number_of_generations = 100;
   m_population_size = 100;
   m_crossover_probability = 0.9;

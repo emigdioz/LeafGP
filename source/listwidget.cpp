@@ -31,7 +31,8 @@ void ListWidget::dropEvent(QDropEvent *event)
 			if(this->item(i)->text().compare(text) == 0)
 				return;
 		}
-	}
-	 QListWidget::dropEvent(event);
+	}	
+	QListWidget::dropEvent(event);
+	emit dropEventActivated();
 }
 

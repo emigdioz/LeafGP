@@ -13,6 +13,9 @@ class ListWidget : public QListWidget
 public:
 	ListWidget(QWidget *parent = 0) : QListWidget(parent) {};
 
+signals:
+	void dropEventActivated();
+
 protected:
 	void dragMoveEvent(QDragMoveEvent *event);
 	void dropEvent(QDropEvent *event);
